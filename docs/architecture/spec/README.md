@@ -61,7 +61,7 @@ marketplace feature.
 | `09-api.md` | Draft | Defines REST API conventions and contracts |
 | `10-plugins.md` | Draft | Defines extension points, permissions, and isolation |
 | `11-security.md` | Draft | Defines authentication, authorization, and secret handling |
-| `12-deployment.md` | Planned | Defines Docker, Compose, and Unraid requirements |
+| `12-deployment.md` | Draft | Defines Docker, Compose, and Unraid requirements |
 | `13-testing.md` | Planned | Defines deterministic, integration, and platform testing |
 | `14-migration.md` | Planned | Defines the controlled transition from inherited Tunarr concepts |
 
