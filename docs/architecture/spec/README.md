@@ -63,7 +63,7 @@ marketplace feature.
 | `11-security.md` | Draft | Defines authentication, authorization, and secret handling |
 | `12-deployment.md` | Draft | Defines Docker, Compose, and Unraid requirements |
 | `13-testing.md` | Draft | Defines deterministic, integration, and platform testing |
-| `14-migration.md` | Planned | Defines the controlled transition from inherited Tunarr concepts |
+| `14-migration.md` | Draft | Defines the controlled transition from inherited Tunarr concepts |
 
 ## Architectural Principles
 
