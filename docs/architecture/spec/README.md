@@ -58,7 +58,7 @@ marketplace feature.
 | `06-playout-and-output.md` | Draft | Defines FFmpeg, stream sessions, XMLTV, IPTV, and HDHomeRun |
 | `07-integrations.md` | Draft | Defines Plex, Jellyfin, Emby, and future adapter contracts |
 | `08-persistence.md` | Draft | Defines SQLite v1 persistence and repository boundaries |
-| `09-api.md` | Planned | Defines REST API conventions and contracts |
+| `09-api.md` | Draft | Defines REST API conventions and contracts |
 | `10-plugins.md` | Planned | Defines extension points, permissions, and isolation |
 | `11-security.md` | Planned | Defines authentication, authorization, and secret handling |
 | `12-deployment.md` | Planned | Defines Docker, Compose, and Unraid requirements |
