@@ -276,7 +276,7 @@ Roadmap document status terms:
 | `03-identity-persistence-and-migrations.md` | Draft | Introduces ChannelForge identifiers, persistence scaffolding, repositories, transactions, and migration metadata |
 | `04-legacy-compatibility.md` | Draft | Defines compatibility reads, temporary write translation, legacy route handling, and legacy dependency measurement |
 | `05-media-sources-and-catalog.md` | Draft | Implements Media Sources, provider adapters, normalized Catalog Items, Source Bindings, Playback Variants, and synchronization |
-| `06-networks-and-channels.md` | Planned | Implements Network, Channel, profile revisions, programming configuration revisions, and ownership rules |
+| `06-networks-and-channels.md` | Draft | Implements Network, Channel, profile revisions, programming configuration revisions, and ownership rules |
 | `07-deterministic-scheduling.md` | Planned | Implements deterministic plan generation, rules, evidence, validation, approval, and regeneration |
 | `08-publication-playout-and-output.md` | Planned | Implements publication, active-plan pointers, playout decisions, FFmpeg integration, XMLTV, M3U, and HDHomeRun-compatible output |
 | `09-api-ui-security-and-plugins.md` | Planned | Migrates first-party API and UI, authorization, secrets, audit, and plugin capability boundaries |
