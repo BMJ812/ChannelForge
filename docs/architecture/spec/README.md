@@ -59,7 +59,7 @@ marketplace feature.
 | `07-integrations.md` | Draft | Defines Plex, Jellyfin, Emby, and future adapter contracts |
 | `08-persistence.md` | Draft | Defines SQLite v1 persistence and repository boundaries |
 | `09-api.md` | Draft | Defines REST API conventions and contracts |
-| `10-plugins.md` | Planned | Defines extension points, permissions, and isolation |
+| `10-plugins.md` | Draft | Defines extension points, permissions, and isolation |
 | `11-security.md` | Planned | Defines authentication, authorization, and secret handling |
 | `12-deployment.md` | Planned | Defines Docker, Compose, and Unraid requirements |
 | `13-testing.md` | Planned | Defines deterministic, integration, and platform testing |
