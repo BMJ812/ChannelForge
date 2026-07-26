@@ -53,7 +53,7 @@ marketplace feature.
 | `01-terminology.md` | Draft | Defines canonical ChannelForge terms |
 | `02-system-context.md` | Draft | Defines users, external systems, and runtime boundaries |
 | `03-domain-model.md` | Draft | Defines core entities and relationships |
-| `04-scheduling-model.md` | Planned | Defines deterministic schedule generation |
+| `04-scheduling-model.md` | Draft | Defines deterministic schedule generation |
 | `05-media-catalog.md` | Planned | Defines normalized media metadata and source bindings |
 | `06-playout-and-output.md` | Planned | Defines FFmpeg, stream sessions, XMLTV, IPTV, and HDHomeRun |
 | `07-integrations.md` | Planned | Defines Plex, Jellyfin, Emby, and future adapter contracts |
