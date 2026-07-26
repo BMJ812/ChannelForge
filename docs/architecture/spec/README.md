@@ -3,7 +3,7 @@
 - **Version:** 0.1
 - **Status:** Draft
 - **Project phase:** Architecture and foundation
-- **Last updated:** 2026-07-26
+- **Last updated:** 2026-07-27
 
 ## Purpose
 
