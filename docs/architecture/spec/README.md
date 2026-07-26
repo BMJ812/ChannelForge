@@ -55,7 +55,7 @@ marketplace feature.
 | `03-domain-model.md` | Draft | Defines core entities and relationships |
 | `04-scheduling-model.md` | Draft | Defines deterministic schedule generation |
 | `05-media-catalog.md` | Draft | Defines normalized media metadata and source bindings |
-| `06-playout-and-output.md` | Planned | Defines FFmpeg, stream sessions, XMLTV, IPTV, and HDHomeRun |
+| `06-playout-and-output.md` | Draft | Defines FFmpeg, stream sessions, XMLTV, IPTV, and HDHomeRun |
 | `07-integrations.md` | Planned | Defines Plex, Jellyfin, Emby, and future adapter contracts |
 | `08-persistence.md` | Planned | Defines SQLite v1 persistence and repository boundaries |
 | `09-api.md` | Planned | Defines REST API conventions and contracts |
