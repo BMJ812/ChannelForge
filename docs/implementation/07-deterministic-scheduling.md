@@ -85,6 +85,7 @@ This milestone is governed by:
 - `docs/architecture/spec/12-deployment.md`
 - `docs/architecture/spec/13-testing.md`
 - `docs/architecture/spec/14-migration.md`
+- `docs/architecture/spec/15-interstitial-programming-and-external-video-feeds.md`
 - `docs/implementation/README.md`
 - `docs/implementation/01-baseline-and-change-control.md`
 - `docs/implementation/02-module-boundaries.md`
@@ -3866,6 +3867,134 @@ Milestone 07 may begin when:
 16. Linux Catalog and Network tests pass.
 17. Windows issues are classified.
 18. No critical revision or Catalog conflict blocks deterministic input resolution.
+
+## Interstitial Programming and External Video Feeds Amendment
+
+### Purpose
+
+Milestone 07 owns deterministic planning of Presentation Assets and eligibility
+of externally discovered items.
+
+### Break Planning
+
+Implement deterministic planning for:
+
+- Break Window creation
+- Interstitial Pool candidate selection
+- Duration targeting
+- Minimum and maximum duration
+- Maximum item count
+- Repeat cooldowns
+- Frequency caps
+- Tag rotation
+- Weighted seeded selection
+- Stable tie-breaking
+- Fixed-event boundaries
+- Carry-In and Carry-Out behavior
+
+### Planning Inputs
+
+Planning snapshots must include:
+
+- Presentation Asset state
+- Rights Status
+- Playability Status
+- Availability State
+- Interstitial Pool revision
+- Break Rule revision
+- External Feed Item eligibility
+- Catalog or Presentation Asset match
+- Duration
+- Prior progression or play history where policy requires it
+- PRNG version
+- Seed
+
+### External Feed Eligibility
+
+An External Feed Item may enter planning only when:
+
+- It has a canonical Catalog Item or Presentation Asset association.
+- Duration is known.
+- A supported playable source exists.
+- Rights and Playability Status permit the intended output.
+- Availability is acceptable in the planning snapshot.
+- Network and Channel assignment matches.
+- Content and tag filters pass.
+- Automatic scheduling is explicitly enabled.
+
+### Selection Evidence
+
+Evidence must identify:
+
+- Break Rule
+- Interstitial Pool
+- Presentation Asset
+- Candidate snapshot
+- Rights and playability result
+- Availability result
+- Repeat and frequency result
+- Duration-fit result
+- Seed stream
+- Score and tie-break
+- Rejected-candidate reasons where required
+
+### Determinism
+
+The same canonical inputs and seed must produce the same:
+
+- Break Windows
+- Presentation Asset order
+- Break duration totals
+- Selection evidence
+- Schedule Plan checksum
+
+Provider changes after the planning snapshot must not retroactively change the
+approved plan.
+
+### Suggested Additional Pull Requests
+
+#### PR 07: Break Window Model
+
+- Placement boundaries
+- Half-open intervals
+- Fixed-event protection
+- Validation
+
+#### PR 07: Interstitial Candidate Selection
+
+- Eligibility
+- Seed streams
+- Stable ordering
+- Cooldowns and caps
+- Evidence
+
+#### PR 07: Deterministic Duration Packing
+
+- Exact and bounded targets
+- Underrun policy
+- Overrun prohibition or explicit allowance
+- Combination selection
+- Golden fixtures
+
+#### PR 07: External Feed Eligibility Snapshot
+
+- Playability and rights gates
+- Availability state
+- Match state
+- Snapshot serialization
+
+### Milestone 07 Completion Additions
+
+Milestone 07 cannot be marked Complete until:
+
+1. Break planning is independent from playout.
+2. Interstitial selection is deterministic.
+3. Duration packing has golden fixtures.
+4. Repeat cooldowns and frequency caps are enforced.
+5. External Feed Items cannot bypass playability and rights gates.
+6. Fixed events cannot be displaced silently.
+7. Every selected Presentation Asset has explanation evidence.
+8. Cross-platform canonical plans match.
 
 ## Completion Gates
 

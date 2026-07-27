@@ -101,7 +101,10 @@ That baseline includes:
 - ChannelForge persistence scaffolding
 - Controlled legacy compatibility
 - Normalized Media Sources and Catalog
+- Presentation Assets and Interstitial Pools
+- External Video Feeds and Discovery Inbox
 - Network and Channel domains
+- Break Rules and deterministic interstitial scheduling
 - Deterministic schedule planning
 - Schedule publication
 - Runtime playout integration
@@ -281,6 +284,44 @@ Roadmap document status terms:
 | `08-publication-playout-and-output.md` | Draft | Implements publication, active-plan pointers, playout decisions, FFmpeg integration, XMLTV, M3U, and HDHomeRun-compatible output |
 | `09-api-ui-security-and-plugins.md` | Draft | Migrates first-party API and UI, authorization, secrets, audit, and plugin capability boundaries |
 | `10-deployment-validation-and-release.md` | Draft | Completes Docker, Compose, Unraid, migration cutover, platform validation, release gates, and legacy retirement criteria |
+
+## Cross-Cutting Amendment: Interstitial Programming and External Video Feeds
+
+ADR 0002 and architecture specification 15 add two related capabilities:
+
+1. Interstitial Programming
+2. External Video Feeds
+
+The implementation remains distributed across existing milestones rather than
+creating a separate vertical milestone.
+
+| Milestone | Responsibility |
+| --- | --- |
+| 01 | Inventory and characterize inherited filler, flex, commercial-like content, remote URLs, and web-video references |
+| 05 | Implement Presentation Assets, External Feeds, Feed Items, synchronization, matching, Rights Status, and Playability Status |
+| 06 | Implement Network- and Channel-scoped Interstitial Pools, Break Rules, and Feed assignment |
+| 07 | Implement deterministic break insertion, duration packing, cooldowns, frequency caps, and selection evidence |
+| 08 | Implement Presentation Asset publication, playout, guide behavior, runtime fallback, and Airing Records |
+| 09 | Implement API, UI, authorization, Secret Service use, remote-feed security, audit, and plugin adapter boundaries |
+| 10 | Validate Docker, Unraid, migration, security, provider failure, determinism, backup, restore, and release documentation |
+
+The default External Feed behavior is discovery-only through the Discovery
+Inbox.
+
+A discovered external item cannot enter linear planning or playout unless a
+separate supported and authorized playable source exists.
+
+Version 1 explicitly excludes:
+
+- YouTube downloading
+- YouTube stream extraction
+- YouTube-to-FFmpeg restreaming
+- BumpWorthy scraping or downloading
+- Arbitrary webpage-to-media conversion
+- Advertising marketplace and billing
+- Per-viewer targeted advertising
+
+These boundaries are release gates, not optional implementation guidance.
 
 ## Milestone Sequence
 

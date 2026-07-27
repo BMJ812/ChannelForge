@@ -37,6 +37,7 @@ It establishes the secure and testable external surface consumed by Milestone
 - `docs/architecture/spec/12-deployment.md`
 - `docs/architecture/spec/13-testing.md`
 - `docs/architecture/spec/14-migration.md`
+- `docs/architecture/spec/15-interstitial-programming-and-external-video-feeds.md`
 - `docs/implementation/README.md`
 - `docs/implementation/01-baseline-and-change-control.md`
 - `docs/implementation/02-module-boundaries.md`
@@ -2992,6 +2993,148 @@ docs/implementation/api-ui-security-plugins/
 16. Build passes.
 17. Linux domain tests pass.
 18. Windows issues are classified.
+
+## Interstitial Programming and External Video Feeds Amendment
+
+### Purpose
+
+Milestone 09 owns management surfaces, authorization, Secret Service use,
+security policy, audit, and plugin extension for the new capabilities.
+
+### API Resources
+
+Implement versioned API resources for:
+
+- Presentation Assets
+- Interstitial Pools
+- Break Rules
+- External Feeds
+- External Feed Items
+- Discovery Inbox
+- Feed synchronization runs
+- Matching decisions
+- Rights decisions
+- Playability decisions
+- Eligibility explanations
+
+### First-Party UI
+
+Implement:
+
+- Presentation Asset library
+- Upload and Media Source linking
+- Rights and playability controls
+- Interstitial Pool editor
+- Break Rule editor
+- Break preview
+- External Feed setup
+- YouTube Channel and playlist resolution
+- Feed synchronization history
+- Discovery Inbox
+- Catalog and Presentation Asset matching
+- Network and Channel assignment
+- Eligibility explanation
+- Runtime break diagnostics
+
+### Authorization
+
+Add bounded permissions for:
+
+- Presentation Asset read and manage
+- Rights management
+- Interstitial Pool read and manage
+- External Feed read and manage
+- External Feed credential management
+- Manual synchronization
+- Discovery Inbox review
+- Matching decisions
+
+### Security
+
+Implement:
+
+- URL scheme allowlist
+- DNS and address validation
+- SSRF protection
+- Redirect revalidation
+- Response-size limits
+- Timeouts
+- Content-type validation
+- Hardened XML parsing
+- Credential isolation
+- API-key redaction
+- Provider quota handling
+- Rate limiting
+- Audit
+- Rejection of arbitrary shell execution
+- Rejection of unsupported automatic downloads
+- Rejection of arbitrary FFmpeg source creation
+
+### Plugin Extension
+
+Expose a bounded External Video Feed adapter capability.
+
+Plugins may:
+
+- Resolve feed identity
+- Fetch bounded metadata
+- Emit normalized observations
+- Declare credentials and destinations
+- Normalize provider errors
+
+Plugins may not:
+
+- Write directly to Catalog tables
+- Write directly to Schedule Plans
+- Bypass rights or playability policy
+- Use undeclared network destinations
+- Run arbitrary downloaders
+- Log raw credentials
+
+### Suggested Additional Pull Requests
+
+#### PR 09: Presentation and Feed API
+
+- Resource contracts
+- Commands
+- Errors
+- Concurrency
+- OpenAPI
+
+#### PR 09: Management UI
+
+- Asset library
+- Pool and Break Rule editors
+- Feed setup
+- Discovery Inbox
+- Matching workflow
+
+#### PR 09: Remote Feed Security
+
+- SSRF controls
+- URL validation
+- XML hardening
+- Quota and credential failures
+
+#### PR 09: External Feed Plugin Boundary
+
+- Capability manifest
+- Adapter contract
+- Contract fixtures
+- Permission enforcement
+
+### Milestone 09 Completion Additions
+
+Milestone 09 cannot be marked Complete until:
+
+1. First-party workflows use canonical APIs.
+2. Secrets are never returned through ordinary reads.
+3. Remote-feed SSRF protections are verified.
+4. Discovery Inbox decisions are auditable.
+5. Rights and playability changes are auditable.
+6. Plugin adapters cannot bypass domain policy.
+7. Unsupported downloading and restreaming actions are rejected.
+8. UI explains why an item is or is not schedule-eligible.
 
 ## Completion Gates
 

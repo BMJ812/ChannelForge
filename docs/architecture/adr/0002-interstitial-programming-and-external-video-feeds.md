@@ -1,6 +1,6 @@
 # ADR 0002: Interstitial Programming and External Video Feeds
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-07-27
 - **Decision owners:** ChannelForge maintainers
 - **Related principle:** Build television networks, not playlists.
