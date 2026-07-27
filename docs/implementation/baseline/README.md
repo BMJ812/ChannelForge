@@ -19,6 +19,7 @@ change public API paths.
 | 01C | Persistence and API inventory | `0e5491f87259123a3cb085e3d2ba3844eda510d0` | `docs/m01-persistence-api-inventory` |
 | 01D | Provider, scheduling, and playout inventory | `49be6eec67247b5a3c43efaa928953bfd4c852dd` | `docs/m01-provider-scheduling-playout-inventory` |
 | 01E | Change-control and contribution rules | `53c1ac125e24a8f3601aa4f00ef848482a4f144d` | `docs/m01-change-control-contribution-rules` |
+| 01F | Characterization test foundation | `3370c66d801e2525edfce364fc2488d326ec10b3` | `test/m01-characterization-foundation` |
 
 ## Artifacts
 
@@ -44,9 +45,12 @@ change public API paths.
 | `playout-output-inventory.md` | Runtime selection, sessions, FFmpeg, XMLTV, M3U, HLS, and HDHomeRun output |
 | `background-runtime-inventory.md` | Tasks, workers, timers, process boundaries, and filesystem authorities |
 | `characterization-matrix.md` | Existing coverage and required safety net before subsystem replacement |
+| `characterization-foundation-discovery.json` | Sanitized test/config/helper/fixture discovery evidence |
+| `test-infrastructure.md` | Reviewed test infrastructure, determinism controls, and coverage gaps |
 | `issue-register.md` | Active blocking, conditional, and deferred Milestone 01 findings |
 | `../change-control.md` | Required authority, scope, compatibility, migration, and rollback policy |
 | `../risk-classification.md` | Low, Moderate, High, and Critical change gates |
+| `../characterization-testing.md` | Characterization conventions, fixtures, clocks, randomness, and golden rules |
 | `../../../CONTRIBUTING.md` | Contributor workflow and validation policy |
 | `../../../.github/pull_request_template.md` | Required pull-request evidence template |
 
@@ -82,6 +86,14 @@ PR 01E adopts hand-authored change-control authority from clean source commit
 `53c1ac125e24a8f3601aa4f00ef848482a4f144d`. Its artifacts introduce no runtime, persistence,
 provider, scheduling, playout, output, dependency, or deployment behavior
 changes.
+
+PR 01F records the inherited test foundation from clean source commit
+`3370c66d801e2525edfce364fc2488d326ec10b3`. Its raw discovery SHA-256 is
+`2e5dc1bd4f4ff837a4cd434a59b7d7fc42351948c45324043d4e6f6773344680` and its normalized SHA-256 is
+`42c3b3ac98ee541933e0d89f6eb7a8d420593e891e17321ba12502d40b03d2ba`. The pull request adds test-only deterministic helpers,
+a focused Vitest configuration, fixture policy, and helper self-tests. It
+does not replace production behavior or close subsystem coverage findings.
+
 ## Evidence Rules
 
 - Treat each recorded source commit as immutable historical evidence.
