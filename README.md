@@ -1,126 +1,262 @@
-<p align="center">
-  <img src="./design/tunarr-guide.png" alt="Tunarr TV Guide">
-</p>
+<div align="center">
 
-<h1 align="center">Tunarr</h1>
+# ChannelForge
 
-<p align="center">Create your own live TV channels from media on Plex, Jellyfin, Emby, or local files.</p>
+**Build television networks, not playlists.**
 
-<p align="center">
-  <a href="https://github.com/chrisbenincasa/tunarr/releases"><img src="https://img.shields.io/github/v/release/chrisbenincasa/tunarr?style=flat&logo=github&color=lightseagreen" alt="GitHub Release"></a>
-  <a href="https://hub.docker.com/r/chrisbenincasa/tunarr"><img src="https://img.shields.io/docker/pulls/chrisbenincasa/tunarr?style=flat&logo=docker&color=lightseagreen" alt="Docker Pulls"></a>
-  <a href="https://github.com/chrisbenincasa/tunarr/stargazers"><img src="https://img.shields.io/github/stars/chrisbenincasa/tunarr?style=flat&logo=github&color=lightseagreen" alt="GitHub Stars"></a>
-  <a href="https://discord.gg/7tUjBbDxag"><img src="https://img.shields.io/discord/1254564006123802805?style=flat&logo=discord&logoColor=white&label=Discord" alt="Discord"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-Zlib-lightseagreen?style=flat" alt="License"></a>
-</p>
+An open-source, self-hosted platform for designing, scheduling, and publishing virtual television networks.
+
+[Architecture](docs/architecture/README.md) ·
+[Implementation Roadmap](docs/implementation/README.md) ·
+[Project Notices](NOTICE.md) ·
+[Contributing](CONTRIBUTING.md)
+
+![Project status](https://img.shields.io/badge/status-foundation%20in%20progress-8a6d3b)
+![License](https://img.shields.io/badge/license-zlib-4c8c72)
+![Node.js](https://img.shields.io/badge/node.js-22-43853d)
+![pnpm](https://img.shields.io/badge/pnpm-10.28.0-f69220)
+
+</div>
 
 ---
 
-## What is Tunarr?
+> [!IMPORTANT]
+> ChannelForge is in active foundation development. It is not yet a stable
+> end-user release, and there is no official ChannelForge container image or
+> installation package.
+>
+> The repository currently retains substantial inherited Tunarr runtime code,
+> package names, terminology, and interface elements while the transition is
+> performed incrementally.
 
-Tunarr lets you build custom live TV channels out of your existing media libraries — movies, TV episodes, music videos, or local files — and stream them as if they were real broadcast channels.
+## What is ChannelForge?
 
-Tune in by adding Tunarr's spoofed HDHomeRun tuner to Plex, Jellyfin, or Emby, or grab the M3U URL for any IPTV player like [Tivimate](https://tivimate.com/) or [UHF](https://www.uhfapp.com/).
+ChannelForge is a network-first virtual television system for self-hosted media
+libraries.
 
-## Features
+Instead of treating a channel as a manually ordered playlist, ChannelForge is
+designed around the identity and programming strategy of a television network.
+A network can define its audience, editorial profile, dayparts, programming
+blocks, constraints, interstitial rules, and scheduling preferences.
+ChannelForge then produces a deterministic and explainable schedule from those
+inputs.
 
-**Media Sources**
+The planned runtime publishes compatible television outputs for media servers
+and IPTV clients while keeping schedule planning separate from live playout.
 
-- Connect Plex, Jellyfin, Emby, or local file libraries
-- Advanced search, filter, and sort across all connected libraries
+## Product direction
 
-**Channel Management**
+ChannelForge is being built around these principles:
 
-- Drag-and-drop lineup editor
-- Filler content between programs (commercials, music videos, prerolls, branding)
-- Per-channel logos and automatic configuration backups
+- **Network-first programming:** networks, channels, dayparts, blocks, profiles,
+  and programming rules are first-class concepts.
+- **Deterministic scheduling:** the same inputs and seed must produce the same
+  plan, with evidence explaining each decision.
+- **Planning and playout separation:** schedule generation does not directly
+  control stream execution.
+- **Provider-independent catalog:** Plex, Jellyfin, Emby, and local media are
+  normalized behind explicit adapters.
+- **Controlled constraints:** hard rules cannot be silently overridden by
+  weighted preferences.
+- **Local-first deployment:** Docker Compose is the canonical deployment model,
+  with Unraid supported as a wrapper around the same container contract.
+- **Incremental migration:** the inherited runtime remains buildable while
+  ChannelForge-owned boundaries replace legacy concepts in controlled stages.
+- **Explicit security boundaries:** plugins, external feeds, secrets, database
+  access, and process execution must use defined capabilities.
 
-**Scheduling**
+## Current repository state
 
-- Time-slot and random-slot scheduling tools
-- Web-based TV guide for viewing channel lineups
+ChannelForge uses portions of the mature Tunarr runtime as its implementation
+foundation. This avoids rebuilding proven virtual television infrastructure
+before the ChannelForge domain model is ready.
 
-**Playback & Integration**
+### Inherited runtime capabilities currently present
 
-- Spoofed [HDHR](https://www.silicondust.com/hdhomerun/) tuner for Plex, Jellyfin, and Emby
-- M3U/IPTV output for [Dispatcharr](https://github.com/Dispatcharr/Dispatcharr), [Threadfin](https://github.com/Threadfin/Threadfin), [xTeVe](https://github.com/xteve-project/xTeVe), or any IPTV client
-- Stream channels directly in the browser
-- Per-channel audio language and subtitle preferences
+- Plex, Jellyfin, and Emby integrations
+- Local media-library support
+- Existing channel and lineup editing
+- Existing time-slot and random-slot scheduling
+- Filler and flex programming behavior
+- FFmpeg-based playback and transcoding
+- Stream-session management
+- XMLTV guide generation
+- M3U/IPTV output
+- HDHomeRun-compatible endpoints
+- Browser-based management interface
+- Docker deployment infrastructure
+- SQLite, Kysely, Drizzle, Better SQLite3, and LowDB persistence layers
 
-**Transcoding**
+These capabilities describe the current inherited baseline. They are not a
+claim that the final ChannelForge architecture has already been implemented.
 
-- Hardware-accelerated transcoding: Nvidia NVENC, VAAPI, Intel QuickSync, macOS VideoToolbox
-- Multiple transcode profiles, configurable per channel
+### ChannelForge implementation status
 
-## Screenshots
+| Area | Status |
+| --- | --- |
+| Product mission and terminology | Defined |
+| Architecture specifications and ADRs | Documented; individual documents retain their recorded status |
+| Implementation roadmap | Draft |
+| Milestone 01: baseline and change control | In progress |
+| Baseline capture framework | Merged |
+| Repository and toolchain inventory | Merged |
+| Persistence and API inventory | Merged |
+| Provider, scheduling, and playout inventory | Next |
+| Stable ChannelForge end-user release | Not available |
 
-<table>
-  <tr>
-    <td align="center"><img src="./design/tunarr-channels.png" alt="Channel Management"><br><em>Channel Management</em></td>
-    <td align="center"><img src="./docs/assets/channel-properties.png" alt="Channel Configuration"><br><em>Channel Configuration</em></td>
-  </tr>
-</table>
+Milestone status and implementation sequencing are tracked in
+[`docs/implementation/`](docs/implementation/).
 
-## Quick Start
+## Planned version 1 scope
 
-The easiest way to run Tunarr is with Docker Compose. Create a `docker-compose.yml`:
+The first credible ChannelForge implementation baseline is intended to include:
 
-```yaml
-services:
-  tunarr:
-    image: chrisbenincasa/tunarr:latest
-    container_name: tunarr
-    ports:
-      - 8000:8000
-    environment:
-      - TZ=America/New_York
-    volumes:
-      - ./tunarr-data:/config/tunarr
-    restart: unless-stopped
-```
+- Stable ChannelForge identities and module boundaries
+- Controlled compatibility with inherited Tunarr data and routes
+- Normalized Media Sources, Catalog Items, Source Bindings, and Playback Variants
+- Networks, Channels, editorial profiles, audience profiles, and revisions
+- Presentation Assets and network- or channel-scoped Interstitial Pools
+- Dayparts, programming blocks, templates, and programming configuration
+- Deterministic schedule planning with validation and decision evidence
+- Schedule approval, publication, and active-plan selection
+- Runtime playout integration and fallback decisions
+- XMLTV, M3U/IPTV, and HDHomeRun-compatible publication
+- First-party API and UI migration
+- Authentication, authorization, audit, and secret-handling boundaries
+- Plugin contract scaffolding
+- Docker Compose and Unraid validation
+- Migration, backup, restore, rollback, and release-readiness gates
 
-Then run:
+The roadmap intentionally excludes a big-bang rewrite, PostgreSQL migration,
+distributed microservices, a hosted control plane, and a public SaaS platform
+from version 1.
 
-```bash
-docker compose up -d
-```
+## Interstitial programming and external feeds
 
-Tunarr will be available at `http://localhost:8000`.
+ChannelForge treats commercials, station IDs, bumpers, promos, prerolls,
+short-form segments, and similar material as structured interstitial
+programming rather than anonymous filler.
 
-**Other installation options:**
+External video feeds are discovery sources, not automatically playable linear
+media. A discovered item may enter scheduling or playout only when a separately
+supported and authorized playable source exists.
 
-| Platform                 | Method                                                                        |
-| ------------------------ | ----------------------------------------------------------------------------- |
-| Linux / macOS / Windows  | [Standalone binaries](https://github.com/chrisbenincasa/tunarr/releases)      |
-| Unraid                   | Community App Store                                                           |
-| Proxmox                  | [LXC helper script](https://tunarr.com/getting-started/installation/#proxmox) |
-| ARM (Raspberry Pi, etc.) | Docker image (`linux/arm64`)                                                  |
+Version 1 does **not** include:
 
-For hardware-accelerated transcoding setup, see the [transcoding docs](https://tunarr.com/getting-started/run/).
+- YouTube downloading
+- YouTube stream extraction
+- YouTube-to-FFmpeg restreaming
+- BumpWorthy scraping or downloading
+- Arbitrary webpage-to-media conversion
 
-## Documentation
+See
+[`ADR 0002`](docs/architecture/adr/0002-interstitial-programming-and-external-video-feeds.md)
+and
+[`Specification 15`](docs/architecture/spec/15-interstitial-programming-and-external-video-feeds.md)
+for the governing rules.
 
-- [Installation guide](https://tunarr.com/getting-started/installation/)
-- [Creating channels](https://tunarr.com/configure/channels/)
-- [Scheduling tools](https://tunarr.com/configure/scheduling/)
-- [Transcoding configuration](https://tunarr.com/configure/ffmpeg/transcode_config/)
-- [Full documentation](https://tunarr.com/)
+## Installation
+
+There is currently no supported ChannelForge release, Docker image, Unraid
+Community Application, or standalone binary.
+
+The inherited Tunarr deployment instructions are intentionally not presented as
+ChannelForge installation instructions. Installation documentation will be
+published after the ChannelForge container identity, migration behavior,
+configuration paths, and release gates are validated.
 
 ## Development
 
+### Requirements
+
+- Node.js 22
+- pnpm 10.28.0
+- Git
+- FFmpeg for runtime media testing
+- Docker for production-like deployment validation
+
+### Local setup
+
 ```bash
-pnpm i
-pnpm turbo dev  # backend at :8000, frontend at :5173/web
+pnpm install
+pnpm build
+pnpm turbo dev
 ```
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for a full development guide.
+The development server currently uses inherited runtime defaults:
 
-## Community
+- Backend: `http://localhost:8000`
+- Frontend: `http://localhost:5173/web`
 
-- [Discord](https://discord.gg/7tUjBbDxag) — chat, help, and announcements
-- [GitHub Issues](https://github.com/chrisbenincasa/tunarr/issues) — bug reports and feature requests
-- [GitHub Discussions](https://github.com/chrisbenincasa/tunarr/discussions) — questions and general conversation
+Run the baseline capture tests with:
+
+```bash
+pnpm baseline:test
+```
+
+The inherited full test suite has known Windows-specific path and SQLite file
+locking failures. Production behavior is validated in Linux, while Windows
+failures remain tracked and must be classified rather than dismissed.
+
+## Repository layout
+
+| Path | Purpose |
+| --- | --- |
+| `server/` | Fastify API, persistence, providers, scheduling, playout, and background tasks |
+| `web/` | First-party React management interface |
+| `types/` | Shared schemas, API types, and provider contracts |
+| `shared/` | Shared utilities |
+| `docs/architecture/` | ChannelForge architecture, specifications, and ADRs |
+| `docs/implementation/` | Milestone roadmap and implementation gates |
+| `docs/implementation/baseline/` | Reviewed Milestone 01 evidence |
+| `scripts/implementation-baseline/` | Deterministic baseline capture tooling |
+| `LICENSES/` | Preserved third-party and inherited license notices |
+
+## Documentation
+
+Start with:
+
+1. [Architecture overview](docs/architecture/README.md)
+2. [Architecture specifications](docs/architecture/spec/README.md)
+3. [Architecture Decision Records](docs/architecture/adr/)
+4. [Implementation roadmap](docs/implementation/README.md)
+5. [Milestone 01 baseline evidence](docs/implementation/baseline/README.md)
+6. [Project notices and attribution](NOTICE.md)
+
+## Contributing
+
+ChannelForge uses narrow, reviewable pull requests that preserve a buildable
+`main` branch.
+
+Before changing runtime behavior:
+
+- Identify the governing architecture and milestone documents.
+- Characterize inherited behavior before replacing it.
+- Keep one documented write authority per concept.
+- Preserve migration and rollback paths.
+- Avoid unrelated dependency updates, broad formatting churn, and opportunistic
+  renaming.
+- Include tests or evidence appropriate to the boundary being changed.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for inherited development instructions.
+Some terminology in that document remains Tunarr-derived and will be migrated
+in a later controlled documentation pass.
+
+## Attribution
+
+ChannelForge is an independent open-source virtual television project derived
+in part from the Tunarr codebase.
+
+The original Tunarr code is distributed under the zlib License. ChannelForge
+preserves the inherited Git history and retains a copy of the original license
+at [`LICENSES/tunarr-zlib.txt`](LICENSES/tunarr-zlib.txt).
+
+ChannelForge has its own product direction and is not represented as the
+original Tunarr software or as work authored entirely by the ChannelForge
+maintainers. See [NOTICE.md](NOTICE.md) for the full attribution statement.
 
 ## License
 
-Tunarr is released under the [Zlib License](LICENSE).
+The repository is currently distributed under the
+[zlib License](LICENSE), including the requirements to preserve origin,
+identify altered source versions, and retain the license notice.
