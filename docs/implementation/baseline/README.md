@@ -1,6 +1,6 @@
 # Milestone 01 Baseline Evidence
 
-- **Milestone status:** In Progress
+- **Milestone status:** Complete
 - **Inventory authority:** Git-tracked source and reviewed generated evidence
 - **Runtime changes:** None
 
@@ -20,6 +20,7 @@ change public API paths.
 | 01D | Provider, scheduling, and playout inventory | `49be6eec67247b5a3c43efaa928953bfd4c852dd` | `docs/m01-provider-scheduling-playout-inventory` |
 | 01E | Change-control and contribution rules | `53c1ac125e24a8f3601aa4f00ef848482a4f144d` | `docs/m01-change-control-contribution-rules` |
 | 01F | Characterization test foundation | `3370c66d801e2525edfce364fc2488d326ec10b3` | `test/m01-characterization-foundation` |
+| 01G | Platform baselines, closure, and completion | `426c50bf4dccb776a656446a90725d4c2eb71098` | `docs/m01-baseline-reports-completion` |
 
 ## Artifacts
 
@@ -47,7 +48,13 @@ change public API paths.
 | `characterization-matrix.md` | Existing coverage and required safety net before subsystem replacement |
 | `characterization-foundation-discovery.json` | Sanitized test/config/helper/fixture discovery evidence |
 | `test-infrastructure.md` | Reviewed test infrastructure, determinism controls, and coverage gaps |
-| `issue-register.md` | Active blocking, conditional, and deferred Milestone 01 findings |
+| `issue-register.md` | Blocking, open, resolved, and deferred Milestone 01 findings |
+| `windows-test-baseline.md` | Windows build, test result, and complete failure classification |
+| `linux-test-baseline.md` | Release-authoritative Linux build, test, and cleanliness result |
+| `platform-matrix.md` | Windows and Linux authority and compatibility matrix |
+| `flake-register.md` | Reviewed intermittent-result and retry classification |
+| `security-deployment-closure.md` | Security baseline and deployment-path closure |
+| `completion-report.md` | Gate-by-gate completion and Milestone 02 entry decision |
 | `../change-control.md` | Required authority, scope, compatibility, migration, and rollback policy |
 | `../risk-classification.md` | Low, Moderate, High, and Critical change gates |
 | `../characterization-testing.md` | Characterization conventions, fixtures, clocks, randomness, and golden rules |
@@ -93,6 +100,28 @@ PR 01F records the inherited test foundation from clean source commit
 `42c3b3ac98ee541933e0d89f6eb7a8d420593e891e17321ba12502d40b03d2ba`. The pull request adds test-only deterministic helpers,
 a focused Vitest configuration, fixture policy, and helper self-tests. It
 does not replace production behavior or close subsystem coverage findings.
+
+## PR 01G Platform and Completion Evidence
+
+PR 01G records:
+
+- Sanitized Windows evidence from source commit
+  `4d98408fa55e26d254132d931bde8a016d89f962`
+- Complete classification of 43 inherited Windows failures
+- Release-authoritative Linux evidence from source head
+  `426c50bf4dccb776a656446a90725d4c2eb71098`
+- Successful GitHub Actions run `30307943127`
+- Artifact `m01-linux-baseline`, ID `8669221317`
+- Artifact digest
+  `sha256:0e33345f45b0e5a8c97abc1f7245affd3602fcbfb990aa2b33201d07e61ff319`
+- Platform and flake registers
+- Security and deployment closure
+- Explicit high-risk coverage deferrals
+- Gate-by-gate Milestone 01 completion decision
+
+The completion decision becomes effective when PR #13 is merged. The evidence
+does not alter production runtime, persistence, provider, scheduling, playout,
+output, or deployment behavior.
 
 ## Evidence Rules
 
