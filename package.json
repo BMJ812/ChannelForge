@@ -7,6 +7,8 @@
   "license": "Zlib",
   "scripts": {
     "build": "turbo run build",
+    "baseline:capture": "node scripts/implementation-baseline/capture.mjs all",
+    "baseline:test": "node --test scripts/implementation-baseline/test/baseline-utils.test.mjs scripts/implementation-baseline/test/capture.test.mjs",
     "dev": "turbo run dev",
     "fmt": "prettier --write .",
     "lint-staged": "lint-staged --allow-empty",
