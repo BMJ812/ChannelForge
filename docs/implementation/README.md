@@ -279,7 +279,7 @@ Roadmap document status terms:
 | `06-networks-and-channels.md` | Draft | Implements Network, Channel, profile revisions, programming configuration revisions, and ownership rules |
 | `07-deterministic-scheduling.md` | Draft | Implements deterministic plan generation, rules, evidence, validation, approval, and regeneration |
 | `08-publication-playout-and-output.md` | Draft | Implements publication, active-plan pointers, playout decisions, FFmpeg integration, XMLTV, M3U, and HDHomeRun-compatible output |
-| `09-api-ui-security-and-plugins.md` | Planned | Migrates first-party API and UI, authorization, secrets, audit, and plugin capability boundaries |
+| `09-api-ui-security-and-plugins.md` | Draft | Migrates first-party API and UI, authorization, secrets, audit, and plugin capability boundaries |
 | `10-deployment-validation-and-release.md` | Planned | Completes Docker, Compose, Unraid, migration cutover, platform validation, release gates, and legacy retirement criteria |
 
 ## Milestone Sequence
