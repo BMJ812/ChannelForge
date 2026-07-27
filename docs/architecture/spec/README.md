@@ -64,6 +64,7 @@ marketplace feature.
 | `12-deployment.md` | Draft | Defines Docker, Compose, and Unraid requirements |
 | `13-testing.md` | Draft | Defines deterministic, integration, and platform testing |
 | `14-migration.md` | Draft | Defines the controlled transition from inherited Tunarr concepts |
+| `15-interstitial-programming-and-external-video-feeds.md` | Draft | Defines Presentation Assets, interstitial scheduling, External Feeds, discovery, and playback eligibility |
 
 ## Architectural Principles
 
@@ -82,6 +83,7 @@ marketplace feature.
 12. Explainability is required for programming recommendations.
 13. Backward compatibility must be intentional rather than accidental.
 14. Major architectural changes require Architecture Decision Records.
+15. External metadata discovery does not imply linear playout eligibility or playback rights.
 
 ## Document Status Terms
 
