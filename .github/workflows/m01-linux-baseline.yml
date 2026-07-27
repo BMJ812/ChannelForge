@@ -55,7 +55,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          evidence="m01-linux-baseline"
+          evidence="$RUNNER_TEMP/m01-linux-baseline"
           mkdir -p "$evidence"
 
           run_capture() {
@@ -158,7 +158,16 @@ jobs:
             join,
           } from 'node:path';
 
-          const directory = 'm01-linux-baseline';
+          const runnerTemp = process.env.RUNNER_TEMP;
+
+          if (!runnerTemp) {
+            throw new Error('RUNNER_TEMP is required.');
+          }
+
+          const directory = join(
+            runnerTemp,
+            'm01-linux-baseline',
+          );
 
           const commandIds = [
             'baseline-test',
@@ -335,7 +344,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: m01-linux-baseline
-          path: m01-linux-baseline
+          path: ${{ runner.temp }}/m01-linux-baseline
           if-no-files-found: error
           retention-days: 30
 
@@ -345,7 +354,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          evidence="m01-linux-baseline"
+          evidence="$RUNNER_TEMP/m01-linux-baseline"
           failed=0
 
           for id in \
