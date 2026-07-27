@@ -77,6 +77,7 @@ This milestone is governed by:
 - `docs/architecture/spec/12-deployment.md`
 - `docs/architecture/spec/13-testing.md`
 - `docs/architecture/spec/14-migration.md`
+- `docs/architecture/spec/15-interstitial-programming-and-external-video-feeds.md`
 - `docs/implementation/README.md`
 - `docs/implementation/01-baseline-and-change-control.md`
 - `docs/implementation/02-module-boundaries.md`
@@ -4104,6 +4105,166 @@ Milestone 05 may begin when:
 14. Linux persistence tests pass.
 15. Windows persistence issues are classified.
 16. No critical compatibility conflict blocks source migration.
+
+## Interstitial Programming and External Video Feeds Amendment
+
+### Purpose
+
+Milestone 05 owns the provider-independent media and discovery foundation for
+Presentation Assets and External Video Feeds.
+
+### Presentation Asset Foundation
+
+Implement:
+
+- Presentation Asset identity
+- Presentation Asset kind
+- Presentation Asset source association
+- Local-file source support
+- Managed-upload source support where approved
+- Media Source-backed source support
+- External-reference metadata
+- Rights Status
+- Playability Status
+- Availability State
+- External metadata provenance
+- Duration and technical metadata
+- Network and Channel scope references without owning those aggregates
+
+Initial Presentation Asset kinds include:
+
+- `BUMP`
+- `COMMERCIAL`
+- `PROMO`
+- `STATION_ID`
+- `PSA`
+- `TRAILER`
+- `FILLER`
+- `TECHNICAL_SLATE`
+- `OFF_AIR_SLATE`
+
+### External Feed Foundation
+
+Implement:
+
+- External Feed aggregate
+- External Feed Item entity
+- Qualified provider identity
+- Synchronization cursor
+- Synchronization runs
+- Discovery Inbox state
+- Provider deletion and privacy transitions
+- Feed-to-Catalog matching
+- Feed-to-Presentation-Asset matching
+- Operator-visible ambiguity
+- Restart-safe synchronization
+- Quota and retry metadata
+
+### Initial Feed Adapters
+
+Implement bounded metadata discovery for:
+
+- YouTube Channels
+- YouTube playlists
+- RSS video feeds
+- Atom video feeds
+
+The official YouTube metadata API is the primary YouTube contract.
+
+HTML scraping must not become the primary adapter behavior.
+
+### Playback Boundary
+
+Milestone 05 must preserve the distinction between:
+
+- Metadata discovery
+- Web-player eligibility
+- Linear-planning eligibility
+- Linear-playout eligibility
+
+A YouTube watch URL is not a direct media source.
+
+Milestone 05 must not add:
+
+- YouTube downloading
+- YouTube stream extraction
+- YouTube-to-FFmpeg restreaming
+- BumpWorthy scraping or downloading
+- Arbitrary remote URL playback
+
+### Default Automation Policy
+
+The default External Feed policy is:
+
+```text
+DISCOVERY_INBOX
+```
+
+Automatic add or scheduling requires:
+
+- A supported playable source
+- Known duration
+- Permitted Rights Status
+- Permitted Playability Status
+- Successful matching
+- Explicit operator policy
+
+### Suggested Additional Pull Requests
+
+#### PR 05: Presentation Asset Domain
+
+- Identity and persistence
+- Source association
+- Rights and playability
+- Availability
+- Unit and repository tests
+
+#### PR 05: External Feed Domain
+
+- Feed and Feed Item identity
+- Synchronization state
+- Cursor and checkpoint
+- Discovery Inbox persistence
+- Contract tests
+
+#### PR 05: YouTube Metadata Adapter
+
+- Official API client
+- Channel and playlist resolution
+- Upload discovery
+- Quota handling
+- Removal and privacy transitions
+- Sanitized provider fixtures
+
+#### PR 05: RSS and Atom Adapters
+
+- Hardened XML parsing
+- Feed and enclosure validation
+- SSRF controls
+- Metadata-only versus playable enclosure classification
+
+#### PR 05: Matching and Eligibility
+
+- Catalog matching
+- Presentation Asset matching
+- Conflict workflow
+- Rights and playability gates
+- Eligibility explanation
+
+### Milestone 05 Completion Additions
+
+Milestone 05 cannot be marked Complete until:
+
+1. Presentation Asset identity and persistence exist.
+2. Rights and Playability Status are enforced.
+3. External Feed and Feed Item persistence exist.
+4. Synchronization is deterministic in normalized output and restart-safe.
+5. YouTube discovery uses the official metadata contract.
+6. RSS and Atom parsing is security-hardened.
+7. Discovery Inbox is the default policy.
+8. Metadata-only items cannot enter linear planning.
+9. Unsupported downloading and restreaming paths do not exist.
+10. Provider connectivity for Plex, Jellyfin, and Emby remains intact.
 
 ## Completion Gates
 

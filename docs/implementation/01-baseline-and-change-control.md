@@ -60,6 +60,7 @@ This milestone is governed by:
 - `docs/architecture/spec/12-deployment.md`
 - `docs/architecture/spec/13-testing.md`
 - `docs/architecture/spec/14-migration.md`
+- `docs/architecture/spec/15-interstitial-programming-and-external-video-feeds.md`
 
 The implementation roadmap index also governs this milestone:
 
@@ -2247,6 +2248,94 @@ Reviewers should verify:
 - Deployment paths are recorded
 - Unknowns are explicit
 - No runtime behavior changed unintentionally
+
+## Interstitial Programming and External Video Feeds Amendment
+
+### Purpose
+
+Milestone 01 must inventory and characterize inherited behavior that may later
+map to Presentation Assets, Interstitial Pools, Break Rules, External Feeds, or
+External Feed Items.
+
+This amendment does not add new runtime behavior.
+
+### Required Inventory Additions
+
+Inventory inherited Tunarr behavior related to:
+
+- Filler lists
+- Flex and gap-filling entries
+- Commercial-like content
+- Bumpers and station-identification media
+- Custom shows used as short-form presentation collections
+- Trailers, promos, slates, and other continuity media
+- Remote media URLs
+- Generic web-video references
+- YouTube references or integrations
+- RSS or Atom video-feed behavior
+- Guide handling for filler and short-form entries
+- Repeat and cooldown behavior
+- Runtime fallback when short-form media is unavailable
+
+### Required Baseline Artifacts
+
+Add or extend baseline evidence so it records:
+
+- Current filler and flex domain concepts
+- Current persistence tables and columns used by those concepts
+- Current API routes and UI callers
+- Current scheduling entry points
+- Current playout entry points
+- Current XMLTV treatment
+- Current source-resolution behavior
+- Current remote URL validation
+- Current credential or secret handling
+- Current automatic refresh or synchronization behavior
+- Current provider restrictions
+- Known nondeterministic selection behavior
+- Known missing characterization coverage
+
+### Characterization Requirements
+
+Characterization coverage should preserve observable inherited behavior for:
+
+- Filler selection
+- Flex insertion
+- Short-gap handling
+- Repeat avoidance
+- Duration fitting
+- Guide output
+- Source failure fallback
+- Remote URL rejection or acceptance
+- Provider reference persistence
+
+Tests must not add YouTube downloading, extraction, or restreaming.
+
+### Issue Register Classification
+
+Findings should identify whether inherited behavior is:
+
+- Reusable behind a ChannelForge boundary
+- A migration input
+- A compatibility-only behavior
+- A security risk
+- A rights-policy risk
+- A nondeterminism source
+- A removal candidate
+- Unsupported for ChannelForge version 1
+
+### Milestone 01 Completion Additions
+
+Milestone 01 cannot be marked Complete until:
+
+1. Filler, flex, and presentation-like behavior is inventoried.
+2. Remote and web-video references are inventoried.
+3. Scheduling and playout entry points are identified.
+4. Guide behavior is characterized.
+5. Rights and playability gaps are recorded.
+6. Unsupported download or extraction behavior is explicitly classified.
+7. Findings are assigned to Milestones 05 through 10.
+8. No new interstitial or External Feed runtime behavior was introduced.
 
 ## Recommended Milestone Pull-Request Sequence
 

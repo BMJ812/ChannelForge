@@ -85,6 +85,7 @@ architecture-first planning phase.
 - `docs/architecture/spec/12-deployment.md`
 - `docs/architecture/spec/13-testing.md`
 - `docs/architecture/spec/14-migration.md`
+- `docs/architecture/spec/15-interstitial-programming-and-external-video-feeds.md`
 - `docs/implementation/README.md`
 - `docs/implementation/01-baseline-and-change-control.md`
 - `docs/implementation/02-module-boundaries.md`
@@ -4536,6 +4537,155 @@ docs/implementation/release/
 17. Linux test baseline exists.
 18. Windows failures are classified.
 19. No unresolved critical data-loss risk blocks release work.
+
+## Interstitial Programming and External Video Feeds Amendment
+
+### Purpose
+
+Milestone 10 validates deployment, migration, reliability, security, and release
+readiness for Presentation Assets, Interstitial Programming, and External Video
+Feeds.
+
+### Docker and Unraid Validation
+
+Validate:
+
+- Persistent Presentation Asset metadata
+- Managed-upload storage where enabled
+- External Feed configuration
+- Secret References
+- Synchronization cursors
+- Synchronization restart after container interruption
+- Provider DNS and outbound connectivity
+- Quota and rate-limit handling
+- Local and Media Source-backed Presentation Asset playout
+- Break transitions
+- Runtime fallback
+- Backup and restore
+
+### Migration Validation
+
+Validate migration of inherited:
+
+- Filler
+- Flex
+- Custom short-form collections
+- Commercial-like items
+- Remote references
+- Unsupported web-video references
+
+Migration must:
+
+- Preserve identity mappings.
+- Surface conflicts.
+- Avoid inferring rights.
+- Preserve metadata-only references when playback is unsupported.
+- Remain restart-safe and reversible during the rollback window.
+
+### Security Validation
+
+Release gates must include:
+
+- SSRF tests
+- Redirect-to-private-address tests
+- Credential redaction
+- Unsupported downloader rejection
+- Arbitrary FFmpeg source rejection
+- XML external-entity rejection
+- Response-size and timeout enforcement
+- Permission checks
+- Audit evidence
+
+### Determinism and Reliability Validation
+
+Validate:
+
+- Cross-platform break-plan checksums
+- Repeat cooldowns
+- Frequency caps
+- Duration packing
+- DST boundaries
+- Provider item disappearance
+- Feed cursor resume
+- Quota exhaustion
+- Authentication failure
+- Pool exhaustion
+- Fallback slates
+- Airing Records
+
+### Release Documentation
+
+Document:
+
+- Creating Presentation Assets
+- Creating Interstitial Pools
+- Configuring Break Rules
+- Adding YouTube Channel and playlist discovery
+- Adding RSS and Atom feeds
+- Discovery Inbox behavior
+- Matching a local or Media Source copy
+- Rights and playability meaning
+- Unsupported YouTube and BumpWorthy behavior
+- Backup and restore
+- Troubleshooting provider quota and credentials
+
+### Version 1 Release Boundary
+
+Version 1 includes metadata discovery and authorized playable-source matching.
+
+Version 1 excludes:
+
+- YouTube downloading
+- YouTube stream extraction
+- YouTube-to-FFmpeg restreaming
+- BumpWorthy scraping or downloading
+- Advertising marketplace and billing
+- Per-viewer targeted advertising
+
+### Suggested Additional Pull Requests
+
+#### PR 10: External Feed Deployment Validation
+
+- Docker and Unraid
+- Persistence
+- Secrets
+- Restart and recovery
+
+#### PR 10: Interstitial Runtime Validation
+
+- Break continuity
+- Fallback
+- Output clients
+- Airing Records
+
+#### PR 10: Security and Provider Failure Matrix
+
+- SSRF
+- Quota
+- Authentication
+- Removal and privacy transitions
+- Unsupported action rejection
+
+#### PR 10: Documentation and Release Evidence
+
+- Operator guides
+- Migration guide
+- Support bundle fields
+- Release checklist
+
+### Milestone 10 Completion Additions
+
+Milestone 10 cannot be marked Complete until:
+
+1. Feed synchronization is validated under Docker and Unraid.
+2. Provider failures are operator-visible and recoverable.
+3. Presentation Asset state survives backup and restore.
+4. Interstitial planning remains deterministic on authoritative platforms.
+5. Runtime fallback and Airing Records are verified.
+6. Migration does not infer playback rights.
+7. Unsupported YouTube and BumpWorthy actions remain absent.
+8. Security gates pass.
+9. Operator documentation is complete.
 
 ## Completion Gates
 

@@ -77,6 +77,7 @@ This milestone is governed by:
 - `docs/architecture/spec/12-deployment.md`
 - `docs/architecture/spec/13-testing.md`
 - `docs/architecture/spec/14-migration.md`
+- `docs/architecture/spec/15-interstitial-programming-and-external-video-feeds.md`
 - `docs/implementation/README.md`
 - `docs/implementation/01-baseline-and-change-control.md`
 - `docs/implementation/02-module-boundaries.md`
@@ -3752,6 +3753,105 @@ Milestone 06 may begin when:
 14. Linux persistence and Catalog tests pass.
 15. Windows issues are classified.
 16. No critical mapping conflict blocks Network or Channel identity.
+
+## Interstitial Programming and External Video Feeds Amendment
+
+### Purpose
+
+Milestone 06 owns Network and Channel policy for interstitial presentation and
+external publisher assignment.
+
+### Interstitial Pools
+
+Implement:
+
+- Interstitial Pool identity
+- Network-scoped Pools
+- Channel-scoped Pools
+- Allowed Presentation Asset kinds
+- Required and excluded tags
+- Selection policy reference
+- Repeat policy
+- Duration policy
+- Rights policy
+- Active and archived lifecycle
+- Immutable revision references where required
+
+### Break Rules
+
+Break Rules are part of Programming Configuration revisions.
+
+Implement rules for:
+
+- Before-program placement
+- After-program placement
+- Between-episode placement
+- Programming Block boundaries
+- Daypart boundaries
+- Exact local-time boundaries
+- Reserved Break Windows
+- Bounded gap fill
+- Before and after fixed events
+
+Break Rules define intent and constraints.
+
+They do not execute source resolution or FFmpeg.
+
+### External Feed Assignment
+
+Implement explicit assignment of External Feeds to:
+
+- Networks
+- Channels
+- Programming configurations
+- Discovery workflows
+
+One External Feed may contribute to multiple Channels only through explicit
+assignment.
+
+### Revision and Lifecycle Rules
+
+- Approved Programming Configuration revisions are immutable.
+- Pool references are versioned or snapshot-safe.
+- Feed assignment changes do not rewrite approved Schedule Plans.
+- Archive and restore preserve historical references.
+- Migrated Channels receive explicit default behavior rather than implicit
+  filler inheritance.
+
+### Suggested Additional Pull Requests
+
+#### PR 06: Interstitial Pool Aggregate
+
+- Aggregate and repository
+- Network and Channel scope
+- Membership and tag policy
+- Lifecycle and concurrency tests
+
+#### PR 06: Break Rule Configuration
+
+- Rule schemas
+- Programming Configuration revision integration
+- Validation
+- Fixed-event and boundary constraints
+
+#### PR 06: External Feed Assignment
+
+- Network and Channel assignment
+- Default policy
+- Migration mapping
+- Authorization foundation
+
+### Milestone 06 Completion Additions
+
+Milestone 06 cannot be marked Complete until:
+
+1. Interstitial Pools are first-class Network or Channel concepts.
+2. Break Rules belong to immutable Programming Configuration revisions.
+3. Feed assignment is explicit.
+4. Scope and ownership are enforced.
+5. Pool and Break Rule validation exists.
+6. Migrated filler behavior has an explicit mapping or conflict.
+7. Playlist terminology is not the primary model for this capability.
 
 ## Completion Gates
 

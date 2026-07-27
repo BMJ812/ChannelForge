@@ -83,6 +83,7 @@ This milestone is governed by:
 - `docs/architecture/spec/12-deployment.md`
 - `docs/architecture/spec/13-testing.md`
 - `docs/architecture/spec/14-migration.md`
+- `docs/architecture/spec/15-interstitial-programming-and-external-video-feeds.md`
 - `docs/implementation/README.md`
 - `docs/implementation/01-baseline-and-change-control.md`
 - `docs/implementation/02-module-boundaries.md`
@@ -3657,6 +3658,126 @@ Milestone 08 may begin when:
 16. Linux Scheduling tests pass.
 17. Windows determinism issues are classified.
 18. No critical publication or source-resolution conflict blocks implementation.
+
+## Interstitial Programming and External Video Feeds Amendment
+
+### Purpose
+
+Milestone 08 owns publication and runtime execution of planned Presentation
+Assets.
+
+### Publication
+
+Implement:
+
+- Explicit Presentation Asset Schedule Entries
+- Stable Break group identity
+- Referential-integrity checks
+- Guide visibility policy
+- Metadata-only exclusion
+- Stale external metadata warnings
+- Publication artifact checksums
+
+### Runtime Playout
+
+Implement:
+
+- Late Presentation Asset source resolution
+- Direct play, remux, and transcode decisions
+- Break transitions
+- Audio and video continuity
+- Runtime availability checks
+- Playout Decision evidence
+- Airing Records for planned and actual assets
+- Runtime metrics
+
+### Guide Modes
+
+Support explicit policy for:
+
+- Hidden interstitial entries
+- Grouped break entries
+- Individual Presentation Asset entries
+- Current-program display only where explicitly permitted
+
+Guide policy must not falsify Airing Records.
+
+### Unavailable Asset Recovery
+
+Support configured recovery:
+
+- Skip
+- Deterministic fallback Pool
+- Technical slate
+- Off-Air slate
+- Session failure
+
+Recovery must:
+
+- Preserve the original planned entry.
+- Record the actual aired asset.
+- Record the failure reason.
+- Avoid rewriting the approved Schedule Plan.
+- Avoid corrupting repeat or progression state.
+
+### External Provider Boundary
+
+Milestone 08 must not create:
+
+- YouTube-to-FFmpeg source resolution
+- YouTube stream extraction
+- Hidden or modified YouTube embeds
+- BumpWorthy playback adapters
+- Arbitrary webpage-to-media conversion
+
+A separately authorized playable source may retain YouTube metadata provenance.
+
+### Web-Only Playback
+
+Any future official embedded-player mode is a separate output class.
+
+It is not:
+
+- M3U output
+- HDHomeRun-compatible output
+- Plex Live TV output
+- Jellyfin Live TV output
+- Emby Live TV output
+
+### Suggested Additional Pull Requests
+
+#### PR 08: Publication of Presentation Assets
+
+- Schedule Entry serialization
+- Break identity
+- Guide policy
+- Artifact validation
+
+#### PR 08: Presentation Asset Source Resolution
+
+- Local and Media Source-backed assets
+- Output Profile selection
+- Failure classification
+
+#### PR 08: Break Runtime and Fallback
+
+- Transitions
+- Fallback Pool
+- Slates
+- Airing Records
+- Metrics
+
+### Milestone 08 Completion Additions
+
+Milestone 08 cannot be marked Complete until:
+
+1. Presentation Assets publish through the canonical Schedule Plan.
+2. Metadata-only external items cannot reach linear playout.
+3. Guide behavior is explicit and tested.
+4. Runtime fallback preserves planned history.
+5. Airing Records identify actual break media.
+6. Unsupported YouTube restream paths do not exist.
+7. XMLTV, M3U, and HDHomeRun-compatible output remain stable.
 
 ## Completion Gates
 
