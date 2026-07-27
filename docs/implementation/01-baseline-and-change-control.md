@@ -2386,7 +2386,19 @@ Scope:
 - Output inventory
 - Background-job inventory
 
-## PR 01E: Characterization Test Foundation
+## PR 01E: Change-Control and Contribution Rules
+
+Scope:
+
+- ChannelForge contribution guide
+- Pull-request template
+- Change-control policy
+- Risk-classification guide
+- Architecture-traceability requirements
+- Issue register
+- No runtime behavior change
+
+## PR 01F: Characterization Test Foundation
 
 Scope:
 
@@ -2398,7 +2410,7 @@ Scope:
 - Golden file review rules
 - No behavior replacement
 
-## PR 01F: Baseline Test Reports
+## PR 01G: Baseline Test Reports and Completion
 
 Scope:
 
@@ -2407,18 +2419,11 @@ Scope:
 - Failure classification
 - Platform matrix
 - Flake register
+- Security and deployment baseline closure
+- Milestone 01 completion report
 
-## PR 01G: Change-Control Artifacts
-
-Scope:
-
-- Pull-request template
-- Issue-register template
-- Risk-classification guide
-- Architecture traceability
-- Completion report
-
-The exact grouping may change.
+This sequence intentionally adopts change control before adding or classifying
+the remaining characterization and platform evidence.
 
 The semantic separation must remain.
 
