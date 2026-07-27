@@ -17,6 +17,7 @@ change public API paths.
 | --- | --- | --- | --- |
 | 01B | Repository and toolchain inventory | `195a4d04aca082af04362152f56283c139e9eaad` | `docs/m01-repository-toolchain-inventory` |
 | 01C | Persistence and API inventory | `0e5491f87259123a3cb085e3d2ba3844eda510d0` | `docs/m01-persistence-api-inventory` |
+| 01D | Provider, scheduling, and playout inventory | `49be6eec67247b5a3c43efaa928953bfd4c852dd` | `docs/m01-provider-scheduling-playout-inventory` |
 
 ## Artifacts
 
@@ -36,6 +37,12 @@ change public API paths.
 | `api-inventory.md` | Inherited route declarations and compatibility disposition |
 | `openapi-inventory.md` | OpenAPI generation and generated-client pipeline |
 | `configuration-filesystem-inventory.md` | Environment-key and durable-path evidence |
+| `provider-scheduling-playout-discovery.json` | Sanitized PR 01D static discovery evidence |
+| `provider-catalog-inventory.md` | Provider adapters, scanners, media-source persistence, and catalog normalization |
+| `scheduling-interstitial-inventory.md` | Time/random slots, lineups, filler, flex, mid-roll, and determinism risks |
+| `playout-output-inventory.md` | Runtime selection, sessions, FFmpeg, XMLTV, M3U, HLS, and HDHomeRun output |
+| `background-runtime-inventory.md` | Tasks, workers, timers, process boundaries, and filesystem authorities |
+| `characterization-matrix.md` | Existing coverage and required safety net before subsystem replacement |
 
 ## Reproduction
 
@@ -57,6 +64,13 @@ configuration only, excluded environment files, did not read environment
 values, emitted no source snippets, and did not emit absolute repository or
 profile paths. Its normalized evidence SHA-256 is
 `9957491ba89d96bcc67bdd17a8ab7be275618fa645ad021de7fa6c6347e322d9`.
+
+PR 01D evidence was captured from a clean checkout of
+`49be6eec67247b5a3c43efaa928953bfd4c852dd`. The collector read Git-tracked source only, excluded
+environment files and values, emitted no source snippets or file contents, and
+did not emit absolute repository or profile paths. Its raw SHA-256 is
+`f4fe004082aefe1281687a3262b3607fa119038949197a68f975367bb6058080` and its normalized evidence SHA-256 is
+`89c88fffcc9a0fdb1b8e92a901f2686bf648969f517aa8ce72159e0ed1d92f21`.
 
 ## Evidence Rules
 
