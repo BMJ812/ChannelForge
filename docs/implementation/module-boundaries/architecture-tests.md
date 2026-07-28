@@ -63,7 +63,12 @@ The self-test suite covers:
 - Allowed compatibility adapter behavior
 - Expired waiver
 - Critical-rule waiver rejection
+- Non-padded waiver milestone rejection
 - Deterministic violation ordering
+- Noncanonical module directory
+- Missing module `index.ts`
+- Missing module `README.md`
+- File placed directly under the modules root
 
 ## Determinism
 

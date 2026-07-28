@@ -74,6 +74,9 @@ Every module directory must contain:
 - `index.ts`
 - `README.md`
 
+Only module directories may exist directly under `server/src/modules/`.
+Root-level source files, barrel files, and placeholders are prohibited.
+
 Empty placeholder directories are prohibited.
 
 ## Public Entry Point

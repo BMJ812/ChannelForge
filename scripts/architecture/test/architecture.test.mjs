@@ -296,6 +296,115 @@ test('rejects waivers for critical rules', async () => {
   });
 });
 
+test('rejects non-padded waiver milestones', async () => {
+  await withRepository(async (repoRoot) => {
+    await createModule(repoRoot, 'catalog', {
+      'internal/value.ts': 'export const value = 1;\n',
+    });
+    await createModule(repoRoot, 'channels', {
+      'application/service.ts':
+        "import { value } from '@/modules/catalog/internal/value.js';\n"
+        + 'export const service = value;\n',
+    });
+
+    const result = await checkArchitecture({
+      registry: {
+        schemaVersion: 1,
+        waivers: [{
+          expiresMilestone: 'M3',
+          id: 'WVR-003',
+          import: '@/modules/catalog/internal/value.js',
+          owner: 'Channels',
+          reason: 'Fixture for milestone-format validation.',
+          ruleId: 'MOD-001',
+          source:
+            'server/src/modules/channels/application/service.ts',
+        }],
+      },
+      repoRoot,
+    });
+
+    assert.equal(
+      result.waiverErrors.some(
+        ({ code }) => code === 'WAIVER-EXPIRY',
+      ),
+      true,
+    );
+  });
+});
+
+test('rejects noncanonical module directories', async () => {
+  await withRepository(async (repoRoot) => {
+    await writeRepoFile(
+      repoRoot,
+      'server/src/modules/misc/index.ts',
+      'export const misc = true;\n',
+    );
+    await writeRepoFile(
+      repoRoot,
+      'server/src/modules/misc/README.md',
+      '# misc\n',
+    );
+
+    const result = await checkArchitecture({
+      registry: emptyRegistry,
+      repoRoot,
+    });
+
+    assert.deepEqual(ruleIds(result), ['STR-001']);
+  });
+});
+
+test('rejects module directories without index.ts', async () => {
+  await withRepository(async (repoRoot) => {
+    await writeRepoFile(
+      repoRoot,
+      'server/src/modules/catalog/README.md',
+      '# catalog\n',
+    );
+
+    const result = await checkArchitecture({
+      registry: emptyRegistry,
+      repoRoot,
+    });
+
+    assert.deepEqual(ruleIds(result), ['STR-002']);
+  });
+});
+
+test('rejects module directories without README.md', async () => {
+  await withRepository(async (repoRoot) => {
+    await writeRepoFile(
+      repoRoot,
+      'server/src/modules/catalog/index.ts',
+      'export const catalog = true;\n',
+    );
+
+    const result = await checkArchitecture({
+      registry: emptyRegistry,
+      repoRoot,
+    });
+
+    assert.deepEqual(ruleIds(result), ['STR-003']);
+  });
+});
+
+test('rejects files directly under the modules root', async () => {
+  await withRepository(async (repoRoot) => {
+    await writeRepoFile(
+      repoRoot,
+      'server/src/modules/catalog.ts',
+      'export const catalog = true;\n',
+    );
+
+    const result = await checkArchitecture({
+      registry: emptyRegistry,
+      repoRoot,
+    });
+
+    assert.deepEqual(ruleIds(result), ['STR-004']);
+  });
+});
 test('sorts violations deterministically', async () => {
   await withRepository(async (repoRoot) => {
     await createModule(repoRoot, 'catalog', {

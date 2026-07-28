@@ -489,6 +489,13 @@ async function scanModuleStructure(repoRoot) {
   for (const entry of entries.sort((left, right) =>
     left.name.localeCompare(right.name))) {
     if (!entry.isDirectory()) {
+      violations.push(createViolation({
+        critical: false,
+        message:
+          'Only module directories may exist directly under server/src/modules.',
+        ruleId: 'STR-004',
+        source: `server/src/modules/${entry.name}`,
+      }));
       continue;
     }
 
@@ -536,7 +543,7 @@ async function scanModuleStructure(repoRoot) {
 }
 
 function milestoneNumber(value) {
-  const match = /^M(\d{1,2})$/u.exec(value);
+  const match = /^M(\d{2})$/u.exec(value);
 
   return match ? Number.parseInt(match[1], 10) : null;
 }

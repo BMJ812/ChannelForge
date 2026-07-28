@@ -20,6 +20,7 @@
 | `STR-001` | Module directories use an approved canonical name | New module directories | Ownership decision required |
 | `STR-002` | Every module exposes `index.ts` | New module directories | Not handled by import waiver |
 | `STR-003` | Every module contains `README.md` | New module directories | Not handled by import waiver |
+| `STR-004` | Only module directories may exist directly under `server/src/modules` | New modules root | Not handled by import waiver |
 
 ## Critical Rules
 

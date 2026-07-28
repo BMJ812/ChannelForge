@@ -80,6 +80,10 @@ export const ruleDefinitions = Object.freeze({
     title: 'Every module directory must contain README.md',
     critical: false,
   },
+  'STR-004': {
+    title: 'Only module directories may exist directly under the modules root',
+    critical: false,
+  },
 });
 
 export const forbiddenDomainPackagePrefixes = Object.freeze([
