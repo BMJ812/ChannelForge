@@ -1,6 +1,6 @@
 # Architecture Tests
 
-- **Authority:** Milestone 02 PR 02A
+- **Authority:** Milestone 02 PR 02A and PR 02B
 - **Tool:** Custom Node.js scanner using the existing TypeScript compiler API
 - **New dependency:** None
 - **Runtime behavior changed:** No
@@ -45,10 +45,17 @@ server/src/app
 server/src/infrastructure
 server/src/compatibility
 server/src/transport
+shared/src
+types/src
 web/src
 ```
 
-Absent directories are valid during PR 02A.
+Absent structural directories remain valid during staged M02 implementation.
+
+`SHR-001` additionally scans legacy `server/src/**`, `server/scripts/**`, and
+root `scripts/**`. That extended scan evaluates only shared-package deep imports;
+it does not apply the other module-direction rules to inherited server or
+tooling code.
 
 ## Fixtures
 
@@ -69,6 +76,22 @@ The self-test suite covers:
 - Missing module `index.ts`
 - Missing module `README.md`
 - File placed directly under the modules root
+- Allowed new-module import from `@tunarr/shared/kernel`
+- Forbidden new-module import from legacy shared entry points
+- Forbidden deep import into `shared/src`
+- Allowed neutral shared-kernel production and test dependencies
+- Forbidden shared-kernel dependency on legacy or domain code
+- Complete shared-package export classification
+- Missing shared-package export classification
+- Forbidden relative import from `shared/dist`
+- Forbidden undeclared shared-package subpath
+- Forbidden shared deep imports from legacy server code, root scripts, and server scripts
+- Forbidden shared deep imports from the Types workspace
+- Allowed exact inherited deep-import baseline with a different source rejected
+- Duplicate occurrence of a baselined import rejected
+- Malformed inherited baseline rejection
+- Unused inherited baseline rejection
+- Waiver attempt for explicitly non-waivable `SHR-004` rejected
 
 ## Determinism
 
@@ -98,6 +121,10 @@ The command exits nonzero when:
 - A waiver targets a critical rule
 - A waiver contains wildcards
 - A waiver is unused
+- A shared-package export is unclassified
+- The governed kernel export points at a noncanonical target
+- The inherited shared deep-import baseline is malformed or unused
+- A waiver targets an explicitly non-waivable rule
 
 ## CI
 

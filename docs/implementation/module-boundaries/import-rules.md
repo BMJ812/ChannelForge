@@ -1,6 +1,6 @@
 # Initial Import Rules
 
-- **Authority:** Milestone 02 PR 02A
+- **Authority:** Milestone 02 PR 02A and PR 02B
 - **Enforcement mode:** Path-scoped strict
 - **Current milestone:** M02
 
@@ -21,6 +21,10 @@
 | `STR-002` | Every module exposes `index.ts` | New module directories | Not handled by import waiver |
 | `STR-003` | Every module contains `README.md` | New module directories | Not handled by import waiver |
 | `STR-004` | Only module directories may exist directly under `server/src/modules` | New modules root | Not handled by import waiver |
+| `SHR-001` | Callers outside the shared package use only declared entry points and do not import `shared/src` or `shared/dist` internals | Strict roots, including Types, plus narrow legacy-server and script scans | Prohibited |
+| `SHR-002` | New modules import `@tunarr/shared/kernel` rather than inherited shared entry points | New modules | Prohibited |
+| `SHR-003` | Shared-kernel source depends only on kernel files and approved neutral packages | `shared/src/kernel/**` | Prohibited |
+| `SHR-004` | The shared registry has exact export classifications and a valid inherited-import baseline | Shared boundary registry | Prohibited |
 
 ## Critical Rules
 
@@ -30,11 +34,49 @@ The initial non-waivable rules are:
 MOD-004
 MOD-005
 MOD-006
+SHR-001
+SHR-002
+SHR-003
 ```
 
 A critical-rule conflict must be resolved through a public port, ownership
 correction, or application-level composition. The waiver registry cannot
-disable a critical rule.
+disable a critical rule. `SHR-004` remains noncritical for severity reporting
+but is also explicitly non-waivable.
+
+## Shared-Package Restrictions
+
+The inherited entry points remain available only as compatibility surfaces:
+
+```text
+@tunarr/shared
+@tunarr/shared/constants
+@tunarr/shared/types
+@tunarr/shared/util
+```
+
+New ChannelForge modules may import only:
+
+```text
+@tunarr/shared/kernel
+```
+
+One inherited deep import is recorded as an exact baseline in
+`scripts/architecture/shared-boundaries.json`:
+
+```text
+server/src/db/SmartCollectionsDB.ts
+../../../shared/dist/src/util/searchUtil.js
+```
+
+It is scheduled for removal in PR 02F and authorizes no other source or import.
+The registry validates exact fields and rejects the entry once its matching
+consumer import no longer exists.
+
+The initial kernel contains only `isNonEmptyString`. Kernel production source may
+depend on `lodash-es` to preserve inherited string semantics. Kernel tests may
+also depend on `vitest`. Provider payloads, `@tunarr/types`, search parsers,
+Day.js mutation, runtime APIs, and legacy shared utilities are prohibited.
 
 ## Domain Package Restrictions
 

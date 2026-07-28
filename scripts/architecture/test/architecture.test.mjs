@@ -405,6 +405,595 @@ test('rejects files directly under the modules root', async () => {
     assert.deepEqual(ruleIds(result), ['STR-004']);
   });
 });
+test('allows new modules to import the governed shared kernel', async () => {
+  await withRepository(async (repoRoot) => {
+    await createModule(repoRoot, 'catalog', {
+      'domain/value.ts':
+        "import { isNonEmptyString } from '@tunarr/shared/kernel';\n"
+        + "export const value = isNonEmptyString('catalog');\n",
+    });
+
+    const result = await checkArchitecture({
+      registry: emptyRegistry,
+      repoRoot,
+    });
+
+    assert.deepEqual(result.violations, []);
+  });
+});
+
+test('rejects legacy shared imports from new modules', async () => {
+  await withRepository(async (repoRoot) => {
+    await createModule(repoRoot, 'catalog', {
+      'application/service.ts':
+        "import { seq } from '@tunarr/shared/util';\n"
+        + 'export const service = seq;\n',
+    });
+
+    const result = await checkArchitecture({
+      registry: emptyRegistry,
+      repoRoot,
+    });
+
+    assert.deepEqual(ruleIds(result), ['SHR-002']);
+    assert.equal(result.violations[0].critical, true);
+  });
+});
+
+test('rejects shared package source deep imports', async () => {
+  await withRepository(async (repoRoot) => {
+    await writeRepoFile(
+      repoRoot,
+      'shared/src/util/index.ts',
+      'export const legacy = true;\n',
+    );
+    await writeRepoFile(
+      repoRoot,
+      'web/src/bad.ts',
+      "import { legacy } from '../../shared/src/util/index.js';\n"
+      + 'export const bad = legacy;\n',
+    );
+
+    const result = await checkArchitecture({
+      registry: emptyRegistry,
+      repoRoot,
+    });
+
+    assert.deepEqual(ruleIds(result), ['SHR-001']);
+    assert.equal(result.violations[0].critical, true);
+  });
+});
+
+test('allows approved shared-kernel production and test dependencies', async () => {
+  await withRepository(async (repoRoot) => {
+    await writeRepoFile(
+      repoRoot,
+      'shared/src/kernel/validation.ts',
+      "import { isString } from 'lodash-es';\n"
+      + 'export const valid = isString;\n',
+    );
+    await writeRepoFile(
+      repoRoot,
+      'shared/src/kernel/validation.test.ts',
+      "import { expect } from 'vitest';\n"
+      + 'export const assertion = expect;\n',
+    );
+
+    const result = await checkArchitecture({
+      registry: emptyRegistry,
+      repoRoot,
+    });
+
+    assert.deepEqual(result.violations, []);
+  });
+});
+
+test('rejects legacy and domain dependencies from the shared kernel', async () => {
+  await withRepository(async (repoRoot) => {
+    await writeRepoFile(
+      repoRoot,
+      'shared/src/util/index.ts',
+      'export const legacy = true;\n',
+    );
+    await writeRepoFile(
+      repoRoot,
+      'shared/src/kernel/bad.ts',
+      "import type { ChannelProgram } from '@tunarr/types';\n"
+      + "import { legacy } from '../util/index.js';\n"
+      + 'export const bad = [legacy] as const;\n'
+      + 'export type BadProgram = ChannelProgram;\n',
+    );
+
+    const result = await checkArchitecture({
+      registry: emptyRegistry,
+      repoRoot,
+    });
+
+    assert.deepEqual(ruleIds(result), ['SHR-003', 'SHR-003']);
+    assert.equal(
+      result.violations.every(({ critical }) => critical),
+      true,
+    );
+  });
+});
+
+test('accepts a fully governed shared package export map', async () => {
+  await withRepository(async (repoRoot) => {
+    await writeRepoFile(
+      repoRoot,
+      'shared/package.json',
+      `${JSON.stringify({
+        name: '@tunarr/shared',
+        exports: {
+          '.': {
+            types: './dist/src/index.d.ts',
+            default: './dist/src/index.js',
+          },
+          './kernel': {
+            types: './dist/src/kernel/index.d.ts',
+            default: './dist/src/kernel/index.js',
+          },
+        },
+      }, null, 2)}\n`,
+    );
+    await writeRepoFile(
+      repoRoot,
+      'scripts/architecture/shared-boundaries.json',
+      `${JSON.stringify({
+        schemaVersion: 1,
+        package: '@tunarr/shared',
+        legacyDeepImportBaseline: [],
+        entryPoints: {
+          '.': 'legacy-compatibility',
+          './kernel': 'kernel',
+        },
+      }, null, 2)}\n`,
+    );
+
+    const result = await checkArchitecture({
+      registry: emptyRegistry,
+      repoRoot,
+    });
+
+    assert.deepEqual(result.violations, []);
+  });
+});
+
+test('rejects package exports missing shared-boundary classifications', async () => {
+  await withRepository(async (repoRoot) => {
+    await writeRepoFile(
+      repoRoot,
+      'shared/package.json',
+      `${JSON.stringify({
+        name: '@tunarr/shared',
+        exports: {
+          '.': {
+            types: './dist/src/index.d.ts',
+            default: './dist/src/index.js',
+          },
+          './kernel': {
+            types: './dist/src/kernel/index.d.ts',
+            default: './dist/src/kernel/index.js',
+          },
+          './util': {
+            types: './dist/src/util/index.d.ts',
+            default: './dist/src/util/index.js',
+          },
+        },
+      }, null, 2)}\n`,
+    );
+    await writeRepoFile(
+      repoRoot,
+      'scripts/architecture/shared-boundaries.json',
+      `${JSON.stringify({
+        schemaVersion: 1,
+        package: '@tunarr/shared',
+        legacyDeepImportBaseline: [],
+        entryPoints: {
+          '.': 'legacy-compatibility',
+          './kernel': 'kernel',
+        },
+      }, null, 2)}\n`,
+    );
+
+    const result = await checkArchitecture({
+      registry: emptyRegistry,
+      repoRoot,
+    });
+
+    assert.deepEqual(ruleIds(result), ['SHR-004']);
+  });
+});
+
+test('rejects relative imports from shared build output', async () => {
+  await withRepository(async (repoRoot) => {
+    await writeRepoFile(
+      repoRoot,
+      'shared/dist/src/util/index.js',
+      'export const legacy = true;\n',
+    );
+    await writeRepoFile(
+      repoRoot,
+      'web/src/bad.ts',
+      "import { legacy } from '../../shared/dist/src/util/index.js';\n"
+      + 'export const bad = legacy;\n',
+    );
+
+    const result = await checkArchitecture({
+      registry: emptyRegistry,
+      repoRoot,
+    });
+
+    assert.deepEqual(ruleIds(result), ['SHR-001']);
+  });
+});
+
+test('rejects undeclared shared package subpaths', async () => {
+  await withRepository(async (repoRoot) => {
+    await writeRepoFile(
+      repoRoot,
+      'shared/package.json',
+      `${JSON.stringify({
+        name: '@tunarr/shared',
+        exports: {
+          '.': {
+            types: './dist/src/index.d.ts',
+            default: './dist/src/index.js',
+          },
+          './kernel': {
+            types: './dist/src/kernel/index.d.ts',
+            default: './dist/src/kernel/index.js',
+          },
+        },
+      }, null, 2)}\n`,
+    );
+    await writeRepoFile(
+      repoRoot,
+      'scripts/architecture/shared-boundaries.json',
+      `${JSON.stringify({
+        schemaVersion: 1,
+        package: '@tunarr/shared',
+        legacyDeepImportBaseline: [],
+        entryPoints: {
+          '.': 'legacy-compatibility',
+          './kernel': 'kernel',
+        },
+      }, null, 2)}\n`,
+    );
+    await writeRepoFile(
+      repoRoot,
+      'web/src/bad.ts',
+      "import { value } from '@tunarr/shared/kernel/validation';\n"
+      + 'export const bad = value;\n',
+    );
+
+    const result = await checkArchitecture({
+      registry: emptyRegistry,
+      repoRoot,
+    });
+
+    assert.deepEqual(ruleIds(result), ['SHR-001']);
+  });
+});
+
+test('rejects shared deep imports from legacy server code and scripts', async () => {
+  await withRepository(async (repoRoot) => {
+    await writeRepoFile(
+      repoRoot,
+      'shared/src/util/index.ts',
+      'export const legacy = true;\n',
+    );
+    await writeRepoFile(
+      repoRoot,
+      'server/src/services/bad.ts',
+      "import { legacy } from '../../../shared/src/util/index.js';\n"
+      + 'export const bad = legacy;\n',
+    );
+    await writeRepoFile(
+      repoRoot,
+      'scripts/bad.mjs',
+      "import { legacy } from '../shared/src/util/index.js';\n"
+      + 'export const bad = legacy;\n',
+    );
+    await writeRepoFile(
+      repoRoot,
+      'server/scripts/bad.ts',
+      "import { legacy } from '../../shared/src/util/index.js';\n"
+      + 'export const serverScriptBad = legacy;\n',
+    );
+
+    const result = await checkArchitecture({
+      registry: emptyRegistry,
+      repoRoot,
+    });
+
+    assert.deepEqual(
+      ruleIds(result),
+      ['SHR-001', 'SHR-001', 'SHR-001'],
+    );
+  });
+});
+
+test('rejects shared deep imports from the types workspace', async () => {
+  await withRepository(async (repoRoot) => {
+    await writeRepoFile(
+      repoRoot,
+      'shared/src/util/index.ts',
+      'export const legacy = true;\n',
+    );
+    await writeRepoFile(
+      repoRoot,
+      'types/src/bad.ts',
+      "import { legacy } from '../../shared/src/util/index.js';\n"
+      + 'export const bad = legacy;\n',
+    );
+
+    const result = await checkArchitecture({
+      registry: emptyRegistry,
+      repoRoot,
+    });
+
+    assert.deepEqual(ruleIds(result), ['SHR-001']);
+  });
+});
+
+test('allows only the exact inherited shared deep-import baseline', async () => {
+  await withRepository(async (repoRoot) => {
+    await writeRepoFile(
+      repoRoot,
+      'shared/package.json',
+      `${JSON.stringify({
+        name: '@tunarr/shared',
+        exports: {
+          '.': {
+            types: './dist/src/index.d.ts',
+            default: './dist/src/index.js',
+          },
+          './kernel': {
+            types: './dist/src/kernel/index.d.ts',
+            default: './dist/src/kernel/index.js',
+          },
+        },
+      }, null, 2)}\n`,
+    );
+    await writeRepoFile(
+      repoRoot,
+      'scripts/architecture/shared-boundaries.json',
+      `${JSON.stringify({
+        schemaVersion: 1,
+        package: '@tunarr/shared',
+        legacyDeepImportBaseline: [{
+          import: '../../../shared/dist/src/util/index.js',
+          owner: 'Catalog',
+          reason: 'Inherited fixture pending consumer migration.',
+          removalUnit: 'PR 02F',
+          source: 'server/src/db/legacy.ts',
+        }],
+        entryPoints: {
+          '.': 'legacy-compatibility',
+          './kernel': 'kernel',
+        },
+      }, null, 2)}\n`,
+    );
+    await writeRepoFile(
+      repoRoot,
+      'shared/dist/src/util/index.js',
+      'export const legacy = true;\n',
+    );
+    await writeRepoFile(
+      repoRoot,
+      'server/src/db/legacy.ts',
+      "import { legacy } from '../../../shared/dist/src/util/index.js';\n"
+      + 'export const allowed = legacy;\n',
+    );
+    await writeRepoFile(
+      repoRoot,
+      'server/src/db/new-deep-import.ts',
+      "import { legacy } from '../../../shared/dist/src/util/index.js';\n"
+      + 'export const rejected = legacy;\n',
+    );
+
+    const result = await checkArchitecture({
+      registry: emptyRegistry,
+      repoRoot,
+    });
+
+    assert.deepEqual(ruleIds(result), ['SHR-001']);
+    assert.equal(
+      result.violations[0].source,
+      'server/src/db/new-deep-import.ts',
+    );
+  });
+});
+
+test('rejects duplicate occurrences of a baselined deep import', async () => {
+  await withRepository(async (repoRoot) => {
+    await writeRepoFile(
+      repoRoot,
+      'shared/package.json',
+      `${JSON.stringify({
+        name: '@tunarr/shared',
+        exports: {
+          '.': {
+            types: './dist/src/index.d.ts',
+            default: './dist/src/index.js',
+          },
+          './kernel': {
+            types: './dist/src/kernel/index.d.ts',
+            default: './dist/src/kernel/index.js',
+          },
+        },
+      }, null, 2)}\n`,
+    );
+    await writeRepoFile(
+      repoRoot,
+      'scripts/architecture/shared-boundaries.json',
+      `${JSON.stringify({
+        schemaVersion: 1,
+        package: '@tunarr/shared',
+        legacyDeepImportBaseline: [{
+          import: '../../../shared/dist/src/util/index.js',
+          owner: 'Catalog',
+          reason: 'Inherited fixture pending consumer migration.',
+          removalUnit: 'PR 02F',
+          source: 'server/src/db/legacy.ts',
+        }],
+        entryPoints: {
+          '.': 'legacy-compatibility',
+          './kernel': 'kernel',
+        },
+      }, null, 2)}\n`,
+    );
+    await writeRepoFile(
+      repoRoot,
+      'shared/dist/src/util/index.js',
+      'export const legacy = true;\n',
+    );
+    await writeRepoFile(
+      repoRoot,
+      'server/src/db/legacy.ts',
+      "import { legacy } from '../../../shared/dist/src/util/index.js';\n"
+      + "export const duplicate = import('../../../shared/dist/src/util/index.js');\n"
+      + 'export const allowed = legacy;\n',
+    );
+
+    const result = await checkArchitecture({
+      registry: emptyRegistry,
+      repoRoot,
+    });
+
+    assert.deepEqual(ruleIds(result), ['SHR-001']);
+    assert.equal(
+      result.violations[0].source,
+      'server/src/db/legacy.ts',
+    );
+  });
+});
+
+test('rejects malformed inherited shared deep-import baselines', async () => {
+  await withRepository(async (repoRoot) => {
+    await writeRepoFile(
+      repoRoot,
+      'shared/package.json',
+      `${JSON.stringify({
+        name: '@tunarr/shared',
+        exports: {
+          '.': {
+            types: './dist/src/index.d.ts',
+            default: './dist/src/index.js',
+          },
+          './kernel': {
+            types: './dist/src/kernel/index.d.ts',
+            default: './dist/src/kernel/index.js',
+          },
+        },
+      }, null, 2)}\n`,
+    );
+    await writeRepoFile(
+      repoRoot,
+      'scripts/architecture/shared-boundaries.json',
+      `${JSON.stringify({
+        schemaVersion: 1,
+        package: '@tunarr/shared',
+        legacyDeepImportBaseline: [{
+          import: '*',
+          source: 'server/src/db/legacy.ts',
+        }],
+        entryPoints: {
+          '.': 'legacy-compatibility',
+          './kernel': 'kernel',
+        },
+      }, null, 2)}\n`,
+    );
+
+    const result = await checkArchitecture({
+      registry: emptyRegistry,
+      repoRoot,
+    });
+
+    assert.equal(
+      result.violations.every(({ ruleId }) => ruleId === 'SHR-004'),
+      true,
+    );
+    assert.ok(result.violations.length > 0);
+  });
+});
+
+test('rejects unused inherited shared deep-import baselines', async () => {
+  await withRepository(async (repoRoot) => {
+    await writeRepoFile(
+      repoRoot,
+      'shared/package.json',
+      `${JSON.stringify({
+        name: '@tunarr/shared',
+        exports: {
+          '.': {
+            types: './dist/src/index.d.ts',
+            default: './dist/src/index.js',
+          },
+          './kernel': {
+            types: './dist/src/kernel/index.d.ts',
+            default: './dist/src/kernel/index.js',
+          },
+        },
+      }, null, 2)}\n`,
+    );
+    await writeRepoFile(
+      repoRoot,
+      'scripts/architecture/shared-boundaries.json',
+      `${JSON.stringify({
+        schemaVersion: 1,
+        package: '@tunarr/shared',
+        legacyDeepImportBaseline: [{
+          import: '../../../shared/dist/src/util/index.js',
+          owner: 'Catalog',
+          reason: 'Unused fixture.',
+          removalUnit: 'PR 02F',
+          source: 'server/src/db/missing.ts',
+        }],
+        entryPoints: {
+          '.': 'legacy-compatibility',
+          './kernel': 'kernel',
+        },
+      }, null, 2)}\n`,
+    );
+
+    const result = await checkArchitecture({
+      registry: emptyRegistry,
+      repoRoot,
+    });
+
+    assert.deepEqual(ruleIds(result), ['SHR-004']);
+  });
+});
+
+test('rejects waivers for explicitly non-waivable rules', async () => {
+  await withRepository(async (repoRoot) => {
+    const result = await checkArchitecture({
+      registry: {
+        schemaVersion: 1,
+        waivers: [{
+          expiresMilestone: 'M03',
+          id: 'WVR-SHR-004',
+          import: '../../../shared/dist/src/util/index.js',
+          owner: 'Catalog',
+          reason: 'Fixture for non-waivable registry validation.',
+          ruleId: 'SHR-004',
+          source: 'server/src/db/legacy.ts',
+        }],
+      },
+      repoRoot,
+    });
+
+    assert.equal(
+      result.waiverErrors.some(
+        ({ code }) => code === 'WAIVER-PROHIBITED',
+      ),
+      true,
+    );
+  });
+});
+
 test('sorts violations deterministically', async () => {
   await withRepository(async (repoRoot) => {
     await createModule(repoRoot, 'catalog', {
