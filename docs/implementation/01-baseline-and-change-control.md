@@ -1,10 +1,12 @@
 # Milestone 01: Baseline and Change Control
 
 - **Roadmap version:** 0.1
-- **Milestone status:** In Progress
+- **Milestone status:** Complete
 - **Last updated:** 2026-07-27
 - **Risk classification:** Foundation / Moderate
 - **Implementation authority:** Documentation and characterization only
+- **Completion report:** `baseline/completion-report.md`
+- **Completion authority:** PR #13, effective on merge
 
 ## Purpose
 
