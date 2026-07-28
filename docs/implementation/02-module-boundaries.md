@@ -1,10 +1,11 @@
 # Milestone 02: Module Boundaries
 
 - **Roadmap version:** 0.1
-- **Milestone status:** Draft
-- **Last updated:** 2026-07-27
+- **Milestone status:** In Progress
+- **Last updated:** 2026-07-28
 - **Risk classification:** Foundation / High
 - **Implementation authority:** Additive module boundaries and dependency enforcement
+- **Current implementation unit:** PR 02A - Boundary Policy and Architecture Test Harness
 
 ## Purpose
 
