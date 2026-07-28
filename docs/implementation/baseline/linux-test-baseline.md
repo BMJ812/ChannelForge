@@ -51,12 +51,36 @@ The root test command completed all five Turbo tasks successfully.
 | Artifact size | 11,738 bytes |
 | Artifact digest | `sha256:0e33345f45b0e5a8c97abc1f7245affd3602fcbfb990aa2b33201d07e61ff319` |
 | Report generated | `2026-07-27T21:44:29.673Z` |
-| Report SHA-256 | `0d937789ba020f3ae860271f6e76f1e2be06108b29f5c1c4e42a0f00099b51ae` |
-| Manifest SHA-256 | `e3978e4e606ce469d5853c081898711cf9e8ec6e91e83d88d8b75769d1d0965a` |
+| Report SHA-256 | `ed7caf38459a04b0b7793969e284d88ea9485d72e67a5c9198d1702555ea9029` |
+| Manifest SHA-256 | `e9422dc6984a478d8efb61e5302d30c6b5cdc0172bccbf242db3681958a5afca` |
 
 The artifact contains command text, exit codes, complete logs, a
 machine-readable report, repository-cleanliness evidence, and a SHA-256
 manifest.
+
+## Completion-Documentation Verification
+
+The completion-documentation head
+`04109aa2dc2bfcfc4c25d0852a02136dc8b45672` was independently validated by
+successful workflow run `30313571172`.
+
+| Property | Value |
+| --- | --- |
+| Artifact ID | `8671321650` |
+| Artifact size | 11,538 bytes |
+| Artifact digest | `sha256:900b82a1eaa93dc46ffb74fab0bfd0984a8c97636987cba5a1a3dc6cd723a655` |
+| Report generated | `2026-07-27T23:17:35.396Z` |
+| Report SHA-256 | `5ed04a3d91717b23e0abf1b4a4b4f176f0cb63b374842366998fe9b5b41e0f1c` |
+| Manifest SHA-256 | `2a5a4647ef3501a281023d7e5fb106e0d32da94ed7124dc6451f548b5aa8a7c7` |
+
+That run recorded exit code `0` for the baseline tests, characterization
+foundation, build, full test suite, and repository-cleanliness guard. Its
+manifest contained 16 records, and every recorded file size and SHA-256 matched
+the downloaded artifact.
+
+This subsequent verification does not replace the release-authoritative source
+anchor above. It confirms that adding the completion documentation did not
+change or invalidate the inherited baseline result.
 
 ## Initial Harness Failure
 
