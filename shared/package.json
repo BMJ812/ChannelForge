@@ -21,6 +21,10 @@
       "types": "./dist/src/index.d.ts",
       "default": "./dist/src/index.js"
     },
+    "./kernel": {
+      "types": "./dist/src/kernel/index.d.ts",
+      "default": "./dist/src/kernel/index.js"
+    },
     "./constants": {
       "types": "./dist/src/util/constants.d.ts",
       "default": "./dist/src/util/constants.js"

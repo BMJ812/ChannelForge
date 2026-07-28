@@ -13,6 +13,8 @@ import {
   forbiddenDomainPackagePrefixes,
   ruleDefinitions,
   scannedExtensions,
+  sharedKernelAllowedPackages,
+  sharedKernelTestAllowedPackages,
 } from './rules.mjs';
 
 const canonicalModuleSet = new Set(canonicalModuleDirectories);
@@ -23,7 +25,15 @@ const strictSourceRoots = Object.freeze([
   'server/src/infrastructure',
   'server/src/compatibility',
   'server/src/transport',
+  'shared/src',
+  'types/src',
   'web/src',
+]);
+
+const sharedOnlySourceRoots = Object.freeze([
+  'server/scripts',
+  'server/src',
+  'scripts',
 ]);
 
 const sourceExtensionPattern = /\.(?:[cm]?[jt]sx?)$/u;
@@ -46,12 +56,70 @@ function stripSourceExtension(value) {
   return value.replace(sourceExtensionPattern, '');
 }
 
+function isTestSourcePath(relativePath) {
+  return /(?:^|\/).+\.(?:test|spec)\.[cm]?[jt]sx?$/u.test(relativePath);
+}
+
 function packageNameFromSpecifier(specifier) {
   if (specifier.startsWith('@')) {
     return specifier.split('/').slice(0, 2).join('/');
   }
 
   return specifier.split('/')[0];
+}
+
+function sharedPackageSpecifierFromEntryPoint(entryPoint) {
+  if (entryPoint === '.') {
+    return '@tunarr/shared';
+  }
+
+  if (entryPoint.startsWith('./')) {
+    return `@tunarr/shared/${entryPoint.slice(2)}`;
+  }
+
+  return null;
+}
+
+function isSharedSourceCategory(category) {
+  return [
+    'shared-kernel',
+    'shared-legacy',
+  ].includes(category);
+}
+
+function sharedDeepImportBaselineKey(source, specifier) {
+  return `${source}\u0000${specifier}`;
+}
+
+function isSharedBoundaryImport({
+  declaredSharedPackageSpecifiers,
+  specifier,
+  targetInfo,
+}) {
+  const targetPath = targetInfo.relativePath;
+  const targetsSharedInternals =
+    targetPath === 'shared/src'
+    || targetPath?.startsWith('shared/src/')
+    || targetPath === 'shared/dist'
+    || targetPath?.startsWith('shared/dist/');
+  const explicitlyTargetsSharedInternals =
+    specifier === '@tunarr/shared/src'
+    || specifier.startsWith('@tunarr/shared/src/')
+    || specifier === '@tunarr/shared/dist'
+    || specifier.startsWith('@tunarr/shared/dist/');
+  const targetsSharedPackage =
+    specifier === '@tunarr/shared'
+    || specifier.startsWith('@tunarr/shared/');
+  const targetsUndeclaredSharedEntry =
+    targetsSharedPackage
+    && declaredSharedPackageSpecifiers instanceof Set
+    && !declaredSharedPackageSpecifiers.has(specifier);
+
+  return (
+    targetsSharedInternals
+    || explicitlyTargetsSharedInternals
+    || targetsUndeclaredSharedEntry
+  );
 }
 
 async function pathExists(value) {
@@ -97,6 +165,21 @@ async function walkFiles(directory) {
 function classifyRelativePath(relativePath) {
   const normalized = normalizeRelativePath(relativePath);
   const parts = normalized.split('/');
+
+  if (
+    parts[0] === 'shared'
+    && parts[1] === 'src'
+  ) {
+    return {
+      category:
+        parts[2] === 'kernel'
+          ? 'shared-kernel'
+          : 'shared-legacy',
+      layer: parts[3] ?? null,
+      module: null,
+      relativePath: normalized,
+    };
+  }
 
   if (
     parts[0] === 'server'
@@ -306,6 +389,7 @@ function createViolation({
 }
 
 function evaluateImport({
+  declaredSharedPackageSpecifiers,
   repoRoot,
   sourceInfo,
   specifier,
@@ -465,7 +549,426 @@ function evaluateImport({
     );
   }
 
+  const sourceIsShared = isSharedSourceCategory(sourceInfo.category);
+  const sharedInternalImport =
+    !sourceIsShared
+    && isSharedBoundaryImport({
+      declaredSharedPackageSpecifiers,
+      specifier,
+      targetInfo,
+    });
+
+  if (sharedInternalImport) {
+    add(
+      'SHR-001',
+      'Callers outside @tunarr/shared must use a declared package entry point.',
+    );
+  }
+
+  const sharedPackageImport =
+    specifier === '@tunarr/shared'
+    || specifier.startsWith('@tunarr/shared/');
+
+  if (
+    sourceInfo.category === 'module'
+    && sharedPackageImport
+    && specifier !== '@tunarr/shared/kernel'
+    && !sharedInternalImport
+  ) {
+    add(
+      'SHR-002',
+      'New ChannelForge modules may import @tunarr/shared/kernel only.',
+    );
+  }
+
+  if (sourceInfo.category === 'shared-kernel') {
+    const packageAllowed =
+      targetInfo.kind !== 'package'
+      || sharedKernelAllowedPackages.includes(targetInfo.packageName)
+      || (
+        isTestSourcePath(sourceInfo.relativePath)
+        && sharedKernelTestAllowedPackages.includes(targetInfo.packageName)
+      );
+    const internalTargetAllowed =
+      targetInfo.kind !== 'internal'
+      || targetInfo.category === 'shared-kernel';
+
+    if (!packageAllowed || !internalTargetAllowed) {
+      add(
+        'SHR-003',
+        'The shared kernel may depend only on kernel files and approved neutral packages.',
+      );
+    }
+  }
+
   return violations;
+}
+
+async function scanSharedPackageBoundary(repoRoot) {
+  const manifestPath = path.join(
+    repoRoot,
+    'shared',
+    'package.json',
+  );
+
+  if (!(await pathExists(manifestPath))) {
+    return [];
+  }
+
+  const registryPath = path.join(
+    repoRoot,
+    'scripts',
+    'architecture',
+    'shared-boundaries.json',
+  );
+  const violations = [];
+  const add = (message, source = 'scripts/architecture/shared-boundaries.json') => {
+    violations.push(createViolation({
+      critical: ruleDefinitions['SHR-004'].critical,
+      message,
+      ruleId: 'SHR-004',
+      source,
+    }));
+  };
+
+  let manifest;
+
+  try {
+    manifest = JSON.parse(await readFile(manifestPath, 'utf8'));
+  } catch {
+    add('shared/package.json must contain valid JSON.', 'shared/package.json');
+    return violations;
+  }
+
+  if (!(await pathExists(registryPath))) {
+    add('The shared export-classification registry is missing.');
+    return violations;
+  }
+
+  let registry;
+
+  try {
+    registry = JSON.parse(await readFile(registryPath, 'utf8'));
+  } catch {
+    add('The shared export-classification registry must contain valid JSON.');
+    return violations;
+  }
+
+  if (registry.schemaVersion !== 1) {
+    add('The shared export-classification schemaVersion must be 1.');
+  }
+
+  if (registry.package !== '@tunarr/shared') {
+    add('The shared export-classification registry must target @tunarr/shared.');
+  }
+
+  if (
+    !registry.entryPoints
+    || typeof registry.entryPoints !== 'object'
+    || Array.isArray(registry.entryPoints)
+  ) {
+    add('The shared export-classification registry must contain an entryPoints object.');
+    return violations;
+  }
+
+  if (!Array.isArray(registry.legacyDeepImportBaseline)) {
+    add('The shared boundary registry must contain a legacyDeepImportBaseline array.');
+    return violations;
+  }
+
+  const baselineKeys = new Set();
+
+  for (const [index, entry] of registry.legacyDeepImportBaseline.entries()) {
+    const label = `legacyDeepImportBaseline[${index}]`;
+
+    if (
+      !entry
+      || typeof entry !== 'object'
+      || Array.isArray(entry)
+    ) {
+      add(`${label} must be an object.`);
+      continue;
+    }
+
+    for (const field of [
+      'import',
+      'owner',
+      'reason',
+      'removalUnit',
+      'source',
+    ]) {
+      if (
+        typeof entry[field] !== 'string'
+        || entry[field].trim() === ''
+      ) {
+        add(`${label}.${field} must be a non-empty string.`);
+      }
+    }
+
+    for (const field of ['source', 'import']) {
+      if (
+        typeof entry[field] === 'string'
+        && /[*?]/u.test(entry[field])
+      ) {
+        add(`${label}.${field} must identify an exact value.`);
+      }
+    }
+
+    if (
+      typeof entry.removalUnit === 'string'
+      && !/^PR \d{2}[A-Z]$/u.test(entry.removalUnit)
+    ) {
+      add(`${label}.removalUnit must use the form PR NNA.`);
+    }
+
+    if (
+      typeof entry.source === 'string'
+      && typeof entry.import === 'string'
+    ) {
+      const key = sharedDeepImportBaselineKey(
+        entry.source,
+        entry.import,
+      );
+
+      if (baselineKeys.has(key)) {
+        add(`${label} duplicates an existing source and import pair.`);
+      }
+
+      baselineKeys.add(key);
+    }
+  }
+
+  const manifestExports =
+    manifest.exports
+    && typeof manifest.exports === 'object'
+    && !Array.isArray(manifest.exports)
+      ? manifest.exports
+      : {};
+  const manifestEntries = Object.keys(manifestExports).sort();
+  const registryEntries = Object.keys(registry.entryPoints).sort();
+  const allowedClassifications = new Set([
+    'kernel',
+    'legacy-compatibility',
+  ]);
+
+  for (const entry of manifestEntries) {
+    if (!(entry in registry.entryPoints)) {
+      add(`Package export "${entry}" is missing a classification.`);
+      continue;
+    }
+
+    const classification = registry.entryPoints[entry];
+    const expectedClassification =
+      entry === './kernel'
+        ? 'kernel'
+        : 'legacy-compatibility';
+
+    if (!allowedClassifications.has(classification)) {
+      add(`Package export "${entry}" has unknown classification "${classification}".`);
+    } else if (classification !== expectedClassification) {
+      add(
+        `Package export "${entry}" must be classified "${expectedClassification}".`,
+      );
+    }
+  }
+
+  for (const entry of registryEntries) {
+    if (!(entry in manifestExports)) {
+      add(`Classification "${entry}" does not match a package export.`);
+    }
+  }
+
+  const kernelExport = manifestExports['./kernel'];
+
+  if (!kernelExport) {
+    add('The governed ./kernel package export is missing.', 'shared/package.json');
+  } else if (
+    kernelExport.types !== './dist/src/kernel/index.d.ts'
+    || kernelExport.default !== './dist/src/kernel/index.js'
+  ) {
+    add(
+      'The ./kernel export must target the canonical kernel declaration and runtime entry points.',
+      'shared/package.json',
+    );
+  }
+
+  return violations;
+}
+
+async function loadDeclaredSharedPackageSpecifiers(repoRoot) {
+  const registryPath = path.join(
+    repoRoot,
+    'scripts',
+    'architecture',
+    'shared-boundaries.json',
+  );
+
+  if (!(await pathExists(registryPath))) {
+    return null;
+  }
+
+  let registry;
+
+  try {
+    registry = JSON.parse(await readFile(registryPath, 'utf8'));
+  } catch {
+    return null;
+  }
+
+  if (
+    !registry.entryPoints
+    || typeof registry.entryPoints !== 'object'
+    || Array.isArray(registry.entryPoints)
+  ) {
+    return null;
+  }
+
+  return new Set(
+    Object.keys(registry.entryPoints)
+      .map(sharedPackageSpecifierFromEntryPoint)
+      .filter((specifier) => specifier !== null),
+  );
+}
+
+async function loadSharedDeepImportBaseline(repoRoot) {
+  const registryPath = path.join(
+    repoRoot,
+    'scripts',
+    'architecture',
+    'shared-boundaries.json',
+  );
+
+  if (!(await pathExists(registryPath))) {
+    return new Map();
+  }
+
+  let registry;
+
+  try {
+    registry = JSON.parse(await readFile(registryPath, 'utf8'));
+  } catch {
+    return new Map();
+  }
+
+  if (!Array.isArray(registry.legacyDeepImportBaseline)) {
+    return new Map();
+  }
+
+  return new Map(
+    registry.legacyDeepImportBaseline
+      .filter((entry) =>
+        typeof entry?.source === 'string'
+        && typeof entry?.import === 'string')
+      .map((entry) => [
+        sharedDeepImportBaselineKey(entry.source, entry.import),
+        entry,
+      ]),
+  );
+}
+
+async function scanAdditionalSharedImportSources({
+  declaredSharedPackageSpecifiers,
+  repoRoot,
+  sharedDeepImportBaseline,
+}) {
+  const usedBaseline = new Set();
+  const violations = [];
+  let filesScanned = 0;
+
+  for (const relativeRoot of sharedOnlySourceRoots) {
+    const files = await walkFiles(
+      path.join(
+        repoRoot,
+        ...relativeRoot.split('/'),
+      ),
+    );
+
+    for (const filePath of files) {
+      const relativePath = normalizeRelativePath(
+        path.relative(repoRoot, filePath),
+      );
+      const sourceInfo = classifyRelativePath(relativePath);
+      const isLegacyServer = sourceInfo.category === 'legacy-server';
+      const isScript =
+        relativePath.startsWith('scripts/')
+        || relativePath.startsWith('server/scripts/');
+
+      if (!isLegacyServer && !isScript) {
+        continue;
+      }
+
+      filesScanned += 1;
+
+      const sourceText = await readFile(filePath, 'utf8');
+
+      for (const specifier of collectImportSpecifiers(
+        sourceText,
+        relativePath,
+      )) {
+        const targetInfo = resolveImport(
+          repoRoot,
+          sourceInfo,
+          relativePath,
+          specifier,
+        );
+
+        if (!isSharedBoundaryImport({
+          declaredSharedPackageSpecifiers,
+          specifier,
+          targetInfo,
+        })) {
+          continue;
+        }
+
+        const baselineKey = sharedDeepImportBaselineKey(
+          relativePath,
+          specifier,
+        );
+
+        if (
+          sharedDeepImportBaseline.has(baselineKey)
+          && !usedBaseline.has(baselineKey)
+        ) {
+          usedBaseline.add(baselineKey);
+          continue;
+        }
+
+        violations.push(createViolation({
+          critical: ruleDefinitions['SHR-001'].critical,
+          importSpecifier: specifier,
+          message:
+            'Callers outside @tunarr/shared must use a declared package entry point.',
+          ruleId: 'SHR-001',
+          source: relativePath,
+          target:
+            targetInfo.relativePath
+            ?? targetInfo.packageName
+            ?? specifier,
+        }));
+      }
+    }
+  }
+
+  for (const [key, baseline] of sharedDeepImportBaseline) {
+    if (usedBaseline.has(key)) {
+      continue;
+    }
+
+    violations.push(createViolation({
+      critical: ruleDefinitions['SHR-004'].critical,
+      importSpecifier: baseline.import,
+      message:
+        'An inherited shared deep-import baseline entry is unused and must be removed.',
+      ruleId: 'SHR-004',
+      source: baseline.source,
+      target: baseline.import,
+    }));
+  }
+
+  return {
+    filesScanned,
+    violations,
+  };
 }
 
 async function scanModuleStructure(repoRoot) {
@@ -634,6 +1137,16 @@ export function validateWaiverRegistry(registry) {
       });
     }
 
+    if (
+      typeof waiver?.ruleId === 'string'
+      && ruleDefinitions[waiver.ruleId]?.waivable === false
+    ) {
+      errors.push({
+        code: 'WAIVER-PROHIBITED',
+        message: `${waiver.ruleId} is explicitly non-waivable.`,
+      });
+    }
+
     for (const field of ['source', 'import']) {
       if (
         typeof waiver?.[field] === 'string'
@@ -743,7 +1256,21 @@ export async function checkArchitecture({
     sourceFiles.push(...files);
   }
 
-  const violations = await scanModuleStructure(repoRoot);
+  const declaredSharedPackageSpecifiers =
+    await loadDeclaredSharedPackageSpecifiers(repoRoot);
+  const sharedDeepImportBaseline =
+    await loadSharedDeepImportBaseline(repoRoot);
+  const additionalSharedImportScan =
+    await scanAdditionalSharedImportSources({
+      declaredSharedPackageSpecifiers,
+      repoRoot,
+      sharedDeepImportBaseline,
+    });
+  const violations = [
+    ...await scanModuleStructure(repoRoot),
+    ...await scanSharedPackageBoundary(repoRoot),
+    ...additionalSharedImportScan.violations,
+  ];
 
   for (const filePath of sourceFiles) {
     const relativePath = normalizeRelativePath(
@@ -758,6 +1285,7 @@ export async function checkArchitecture({
       relativePath,
     )) {
       violations.push(...evaluateImport({
+        declaredSharedPackageSpecifiers,
         repoRoot,
         sourceInfo,
         specifier,
@@ -769,7 +1297,9 @@ export async function checkArchitecture({
 
   if (waiverErrors.length > 0) {
     return {
-      filesScanned: sourceFiles.length,
+      filesScanned:
+        sourceFiles.length
+        + additionalSharedImportScan.filesScanned,
       violations,
       waived: [],
       waiverErrors,
@@ -783,7 +1313,9 @@ export async function checkArchitecture({
   } = applyWaivers(violations, registry);
 
   return {
-    filesScanned: sourceFiles.length,
+    filesScanned:
+        sourceFiles.length
+        + additionalSharedImportScan.filesScanned,
     violations: active,
     waived,
     waiverErrors: unusedWaiverErrors,

@@ -84,7 +84,32 @@ export const ruleDefinitions = Object.freeze({
     title: 'Only module directories may exist directly under the modules root',
     critical: false,
   },
+  'SHR-001': {
+    title: 'Shared package source files must not be deep-imported',
+    critical: true,
+  },
+  'SHR-002': {
+    title: 'New modules may import only the governed shared kernel',
+    critical: true,
+  },
+  'SHR-003': {
+    title: 'Shared-kernel dependencies must remain pure',
+    critical: true,
+  },
+  'SHR-004': {
+    title: 'The shared boundary registry must remain complete and valid',
+    critical: false,
+    waivable: false,
+  },
 });
+
+export const sharedKernelAllowedPackages = Object.freeze([
+  'lodash-es',
+]);
+
+export const sharedKernelTestAllowedPackages = Object.freeze([
+  'vitest',
+]);
 
 export const forbiddenDomainPackagePrefixes = Object.freeze([
   '@fastify/',

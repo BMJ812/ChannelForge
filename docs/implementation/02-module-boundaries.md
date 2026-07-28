@@ -5,7 +5,7 @@
 - **Last updated:** 2026-07-28
 - **Risk classification:** Foundation / High
 - **Implementation authority:** Additive module boundaries and dependency enforcement
-- **Current implementation unit:** PR 02A - Boundary Policy and Architecture Test Harness
+- **Current implementation unit:** PR 02B - Shared-Kernel Classification and Enforcement
 
 ## Purpose
 

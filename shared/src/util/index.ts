@@ -8,9 +8,10 @@ import type {
   SearchFilterValueNode,
   StringOperators,
 } from '@tunarr/types/schemas';
-import { capitalize, isArray, isNull, isNumber, isString } from 'lodash-es';
+import { capitalize, isArray, isNull, isNumber } from 'lodash-es';
 import isFunction from 'lodash-es/isFunction.js';
 import type { MarkRequired } from 'ts-essentials';
+import { isNonEmptyString } from '../kernel/validation.js';
 import type { PerTypeCallback } from '../types/index.js';
 
 export function applyOrValueNoRest<Super, X extends Super, T>(
@@ -172,9 +173,7 @@ export function romanNumeralToNumber(input: string): number {
   return total + previousValue;
 }
 
-export function isNonEmptyString(s: unknown): s is string {
-  return isString(s) && s.length > 0;
-}
+export { isNonEmptyString } from '../kernel/validation.js';
 
 export function emptyStringToNull(s: string | undefined): string | null {
   return isNonEmptyString(s) ? s : null;
