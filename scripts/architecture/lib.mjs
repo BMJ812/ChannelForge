@@ -11,6 +11,8 @@ import {
   canonicalModuleDirectories,
   currentMilestone,
   forbiddenDomainPackagePrefixes,
+  publicContractAllowedPackages,
+  publicContractTestAllowedPackages,
   ruleDefinitions,
   scannedExtensions,
   sharedKernelAllowedPackages,
@@ -31,6 +33,12 @@ const strictSourceRoots = Object.freeze([
 ]);
 
 const sharedOnlySourceRoots = Object.freeze([
+  'server/scripts',
+  'server/src',
+  'scripts',
+]);
+
+const typesOnlySourceRoots = Object.freeze([
   'server/scripts',
   'server/src',
   'scripts',
@@ -87,6 +95,25 @@ function isSharedSourceCategory(category) {
   ].includes(category);
 }
 
+function typesPackageSpecifierFromEntryPoint(entryPoint) {
+  if (entryPoint === '.') {
+    return '@tunarr/types';
+  }
+
+  if (entryPoint.startsWith('./')) {
+    return `@tunarr/types/${entryPoint.slice(2)}`;
+  }
+
+  return null;
+}
+
+function isTypesSourceCategory(category) {
+  return [
+    'types-contracts',
+    'types-legacy',
+  ].includes(category);
+}
+
 function sharedDeepImportBaselineKey(source, specifier) {
   return `${source}\u0000${specifier}`;
 }
@@ -119,6 +146,41 @@ function isSharedBoundaryImport({
     targetsSharedInternals
     || explicitlyTargetsSharedInternals
     || targetsUndeclaredSharedEntry
+  );
+}
+
+function isTypesBoundaryImport({
+  declaredTypesPackageSpecifiers,
+  specifier,
+  targetInfo,
+}) {
+  const targetPath = targetInfo.relativePath;
+  const targetsTypesInternals =
+    targetPath === 'types/src'
+    || targetPath?.startsWith('types/src/')
+    || targetPath === 'types/dist'
+    || targetPath?.startsWith('types/dist/')
+    || targetPath === 'types/build'
+    || targetPath?.startsWith('types/build/');
+  const explicitlyTargetsTypesInternals =
+    specifier === '@tunarr/types/src'
+    || specifier.startsWith('@tunarr/types/src/')
+    || specifier === '@tunarr/types/dist'
+    || specifier.startsWith('@tunarr/types/dist/')
+    || specifier === '@tunarr/types/build'
+    || specifier.startsWith('@tunarr/types/build/');
+  const targetsTypesPackage =
+    specifier === '@tunarr/types'
+    || specifier.startsWith('@tunarr/types/');
+  const targetsUndeclaredTypesEntry =
+    targetsTypesPackage
+    && declaredTypesPackageSpecifiers instanceof Set
+    && !declaredTypesPackageSpecifiers.has(specifier);
+
+  return (
+    targetsTypesInternals
+    || explicitlyTargetsTypesInternals
+    || targetsUndeclaredTypesEntry
   );
 }
 
@@ -175,6 +237,26 @@ function classifyRelativePath(relativePath) {
         parts[2] === 'kernel'
           ? 'shared-kernel'
           : 'shared-legacy',
+      layer: parts[3] ?? null,
+      module: null,
+      relativePath: normalized,
+    };
+  }
+
+  if (
+    parts[0] === 'types'
+    && [
+      'build',
+      'dist',
+      'src',
+    ].includes(parts[1])
+  ) {
+    return {
+      category:
+        parts[1] === 'src'
+        && parts[2] === 'contracts'
+          ? 'types-contracts'
+          : 'types-legacy',
       layer: parts[3] ?? null,
       module: null,
       relativePath: normalized,
@@ -287,6 +369,11 @@ function resolveImport(
 
   if (
     specifier.startsWith('server/src/')
+    || specifier.startsWith('shared/src/')
+    || specifier.startsWith('shared/dist/')
+    || specifier.startsWith('types/src/')
+    || specifier.startsWith('types/dist/')
+    || specifier.startsWith('types/build/')
     || specifier.startsWith('web/src/')
   ) {
     const relativePath = normalizeRelativePath(specifier);
@@ -390,6 +477,7 @@ function createViolation({
 
 function evaluateImport({
   declaredSharedPackageSpecifiers,
+  declaredTypesPackageSpecifiers,
   repoRoot,
   sourceInfo,
   specifier,
@@ -601,6 +689,58 @@ function evaluateImport({
     }
   }
 
+  const sourceIsTypes = isTypesSourceCategory(sourceInfo.category);
+  const typesInternalImport =
+    !sourceIsTypes
+    && isTypesBoundaryImport({
+      declaredTypesPackageSpecifiers,
+      specifier,
+      targetInfo,
+    });
+
+  if (typesInternalImport) {
+    add(
+      'TYP-001',
+      'Callers outside @tunarr/types must use a declared package entry point.',
+    );
+  }
+
+  const typesPackageImport =
+    specifier === '@tunarr/types'
+    || specifier.startsWith('@tunarr/types/');
+
+  if (
+    sourceInfo.category === 'module'
+    && typesPackageImport
+    && specifier !== '@tunarr/types/contracts'
+    && !typesInternalImport
+  ) {
+    add(
+      'TYP-002',
+      'New ChannelForge modules may import @tunarr/types/contracts only.',
+    );
+  }
+
+  if (sourceInfo.category === 'types-contracts') {
+    const packageAllowed =
+      targetInfo.kind !== 'package'
+      || publicContractAllowedPackages.includes(targetInfo.packageName)
+      || (
+        isTestSourcePath(sourceInfo.relativePath)
+        && publicContractTestAllowedPackages.includes(targetInfo.packageName)
+      );
+    const internalTargetAllowed =
+      targetInfo.kind !== 'internal'
+      || targetInfo.category === 'types-contracts';
+
+    if (!packageAllowed || !internalTargetAllowed) {
+      add(
+        'TYP-003',
+        'Public contracts may depend only on contract files and approved schema packages.',
+      );
+    }
+  }
+
   return violations;
 }
 
@@ -795,6 +935,161 @@ async function scanSharedPackageBoundary(repoRoot) {
   return violations;
 }
 
+async function scanTypesPackageBoundary(repoRoot) {
+  const manifestPath = path.join(
+    repoRoot,
+    'types',
+    'package.json',
+  );
+
+  if (!(await pathExists(manifestPath))) {
+    return [];
+  }
+
+  const registryPath = path.join(
+    repoRoot,
+    'scripts',
+    'architecture',
+    'types-boundaries.json',
+  );
+  const violations = [];
+  const add = (
+    message,
+    source = 'scripts/architecture/types-boundaries.json',
+  ) => {
+    violations.push(createViolation({
+      critical: ruleDefinitions['TYP-004'].critical,
+      message,
+      ruleId: 'TYP-004',
+      source,
+    }));
+  };
+
+  let manifest;
+
+  try {
+    manifest = JSON.parse(await readFile(manifestPath, 'utf8'));
+  } catch {
+    add('types/package.json must contain valid JSON.', 'types/package.json');
+    return violations;
+  }
+
+  if (!(await pathExists(registryPath))) {
+    add('The Types export-classification registry is missing.');
+    return violations;
+  }
+
+  let registry;
+
+  try {
+    registry = JSON.parse(await readFile(registryPath, 'utf8'));
+  } catch {
+    add('The Types export-classification registry must contain valid JSON.');
+    return violations;
+  }
+
+  if (registry.schemaVersion !== 1) {
+    add('The Types export-classification schemaVersion must be 1.');
+  }
+
+  if (registry.package !== '@tunarr/types') {
+    add('The Types export-classification registry must target @tunarr/types.');
+  }
+
+  if (
+    !registry.entryPoints
+    || typeof registry.entryPoints !== 'object'
+    || Array.isArray(registry.entryPoints)
+  ) {
+    add('The Types export-classification registry must contain an entryPoints object.');
+    return violations;
+  }
+
+  const manifestExports =
+    manifest.exports
+    && typeof manifest.exports === 'object'
+    && !Array.isArray(manifest.exports)
+      ? manifest.exports
+      : {};
+  const manifestEntries = Object.keys(manifestExports).sort();
+  const registryEntries = Object.keys(registry.entryPoints).sort();
+  const expectedClassifications = Object.freeze({
+    '.': 'legacy-compatibility',
+    './api': 'legacy-api-contract',
+    './contracts': 'public-contract',
+    './emby': 'provider-payload',
+    './jellyfin': 'provider-payload',
+    './package.json': 'package-metadata',
+    './plex': 'provider-payload',
+    './schemas': 'legacy-shared-schema',
+  });
+  const allowedClassifications = new Set(
+    Object.values(expectedClassifications),
+  );
+
+  for (const entry of manifestEntries) {
+    if (!(entry in registry.entryPoints)) {
+      add(`Package export "${entry}" is missing a classification.`);
+      continue;
+    }
+
+    const classification = registry.entryPoints[entry];
+    const expectedClassification = expectedClassifications[entry];
+
+    if (!allowedClassifications.has(classification)) {
+      add(
+        `Package export "${entry}" has unknown classification "${classification}".`,
+      );
+    } else if (!expectedClassification) {
+      add(
+        `Package export "${entry}" has no approved Types classification.`,
+      );
+    } else if (classification !== expectedClassification) {
+      add(
+        `Package export "${entry}" must be classified "${expectedClassification}".`,
+      );
+    }
+  }
+
+  for (const entry of registryEntries) {
+    if (!(entry in manifestExports)) {
+      add(`Classification "${entry}" does not match a package export.`);
+    }
+  }
+
+  const contractsExport = manifestExports['./contracts'];
+
+  if (!contractsExport) {
+    add(
+      'The governed ./contracts package export is missing.',
+      'types/package.json',
+    );
+  } else if (
+    contractsExport.types !== './dist/src/contracts/index.d.ts'
+    || contractsExport.default !== './dist/src/contracts/index.js'
+  ) {
+    add(
+      'The ./contracts export must target the canonical contract declaration and runtime entry points.',
+      'types/package.json',
+    );
+  }
+
+  if (!(await pathExists(path.join(
+    repoRoot,
+    'types',
+    'src',
+    'contracts',
+    'index.ts',
+  )))) {
+    add(
+      'The governed public-contract source entry point is missing.',
+      'types/src/contracts/index.ts',
+    );
+  }
+
+  return violations;
+}
+
 async function loadDeclaredSharedPackageSpecifiers(repoRoot) {
   const registryPath = path.join(
     repoRoot,
@@ -826,6 +1121,41 @@ async function loadDeclaredSharedPackageSpecifiers(repoRoot) {
   return new Set(
     Object.keys(registry.entryPoints)
       .map(sharedPackageSpecifierFromEntryPoint)
+      .filter((specifier) => specifier !== null),
+  );
+}
+
+async function loadDeclaredTypesPackageSpecifiers(repoRoot) {
+  const registryPath = path.join(
+    repoRoot,
+    'scripts',
+    'architecture',
+    'types-boundaries.json',
+  );
+
+  if (!(await pathExists(registryPath))) {
+    return null;
+  }
+
+  let registry;
+
+  try {
+    registry = JSON.parse(await readFile(registryPath, 'utf8'));
+  } catch {
+    return null;
+  }
+
+  if (
+    !registry.entryPoints
+    || typeof registry.entryPoints !== 'object'
+    || Array.isArray(registry.entryPoints)
+  ) {
+    return null;
+  }
+
+  return new Set(
+    Object.keys(registry.entryPoints)
+      .map(typesPackageSpecifierFromEntryPoint)
       .filter((specifier) => specifier !== null),
   );
 }
@@ -963,6 +1293,80 @@ async function scanAdditionalSharedImportSources({
       source: baseline.source,
       target: baseline.import,
     }));
+  }
+
+  return {
+    filesScanned,
+    violations,
+  };
+}
+
+async function scanAdditionalTypesImportSources({
+  declaredTypesPackageSpecifiers,
+  repoRoot,
+}) {
+  const violations = [];
+  let filesScanned = 0;
+
+  for (const relativeRoot of typesOnlySourceRoots) {
+    const files = await walkFiles(
+      path.join(
+        repoRoot,
+        ...relativeRoot.split('/'),
+      ),
+    );
+
+    for (const filePath of files) {
+      const relativePath = normalizeRelativePath(
+        path.relative(repoRoot, filePath),
+      );
+      const sourceInfo = classifyRelativePath(relativePath);
+      const isLegacyServer = sourceInfo.category === 'legacy-server';
+      const isScript =
+        relativePath.startsWith('scripts/')
+        || relativePath.startsWith('server/scripts/');
+
+      if (!isLegacyServer && !isScript) {
+        continue;
+      }
+
+      filesScanned += 1;
+
+      const sourceText = await readFile(filePath, 'utf8');
+
+      for (const specifier of collectImportSpecifiers(
+        sourceText,
+        relativePath,
+      )) {
+        const targetInfo = resolveImport(
+          repoRoot,
+          sourceInfo,
+          relativePath,
+          specifier,
+        );
+
+        if (!isTypesBoundaryImport({
+          declaredTypesPackageSpecifiers,
+          specifier,
+          targetInfo,
+        })) {
+          continue;
+        }
+
+        violations.push(createViolation({
+          critical: ruleDefinitions['TYP-001'].critical,
+          importSpecifier: specifier,
+          message:
+            'Callers outside @tunarr/types must use a declared package entry point.',
+          ruleId: 'TYP-001',
+          source: relativePath,
+          target:
+            targetInfo.relativePath
+            ?? targetInfo.packageName
+            ?? specifier,
+        }));
+      }
+    }
   }
 
   return {
@@ -1258,6 +1662,8 @@ export async function checkArchitecture({
 
   const declaredSharedPackageSpecifiers =
     await loadDeclaredSharedPackageSpecifiers(repoRoot);
+  const declaredTypesPackageSpecifiers =
+    await loadDeclaredTypesPackageSpecifiers(repoRoot);
   const sharedDeepImportBaseline =
     await loadSharedDeepImportBaseline(repoRoot);
   const additionalSharedImportScan =
@@ -1266,10 +1672,17 @@ export async function checkArchitecture({
       repoRoot,
       sharedDeepImportBaseline,
     });
+  const additionalTypesImportScan =
+    await scanAdditionalTypesImportSources({
+      declaredTypesPackageSpecifiers,
+      repoRoot,
+    });
   const violations = [
     ...await scanModuleStructure(repoRoot),
     ...await scanSharedPackageBoundary(repoRoot),
+    ...await scanTypesPackageBoundary(repoRoot),
     ...additionalSharedImportScan.violations,
+    ...additionalTypesImportScan.violations,
   ];
 
   for (const filePath of sourceFiles) {
@@ -1286,6 +1699,7 @@ export async function checkArchitecture({
     )) {
       violations.push(...evaluateImport({
         declaredSharedPackageSpecifiers,
+        declaredTypesPackageSpecifiers,
         repoRoot,
         sourceInfo,
         specifier,
@@ -1299,7 +1713,8 @@ export async function checkArchitecture({
     return {
       filesScanned:
         sourceFiles.length
-        + additionalSharedImportScan.filesScanned,
+        + additionalSharedImportScan.filesScanned
+        + additionalTypesImportScan.filesScanned,
       violations,
       waived: [],
       waiverErrors,
@@ -1315,7 +1730,8 @@ export async function checkArchitecture({
   return {
     filesScanned:
         sourceFiles.length
-        + additionalSharedImportScan.filesScanned,
+        + additionalSharedImportScan.filesScanned
+        + additionalTypesImportScan.filesScanned,
     violations: active,
     waived,
     waiverErrors: unusedWaiverErrors,

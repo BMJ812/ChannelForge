@@ -1,11 +1,12 @@
 # Milestone 02 Module-Boundary Evidence
 
 - **Milestone status:** In Progress
-- **Current implementation unit:** PR 02B - Shared-Kernel Classification and Enforcement
+- **Current implementation unit:** PR 02C - Public Contract Classification and Enforcement
 - **Enforcement mode:** Path-scoped strict enforcement
 - **Runtime behavior changed:** No
 - **Production file moved:** No
 - **Stable primitive extracted:** Yes
+- **Canonical public-contract boundary established:** Yes
 
 ## Purpose
 
@@ -15,6 +16,9 @@ Milestone 02.
 PR 02A established the policy and test harness before production source moves.
 PR 02B classifies the inherited shared package, establishes one governed kernel
 entry point, and blocks new modules from adopting legacy shared surfaces.
+PR 02C classifies the inherited Types package, establishes one governed public-
+contract entry point, and prevents new modules from adopting legacy API, schema,
+or provider payload surfaces.
 
 ## Evidence Artifacts
 
@@ -26,13 +30,15 @@ entry point, and blocks new modules from adopting legacy shared surfaces.
 | `waivers.md` | Exact-match waiver schema, expiry, and review rules |
 | `decision-register.md` | Local M02 implementation decisions that do not require ADRs |
 | `shared-kernel-classification.md` | Shared-package inventory, export classification, ownership, and migration disposition |
-| `scripts/architecture/shared-boundaries.json` | Machine-readable package-entry classification |
+| `public-contract-classification.md` | Types-package inventory, entry-point classification, and public-contract policy |
+| `scripts/architecture/shared-boundaries.json` | Machine-readable shared-package entry classification |
+| `scripts/architecture/types-boundaries.json` | Machine-readable Types-package entry classification |
 | `scripts/architecture/` | Deterministic architecture scanner, registries, and self-tests |
 | `.github/workflows/architecture.yml` | Linux and Windows architecture-test execution |
 
 ## Scope Boundary
 
-PR 02A and PR 02B do not:
+PR 02A, PR 02B, and PR 02C do not:
 
 - Move production files
 - Create production module shells
@@ -42,6 +48,8 @@ PR 02A and PR 02B do not:
 - Change scheduling or playout behavior
 - Rename inherited packages
 - Migrate existing shared-package consumers
+- Migrate existing Types-package consumers
+- Promote inherited API, schema, or provider DTOs into public contracts
 - Move provider, search, scheduling, or runtime utilities
 - Add a dependency
 - Establish final module ownership
@@ -66,6 +74,11 @@ root `scripts/**` solely to prevent new deep imports into shared package source
 or build output. The exact inherited `SmartCollectionsDB.ts` import is recorded for
 removal in PR 02F; the baseline cannot match another source path or import
 specifier, and an unused entry fails validation.
+
+`TYP-001` applies the same no-deep-import policy to `types/src/**`,
+`types/dist/**`, and `types/build/**` across strict roots, legacy server
+source, root scripts, and server scripts. The PR 02C audit found no production
+Types deep import requiring a baseline.
 
 The minimum no-regression metric is:
 

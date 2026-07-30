@@ -1,6 +1,6 @@
 # Architecture Tests
 
-- **Authority:** Milestone 02 PR 02A and PR 02B
+- **Authority:** Milestone 02 PR 02A through PR 02C
 - **Tool:** Custom Node.js scanner using the existing TypeScript compiler API
 - **New dependency:** None
 - **Runtime behavior changed:** No
@@ -52,10 +52,10 @@ web/src
 
 Absent structural directories remain valid during staged M02 implementation.
 
-`SHR-001` additionally scans legacy `server/src/**`, `server/scripts/**`, and
-root `scripts/**`. That extended scan evaluates only shared-package deep imports;
-it does not apply the other module-direction rules to inherited server or
-tooling code.
+`SHR-001` and `TYP-001` additionally scan legacy `server/src/**`,
+`server/scripts/**`, and root `scripts/**`. Those extended scans evaluate only
+shared-package and Types-package deep imports; they do not apply the other
+module-direction rules to inherited server or tooling code.
 
 ## Fixtures
 
@@ -92,6 +92,17 @@ The self-test suite covers:
 - Malformed inherited baseline rejection
 - Unused inherited baseline rejection
 - Waiver attempt for explicitly non-waivable `SHR-004` rejected
+- Allowed new-module import from `@tunarr/types/contracts`
+- Allowed public-contract production and test dependencies
+- Forbidden inherited Types entry points from new modules
+- Forbidden relative import into `types/src`
+- Forbidden undeclared Types package subpath
+- Forbidden public-contract dependency on inherited, provider, or runtime code
+- Complete Types-package export classification
+- Missing Types-package export classification
+- Noncanonical public-contract export target
+- Forbidden Types deep imports from legacy server code, root scripts, and server scripts
+- Waiver attempt for explicitly non-waivable `TYP-004` rejected
 
 ## Determinism
 
@@ -124,6 +135,8 @@ The command exits nonzero when:
 - A shared-package export is unclassified
 - The governed kernel export points at a noncanonical target
 - The inherited shared deep-import baseline is malformed or unused
+- A Types-package export is unclassified
+- The governed public-contract export points at a noncanonical target
 - A waiver targets an explicitly non-waivable rule
 
 ## CI

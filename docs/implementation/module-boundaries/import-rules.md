@@ -1,6 +1,6 @@
 # Initial Import Rules
 
-- **Authority:** Milestone 02 PR 02A and PR 02B
+- **Authority:** Milestone 02 PR 02A through PR 02C
 - **Enforcement mode:** Path-scoped strict
 - **Current milestone:** M02
 
@@ -25,6 +25,10 @@
 | `SHR-002` | New modules import `@tunarr/shared/kernel` rather than inherited shared entry points | New modules | Prohibited |
 | `SHR-003` | Shared-kernel source depends only on kernel files and approved neutral packages | `shared/src/kernel/**` | Prohibited |
 | `SHR-004` | The shared registry has exact export classifications and a valid inherited-import baseline | Shared boundary registry | Prohibited |
+| `TYP-001` | Callers outside the Types package use declared entry points and do not import source or build internals | Strict roots plus narrow legacy-server and script scans | Prohibited |
+| `TYP-002` | New modules import `@tunarr/types/contracts` rather than inherited Types entry points | New modules | Prohibited |
+| `TYP-003` | Public-contract source depends only on contract files and approved schema packages | `types/src/contracts/**` | Prohibited |
+| `TYP-004` | The Types registry has exact export classifications and the canonical contract target | Types boundary registry | Prohibited |
 
 ## Critical Rules
 
@@ -37,12 +41,15 @@ MOD-006
 SHR-001
 SHR-002
 SHR-003
+TYP-001
+TYP-002
+TYP-003
 ```
 
 A critical-rule conflict must be resolved through a public port, ownership
 correction, or application-level composition. The waiver registry cannot
-disable a critical rule. `SHR-004` remains noncritical for severity reporting
-but is also explicitly non-waivable.
+disable a critical rule. `SHR-004` and `TYP-004` remain noncritical for
+severity reporting but are also explicitly non-waivable.
 
 ## Shared-Package Restrictions
 
@@ -77,6 +84,35 @@ The initial kernel contains only `isNonEmptyString`. Kernel production source ma
 depend on `lodash-es` to preserve inherited string semantics. Kernel tests may
 also depend on `vitest`. Provider payloads, `@tunarr/types`, search parsers,
 Day.js mutation, runtime APIs, and legacy shared utilities are prohibited.
+
+## Types-Package Restrictions
+
+The inherited entry points remain available as compatibility surfaces:
+
+```text
+@tunarr/types
+@tunarr/types/api
+@tunarr/types/emby
+@tunarr/types/jellyfin
+@tunarr/types/plex
+@tunarr/types/schemas
+```
+
+New ChannelForge modules may import only:
+
+```text
+@tunarr/types/contracts
+```
+
+The initial contract entry point is intentionally empty. PR 02C establishes the
+boundary without promoting inherited Tunarr DTOs, mixed schemas, provider
+payloads, persistence shapes, or transport-specific request objects into stable
+ChannelForge contracts.
+
+Public-contract production source may depend on `zod`. Public-contract tests
+may also depend on `vitest`. Imports from inherited Types source, inherited
+package surfaces, provider payloads, Fastify, database implementations, and
+other runtime packages are prohibited.
 
 ## Domain Package Restrictions
 
