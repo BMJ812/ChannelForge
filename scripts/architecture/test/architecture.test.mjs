@@ -1022,3 +1022,416 @@ test('sorts violations deterministically', async () => {
     );
   });
 });
+
+test('allows new modules to import the governed public contracts', async () => {
+  await withRepository(async (repoRoot) => {
+    await createModule(repoRoot, 'catalog', {
+      'domain/value.ts':
+        "import '@tunarr/types/contracts';\n"
+        + 'export const value = true;\n',
+    });
+
+    const result = await checkArchitecture({
+      registry: emptyRegistry,
+      repoRoot,
+    });
+
+    assert.deepEqual(result.violations, []);
+  });
+});
+
+test('rejects inherited Types entry points from new modules', async () => {
+  await withRepository(async (repoRoot) => {
+    await createModule(repoRoot, 'catalog', {
+      'application/service.ts':
+        "import type { Channel } from '@tunarr/types';\n"
+        + "import type { PagedResult } from '@tunarr/types/api';\n"
+        + "import type { ChannelSchema } from '@tunarr/types/schemas';\n"
+        + 'export type LegacyContracts = [Channel, PagedResult<unknown>, typeof ChannelSchema];\n',
+    });
+
+    const result = await checkArchitecture({
+      registry: emptyRegistry,
+      repoRoot,
+    });
+
+    assert.deepEqual(
+      ruleIds(result),
+      ['TYP-002', 'TYP-002', 'TYP-002'],
+    );
+    assert.equal(
+      result.violations.every(({ critical }) => critical),
+      true,
+    );
+  });
+});
+
+test('rejects relative imports into Types source', async () => {
+  await withRepository(async (repoRoot) => {
+    await writeRepoFile(
+      repoRoot,
+      'types/src/Program.ts',
+      'export const program = true;\n',
+    );
+    await writeRepoFile(
+      repoRoot,
+      'web/src/bad.ts',
+      "import { program } from '../../types/src/Program.js';\n"
+      + 'export const bad = program;\n',
+    );
+
+    const result = await checkArchitecture({
+      registry: emptyRegistry,
+      repoRoot,
+    });
+
+    assert.deepEqual(ruleIds(result), ['TYP-001']);
+  });
+});
+
+test('rejects undeclared Types package subpaths', async () => {
+  await withRepository(async (repoRoot) => {
+    await writeRepoFile(
+      repoRoot,
+      'types/package.json',
+      `${JSON.stringify({
+        name: '@tunarr/types',
+        exports: {
+          '.': {
+            types: './dist/src/index.d.ts',
+            default: './dist/src/index.js',
+          },
+          './api': {
+            types: './dist/src/api/index.d.ts',
+            default: './dist/src/api/index.js',
+          },
+          './contracts': {
+            types: './dist/src/contracts/index.d.ts',
+            default: './dist/src/contracts/index.js',
+          },
+        },
+      }, null, 2)}\n`,
+    );
+    await writeRepoFile(
+      repoRoot,
+      'types/src/contracts/index.ts',
+      'export {};\n',
+    );
+    await writeRepoFile(
+      repoRoot,
+      'scripts/architecture/types-boundaries.json',
+      `${JSON.stringify({
+        schemaVersion: 1,
+        package: '@tunarr/types',
+        entryPoints: {
+          '.': 'legacy-compatibility',
+          './api': 'legacy-api-contract',
+          './contracts': 'public-contract',
+        },
+      }, null, 2)}\n`,
+    );
+    await writeRepoFile(
+      repoRoot,
+      'web/src/bad.ts',
+      "import { value } from '@tunarr/types/api/TimeSlots';\n"
+      + 'export const bad = value;\n',
+    );
+
+    const result = await checkArchitecture({
+      registry: emptyRegistry,
+      repoRoot,
+    });
+
+    assert.deepEqual(ruleIds(result), ['TYP-001']);
+  });
+});
+
+test('allows approved public-contract production and test dependencies', async () => {
+  await withRepository(async (repoRoot) => {
+    await writeRepoFile(
+      repoRoot,
+      'types/src/contracts/schema.ts',
+      "import { z } from 'zod';\n"
+      + 'export const ContractSchema = z.object({ id: z.string() });\n',
+    );
+    await writeRepoFile(
+      repoRoot,
+      'types/src/contracts/schema.test.ts',
+      "import { expect } from 'vitest';\n"
+      + 'export const assertion = expect;\n',
+    );
+
+    const result = await checkArchitecture({
+      registry: emptyRegistry,
+      repoRoot,
+    });
+
+    assert.deepEqual(result.violations, []);
+  });
+});
+test('rejects legacy, provider, and runtime dependencies from public contracts', async () => {
+  await withRepository(async (repoRoot) => {
+    await writeRepoFile(
+      repoRoot,
+      'types/src/Program.ts',
+      'export const program = true;\n',
+    );
+    await writeRepoFile(
+      repoRoot,
+      'types/src/contracts/bad.ts',
+      "import { program } from '../Program.js';\n"
+      + "import type { PlexMedia } from '@tunarr/types/plex';\n"
+      + "import Fastify from 'fastify';\n"
+      + 'export const bad = [program, Fastify] as const;\n'
+      + 'export type BadProvider = PlexMedia;\n',
+    );
+
+    const result = await checkArchitecture({
+      registry: emptyRegistry,
+      repoRoot,
+    });
+
+    assert.deepEqual(
+      ruleIds(result),
+      ['TYP-003', 'TYP-003', 'TYP-003'],
+    );
+    assert.equal(
+      result.violations.every(({ critical }) => critical),
+      true,
+    );
+  });
+});
+
+test('accepts a fully governed Types package export map', async () => {
+  await withRepository(async (repoRoot) => {
+    await writeRepoFile(
+      repoRoot,
+      'types/package.json',
+      `${JSON.stringify({
+        name: '@tunarr/types',
+        exports: {
+          '.': {
+            types: './dist/src/index.d.ts',
+            default: './dist/src/index.js',
+          },
+          './api': {
+            types: './dist/src/api/index.d.ts',
+            default: './dist/src/api/index.js',
+          },
+          './contracts': {
+            types: './dist/src/contracts/index.d.ts',
+            default: './dist/src/contracts/index.js',
+          },
+          './emby': {
+            types: './dist/src/emby/index.d.ts',
+            default: './dist/src/emby/index.js',
+          },
+          './jellyfin': {
+            types: './dist/src/jellyfin/index.d.ts',
+            default: './dist/src/jellyfin/index.js',
+          },
+          './package.json': './package.json',
+          './plex': {
+            types: './dist/src/plex/index.d.ts',
+            default: './dist/src/plex/index.js',
+          },
+          './schemas': {
+            types: './dist/src/schemas/index.d.ts',
+            default: './dist/src/schemas/index.js',
+          },
+        },
+      }, null, 2)}\n`,
+    );
+    await writeRepoFile(
+      repoRoot,
+      'types/src/contracts/index.ts',
+      'export {};\n',
+    );
+    await writeRepoFile(
+      repoRoot,
+      'scripts/architecture/types-boundaries.json',
+      `${JSON.stringify({
+        schemaVersion: 1,
+        package: '@tunarr/types',
+        entryPoints: {
+          '.': 'legacy-compatibility',
+          './api': 'legacy-api-contract',
+          './contracts': 'public-contract',
+          './emby': 'provider-payload',
+          './jellyfin': 'provider-payload',
+          './package.json': 'package-metadata',
+          './plex': 'provider-payload',
+          './schemas': 'legacy-shared-schema',
+        },
+      }, null, 2)}\n`,
+    );
+
+    const result = await checkArchitecture({
+      registry: emptyRegistry,
+      repoRoot,
+    });
+
+    assert.deepEqual(result.violations, []);
+  });
+});
+
+test('rejects missing Types package classifications', async () => {
+  await withRepository(async (repoRoot) => {
+    await writeRepoFile(
+      repoRoot,
+      'types/package.json',
+      `${JSON.stringify({
+        name: '@tunarr/types',
+        exports: {
+          '.': {
+            types: './dist/src/index.d.ts',
+            default: './dist/src/index.js',
+          },
+          './contracts': {
+            types: './dist/src/contracts/index.d.ts',
+            default: './dist/src/contracts/index.js',
+          },
+          './schemas': {
+            types: './dist/src/schemas/index.d.ts',
+            default: './dist/src/schemas/index.js',
+          },
+        },
+      }, null, 2)}\n`,
+    );
+    await writeRepoFile(
+      repoRoot,
+      'types/src/contracts/index.ts',
+      'export {};\n',
+    );
+    await writeRepoFile(
+      repoRoot,
+      'scripts/architecture/types-boundaries.json',
+      `${JSON.stringify({
+        schemaVersion: 1,
+        package: '@tunarr/types',
+        entryPoints: {
+          '.': 'legacy-compatibility',
+          './contracts': 'public-contract',
+        },
+      }, null, 2)}\n`,
+    );
+
+    const result = await checkArchitecture({
+      registry: emptyRegistry,
+      repoRoot,
+    });
+
+    assert.deepEqual(ruleIds(result), ['TYP-004']);
+  });
+});
+
+test('rejects a noncanonical public-contract export target', async () => {
+  await withRepository(async (repoRoot) => {
+    await writeRepoFile(
+      repoRoot,
+      'types/package.json',
+      `${JSON.stringify({
+        name: '@tunarr/types',
+        exports: {
+          '.': {
+            types: './dist/src/index.d.ts',
+            default: './dist/src/index.js',
+          },
+          './contracts': {
+            types: './dist/src/index.d.ts',
+            default: './dist/src/index.js',
+          },
+        },
+      }, null, 2)}\n`,
+    );
+    await writeRepoFile(
+      repoRoot,
+      'types/src/contracts/index.ts',
+      'export {};\n',
+    );
+    await writeRepoFile(
+      repoRoot,
+      'scripts/architecture/types-boundaries.json',
+      `${JSON.stringify({
+        schemaVersion: 1,
+        package: '@tunarr/types',
+        entryPoints: {
+          '.': 'legacy-compatibility',
+          './contracts': 'public-contract',
+        },
+      }, null, 2)}\n`,
+    );
+
+    const result = await checkArchitecture({
+      registry: emptyRegistry,
+      repoRoot,
+    });
+
+    assert.deepEqual(ruleIds(result), ['TYP-004']);
+  });
+});
+
+test('rejects Types deep imports from legacy server code and scripts', async () => {
+  await withRepository(async (repoRoot) => {
+    await writeRepoFile(
+      repoRoot,
+      'types/src/Program.ts',
+      'export const program = true;\n',
+    );
+    await writeRepoFile(
+      repoRoot,
+      'server/src/services/bad.ts',
+      "import { program } from '../../../types/src/Program.js';\n"
+      + 'export const serverBad = program;\n',
+    );
+    await writeRepoFile(
+      repoRoot,
+      'scripts/bad.mjs',
+      "import { program } from '../types/src/Program.js';\n"
+      + 'export const scriptBad = program;\n',
+    );
+    await writeRepoFile(
+      repoRoot,
+      'server/scripts/bad.ts',
+      "import { program } from '../../types/src/Program.js';\n"
+      + 'export const serverScriptBad = program;\n',
+    );
+
+    const result = await checkArchitecture({
+      registry: emptyRegistry,
+      repoRoot,
+    });
+
+    assert.deepEqual(
+      ruleIds(result),
+      ['TYP-001', 'TYP-001', 'TYP-001'],
+    );
+  });
+});
+
+test('rejects waivers for explicitly non-waivable TYP-004', async () => {
+  await withRepository(async (repoRoot) => {
+    const result = await checkArchitecture({
+      registry: {
+        schemaVersion: 1,
+        waivers: [{
+          expiresMilestone: 'M03',
+          id: 'WVR-TYP-004',
+          import: '@tunarr/types/contracts',
+          owner: 'Architecture',
+          reason: 'Fixture for non-waivable Types registry validation.',
+          ruleId: 'TYP-004',
+          source: 'types/package.json',
+        }],
+      },
+      repoRoot,
+    });
+
+    assert.equal(
+      result.waiverErrors.some(
+        ({ code }) => code === 'WAIVER-PROHIBITED',
+      ),
+      true,
+    );
+  });
+});

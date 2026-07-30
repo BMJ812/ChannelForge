@@ -36,6 +36,10 @@
       "types": "./dist/src/index.d.ts",
       "default": "./dist/src/index.js"
     },
+    "./contracts": {
+      "types": "./dist/src/contracts/index.d.ts",
+      "default": "./dist/src/contracts/index.js"
+    },
     "./package.json": "./package.json",
     "./schemas": {
       "types": "./dist/src/schemas/index.d.ts",

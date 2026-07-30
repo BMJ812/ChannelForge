@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "package": "@tunarr/types",
+  "entryPoints": {
+    ".": "legacy-compatibility",
+    "./api": "legacy-api-contract",
+    "./contracts": "public-contract",
+    "./emby": "provider-payload",
+    "./jellyfin": "provider-payload",
+    "./package.json": "package-metadata",
+    "./plex": "provider-payload",
+    "./schemas": "legacy-shared-schema"
+  }
+}

@@ -101,6 +101,23 @@ export const ruleDefinitions = Object.freeze({
     critical: false,
     waivable: false,
   },
+  'TYP-001': {
+    title: 'Types package source files must not be deep-imported',
+    critical: true,
+  },
+  'TYP-002': {
+    title: 'New modules may import only the governed public-contract boundary',
+    critical: true,
+  },
+  'TYP-003': {
+    title: 'Public-contract dependencies must remain pure',
+    critical: true,
+  },
+  'TYP-004': {
+    title: 'The Types boundary registry must remain complete and valid',
+    critical: false,
+    waivable: false,
+  },
 });
 
 export const sharedKernelAllowedPackages = Object.freeze([
@@ -108,6 +125,14 @@ export const sharedKernelAllowedPackages = Object.freeze([
 ]);
 
 export const sharedKernelTestAllowedPackages = Object.freeze([
+  'vitest',
+]);
+
+export const publicContractAllowedPackages = Object.freeze([
+  'zod',
+]);
+
+export const publicContractTestAllowedPackages = Object.freeze([
   'vitest',
 ]);
 
