@@ -1,0 +1,7278 @@
+<!DOCTYPE html><html lang="en" class="no-js"><head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://tunarr.com/architecture/spec/07-integrations/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>ChannelForge Integrations Specification - Tunarr</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  <link href="../../../assets/stylesheets/glightbox.min.css" rel="stylesheet"><script src="../../../assets/javascripts/glightbox.min.js"></script><style id="glightbox-style">
+            html.glightbox-open { overflow: initial; height: 100%; }
+            .gslide-title { margin-top: 0px; user-select: text; }
+            .gslide-desc { color: #666; user-select: text; }
+            .gslide-image img { background: white; }
+            .gscrollbar-fixer { padding-right: 15px; }
+            .gdesc-inner { font-size: 0.75rem; }
+            body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
+            body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
+            body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
+        </style></head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#channelforge-integrations-specification" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Tunarr" class="md-header__button md-logo" aria-label="Tunarr" data-md-component="logo">
+      
+  <img src="../../../assets/tunarr.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Tunarr
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              ChannelForge Integrations Specification
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo" aria-label="Switch to light mode" type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"></path></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="indigo" aria-label="Switch to dark mode" type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="indigo" aria-label="Switch to system preference" type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required="">
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix="">
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__social">
+        
+          <a href="https://discord.gg/nYkb7MhPfD" title="Join the Tunarr Discord" class="md-header__button md-icon" target="_blank" rel="noopener">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M492.5 69.8c-.2-.3-.4-.6-.8-.7-38.1-17.5-78.4-30-119.7-37.1-.4-.1-.8 0-1.1.1s-.6.4-.8.8c-5.5 9.9-10.5 20.2-14.9 30.6-44.6-6.8-89.9-6.8-134.4 0-4.5-10.5-9.5-20.7-15.1-30.6-.2-.3-.5-.6-.8-.8s-.7-.2-1.1-.2C162.5 39 122.2 51.5 84.1 69c-.3.1-.6.4-.8.7C7.1 183.5-13.8 294.6-3.6 404.2c0 .3.1.5.2.8s.3.4.5.6c44.4 32.9 94 58 146.8 74.2.4.1.8.1 1.1 0s.7-.4.9-.7c11.3-15.4 21.4-31.8 30-48.8.1-.2.2-.5.2-.8s0-.5-.1-.8-.2-.5-.4-.6-.4-.3-.7-.4c-15.8-6.1-31.2-13.4-45.9-21.9-.3-.2-.5-.4-.7-.6s-.3-.6-.3-.9 0-.6.2-.9.3-.5.6-.7c3.1-2.3 6.2-4.7 9.1-7.1.3-.2.6-.4.9-.4s.7 0 1 .1c96.2 43.9 200.4 43.9 295.5 0 .3-.1.7-.2 1-.2s.7.2.9.4c2.9 2.4 6 4.9 9.1 7.2.2.2.4.4.6.7s.2.6.2.9-.1.6-.3.9-.4.5-.6.6c-14.7 8.6-30 15.9-45.9 21.8-.2.1-.5.2-.7.4s-.3.4-.4.7-.1.5-.1.8.1.5.2.8c8.8 17 18.8 33.3 30 48.8.2.3.6.6.9.7s.8.1 1.1 0c52.9-16.2 102.6-41.3 147.1-74.2.2-.2.4-.4.5-.6s.2-.5.2-.8c12.3-126.8-20.5-236.9-86.9-334.5zm-302 267.7c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.4 59.2-52.8 59.2m195.4 0c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.2 59.2-52.8 59.2"></path></svg>
+          </a>
+        
+          <a href="https://github.com/sponsors/chrisbenincasa" title="Sponsor Tunarr on GitHub" class="md-header__button md-icon" target="_blank" rel="noopener">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="m241 87.1 15 20.7 15-20.7C296 52.5 336.2 32 378.9 32 452.4 32 512 91.6 512 165.1v2.6c0 112.2-139.9 242.5-212.9 298.2-12.4 9.4-27.6 14.1-43.1 14.1s-30.8-4.6-43.1-14.1C139.9 410.2 0 279.9 0 167.7v-2.6C0 91.6 59.6 32 133.1 32 175.8 32 216 52.5 241 87.1"></path></svg>
+          </a>
+        
+      </div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/chrisbenincasa/tunarr" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    chrisbenincasa/tunarr
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Tunarr" class="md-nav__button md-logo" aria-label="Tunarr" data-md-component="logo">
+      
+  <img src="../../../assets/tunarr.png" alt="logo">
+
+    </a>
+    Tunarr
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/chrisbenincasa/tunarr" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    chrisbenincasa/tunarr
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix="">
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api-docs.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Docs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3">
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Getting Started
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Install
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/run/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Run
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4">
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Migration
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Migration
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/migration/migrate-to-1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Migrate to 1.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4">
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configure
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Configure
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_1">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/media_sources/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Media Sources
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_1" id="__nav_4_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Media Sources
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/plex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plex
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/jellyfin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Jellyfin
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/emby/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Emby
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_1_5">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/media_sources/local/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_1_5" id="__nav_4_1_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_4_1_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_1_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Local
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/local/movies/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Movies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/local/shows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shows
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/local/other_videos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Other Video
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/local/music/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Music
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/local/music_videos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Music Videos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/ffmpeg/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FFmpeg
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    FFmpeg
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/ffmpeg/transcode_config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transcode Configs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../misc/search/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Search
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Search
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/channels/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Channels
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_4" id="__nav_4_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Channels
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/channels/properties/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Properties
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/channels/flex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flex
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/channels/epg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EPG
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/channels/transcoding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transcoding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/channels/watermarks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Watermarks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/channels/programming/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Programming
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/library/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Library
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Library
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/library/filler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filler
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/library/custom-shows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Custom Shows
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/library/smart-collections/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Smart Collections
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/scheduling/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scheduling
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_6" id="__nav_4_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Scheduling
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/concepts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concepts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/random-slots/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Slot Editor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/time-slots/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Time Slots
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/cyclic-shuffle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cyclic Shuffle
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/block-shuffle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Block Shuffle
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/mid-roll-breaks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mid-Roll Breaks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/replicate/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Replicate
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/consolidate/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Consolidate
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_7">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/clients/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Clients
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_7" id="__nav_4_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Clients
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/clients/plex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plex
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/clients/jellyfin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Jellyfin
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_8">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/system/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    System
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/system/backup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/system/logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5">
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Misc.
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Misc.
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../misc/faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../misc/common-issues/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common Issues
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../misc/troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stream Troubleshooter
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6">
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Development
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../dev/contributing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+      
+        <li class="md-nav__item">
+  <a href="#purpose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Purpose
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integration-mission" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integration Mission
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scope
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integration-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integration Boundary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core-principles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Core Principles
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integration-terms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integration Terms
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Integration Terms">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#media-source" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Media Source
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adapter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adapter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#provider" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Provider
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#provider-instance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Provider Instance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#capability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Capability
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#credential-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Credential Reference
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#source-descriptor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Source Descriptor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#integration-observation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integration Observation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#integration-health" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integration Health
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#synchronization-hint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synchronization Hint
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#provider-cursor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Provider Cursor
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integration-aggregate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integration Aggregate
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#provider-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Provider Types
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#source-identity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Source Identity
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#source-descriptor_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Source Descriptor
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#internal-and-external-addresses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Internal and External Addresses
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#base-uri-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Base URI Validation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#secret-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Secret Boundary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#credential-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Credential Types
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#credential-rotation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Credential Rotation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#credential-revocation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Credential Revocation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adapter-registry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adapter Registry
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integration-ports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integration Ports
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#connection-probe-port" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connection Probe Port
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#capability-discovery-port" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Capability Discovery Port
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#capability-snapshot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Capability Snapshot
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#capability-states" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Capability States
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#library-discovery-port" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Library Discovery Port
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#library-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Library Types
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#library-inclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Library Inclusion
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#catalog-enumeration-port" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Catalog Enumeration Port
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#import-record" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Import Record
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#detail-retrieval-port" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Detail Retrieval Port
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#artwork-access-port" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Artwork Access Port
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#playback-resolution-port" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Playback Resolution Port
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#change-feed-port" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Change Feed Port
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#webhook-verification-port" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Webhook Verification Port
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#provider-health-port" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Provider Health Port
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#provider-identity-port" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Provider Identity Port
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#provider-instance-replacement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Provider Instance Replacement
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error Model
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error Properties
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#retryability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Retryability
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#timeout-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Timeout Policy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cancellation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cancellation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#retry-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Retry Policy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rate-limiting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rate Limiting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#request-concurrency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request Concurrency
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#connection-pooling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connection Pooling
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#http-client-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HTTP Client Boundary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#response-size-limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response Size Limits
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tls-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TLS Policy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#proxy-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Proxy Policy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dns-and-address-rebinding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DNS and Address Rebinding
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#redirect-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Redirect Policy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#authentication-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Authentication State
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#connection-setup-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connection Setup Workflow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#connection-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connection Test
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#source-activation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Source Activation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#source-disable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Source Disable
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#source-archive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Source Archive
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plex-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plex Integration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Plex Integration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plex-adapter-purpose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plex Adapter Purpose
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plex-source-identity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plex Source Identity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plex-authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plex Authentication
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plex-connection-probe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plex Connection Probe
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plex-library-discovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plex Library Discovery
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plex-media-kinds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plex Media Kinds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plex-hierarchy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plex Hierarchy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plex-metadata-observations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plex Metadata Observations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plex-media-parts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plex Media Parts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plex-playback-resolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plex Playback Resolution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plex-provider-transcoding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plex Provider Transcoding
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plex-artwork" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plex Artwork
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plex-incremental-change-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plex Incremental Change Strategy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plex-failure-isolation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plex Failure Isolation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plex-compatibility-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plex Compatibility Notes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jellyfin-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Jellyfin Integration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Jellyfin Integration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#jellyfin-adapter-purpose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Jellyfin Adapter Purpose
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jellyfin-source-identity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Jellyfin Source Identity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jellyfin-authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Jellyfin Authentication
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jellyfin-connection-probe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Jellyfin Connection Probe
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jellyfin-library-discovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Jellyfin Library Discovery
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jellyfin-media-kinds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Jellyfin Media Kinds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jellyfin-hierarchy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Jellyfin Hierarchy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jellyfin-metadata-observations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Jellyfin Metadata Observations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jellyfin-media-sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Jellyfin Media Sources
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jellyfin-playback-resolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Jellyfin Playback Resolution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jellyfin-provider-transcoding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Jellyfin Provider Transcoding
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jellyfin-artwork" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Jellyfin Artwork
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jellyfin-incremental-change-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Jellyfin Incremental Change Strategy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jellyfin-user-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Jellyfin User Scope
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jellyfin-failure-isolation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Jellyfin Failure Isolation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#emby-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Emby Integration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Emby Integration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#emby-adapter-purpose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Emby Adapter Purpose
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emby-source-identity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Emby Source Identity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emby-authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Emby Authentication
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emby-connection-probe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Emby Connection Probe
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emby-library-discovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Emby Library Discovery
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emby-media-kinds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Emby Media Kinds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emby-hierarchy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Emby Hierarchy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emby-metadata-observations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Emby Metadata Observations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emby-media-sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Emby Media Sources
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emby-playback-resolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Emby Playback Resolution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emby-artwork" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Emby Artwork
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emby-incremental-change-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Emby Incremental Change Strategy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emby-failure-isolation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Emby Failure Isolation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plex-jellyfin-and-emby-common-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plex, Jellyfin, and Emby Common Contract
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#provider-differences" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Provider Differences
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#provider-side-transcoding-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Provider-Side Transcoding Policy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#local-path-access" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Local Path Access
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#path-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Path Mapping
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#path-mapping-safety" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Path Mapping Safety
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#path-mapping-precedence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Path Mapping Precedence
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#path-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Path Verification
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#remote-versus-local-source-preference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Remote Versus Local Source Preference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#library-synchronization-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Library Synchronization Policy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#initial-synchronization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Initial Synchronization
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#full-synchronization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Full Synchronization
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#incremental-synchronization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Incremental Synchronization
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#startup-synchronization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Startup Synchronization
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#synchronization-scheduling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synchronization Scheduling
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#synchronization-priority" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synchronization Priority
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#playback-priority-protection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Playback Priority Protection
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#synchronization-checkpoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synchronization Checkpoint
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cursor-expiration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cursor Expiration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#partial-synchronization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Partial Synchronization
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#webhooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Webhooks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#webhook-endpoint-identity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Webhook Endpoint Identity
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#webhook-processing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Webhook Processing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#webhook-replay-protection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Webhook Replay Protection
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#unauthenticated-webhooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Unauthenticated Webhooks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#event-deduplication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Event Deduplication
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#polling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Polling
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adaptive-polling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adaptive Polling
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#health-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Health Model
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#health-dimensions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Health Dimensions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#health-observation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Health Observation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#health-aggregation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Health Aggregation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#health-check-cadence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Health Check Cadence
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#health-versus-availability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Health Versus Availability
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#staleness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Staleness
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#source-staleness-states" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Source Staleness States
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#capability-change" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Capability Change
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#provider-upgrade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Provider Upgrade
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adapter-compatibility-range" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adapter Compatibility Range
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adapter-versioning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adapter Versioning
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adapter-migration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adapter Migration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#raw-provider-payloads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Raw Provider Payloads
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#payload-redaction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Payload Redaction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#diagnostic-bundle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diagnostic Bundle
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#observability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Observability
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Observability">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#structured-logs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Structured Logs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Metrics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tracing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tracing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#correlation-ids" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Correlation IDs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#audit-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Audit Requirements
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Authorization
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Security
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Security">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ssrf-protection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SSRF Protection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#credential-isolation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Credential Isolation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#header-allowlist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Header Allowlist
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#url-logging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        URL Logging
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#local-path-safety" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Local Path Safety
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#webhook-safety" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Webhook Safety
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#denial-of-service-protection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Denial-of-Service Protection
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#privacy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Privacy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integration-api-concepts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integration API Concepts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#background-jobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Background Jobs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#job-concurrency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job Concurrency
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#job-idempotency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job Idempotency
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integration-persistence-expectations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integration Persistence Expectations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#repository-boundaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Repository Boundaries
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integration-services" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integration Services
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plugin-integration-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plugin Integration Boundary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metadata-provider-integrations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Metadata Provider Integrations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#notification-integrations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Notification Integrations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#schedule-import-integrations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Schedule Import Integrations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#monitoring-integrations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Monitoring Integrations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backup-integrations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Backup Integrations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#test-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test Strategy
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Test Strategy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#adapter-unit-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adapter Unit Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#contract-fixtures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Contract Fixtures
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plex-contract-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plex Contract Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jellyfin-contract-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Jellyfin Contract Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emby-contract-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Emby Contract Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#http-behavior-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HTTP Behavior Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#synchronization-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synchronization Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#path-mapping-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Path Mapping Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#determinism-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Determinism Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#property-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Property Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#live-compatibility-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Live Compatibility Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#migration-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Migration Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference-plex-import-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reference Plex Import Example
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference-jellyfin-permission-change-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reference Jellyfin Permission Change Example
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference-emby-playback-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reference Emby Playback Example
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference-webhook-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reference Webhook Example
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference-provider-replacement-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reference Provider Replacement Example
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#version-1-required-behaviors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Version 1 Required Behaviors
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integration-invariants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integration Invariants
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deferred-integration-decisions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deferred Integration Decisions
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/chrisbenincasa/tunarr/edit/dev/docs/architecture/spec/07-integrations.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"></path></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/chrisbenincasa/tunarr/raw/dev/docs/architecture/spec/07-integrations.md" title="View source of this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"></path></svg>
+    </a>
+  
+
+
+<h1 id="channelforge-integrations-specification">ChannelForge Integrations Specification<a class="headerlink" href="#channelforge-integrations-specification" title="Permanent link">¶</a></h1>
+<ul>
+<li><strong>Specification version:</strong> 0.1</li>
+<li><strong>Status:</strong> Draft</li>
+<li><strong>Last updated:</strong> 2026-07-27</li>
+</ul>
+<h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">¶</a></h2>
+<p>This document defines how ChannelForge integrates with external systems.</p>
+<p>It specifies:</p>
+<ul>
+<li>Media Source adapter boundaries</li>
+<li>Plex integration</li>
+<li>Jellyfin integration</li>
+<li>Emby integration</li>
+<li>Authentication and credential handling</li>
+<li>Capability discovery</li>
+<li>Library discovery</li>
+<li>Catalog synchronization</li>
+<li>Artwork access</li>
+<li>Playback source resolution</li>
+<li>Health monitoring</li>
+<li>Incremental synchronization</li>
+<li>Webhook and event handling</li>
+<li>Retry behavior</li>
+<li>Compatibility isolation</li>
+<li>Adapter versioning</li>
+<li>Adapter testing</li>
+<li>Future integration contracts</li>
+</ul>
+<p>This document does not define:</p>
+<ul>
+<li>Canonical Catalog Item semantics</li>
+<li>Schedule generation</li>
+<li>FFmpeg command construction</li>
+<li>Public REST routes</li>
+<li>Physical database tables</li>
+<li>Docker deployment details</li>
+</ul>
+<p>Those concerns are defined in the media catalog, scheduling, playout, API,
+persistence, and deployment specifications.</p>
+<h2 id="integration-mission">Integration Mission<a class="headerlink" href="#integration-mission" title="Permanent link">¶</a></h2>
+<p>ChannelForge must communicate with external media systems without allowing their
+provider-specific models to become the ChannelForge domain model.</p>
+<p>An integration must:</p>
+<ul>
+<li>Authenticate securely</li>
+<li>Discover provider capabilities</li>
+<li>Enumerate relevant libraries</li>
+<li>Normalize provider data</li>
+<li>Resolve playback access at runtime</li>
+<li>Report provider failures accurately</li>
+<li>Preserve provider identity and provenance</li>
+<li>Degrade without corrupting unrelated state</li>
+<li>Remain replaceable</li>
+<li>Remain testable without a live provider</li>
+</ul>
+<p>The application must not treat Plex, Jellyfin, or Emby as the owner of
+ChannelForge identity.</p>
+<h2 id="scope">Scope<a class="headerlink" href="#scope" title="Permanent link">¶</a></h2>
+<p>Version 1 includes Media Source adapters for:</p>
+<ul>
+<li>Plex</li>
+<li>Jellyfin</li>
+<li>Emby</li>
+</ul>
+<p>The integration architecture also supports future adapters for:</p>
+<ul>
+<li>Local file indexes</li>
+<li>Network storage catalogs</li>
+<li>Metadata providers</li>
+<li>Artwork providers</li>
+<li>Scheduling imports</li>
+<li>Monitoring systems</li>
+<li>Authentication providers</li>
+<li>Notification systems</li>
+<li>Backup destinations</li>
+<li>Plugin-provided sources</li>
+</ul>
+<p>The exact set enabled in a release depends on implementation maturity.</p>
+<h2 id="integration-boundary">Integration Boundary<a class="headerlink" href="#integration-boundary" title="Permanent link">¶</a></h2>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>flowchart LR
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    Domain["ChannelForge Domain"]
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    Ports["Integration Ports"]
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    Registry["Adapter Registry"]
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    PlexAdapter["Plex Adapter"]
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    JellyfinAdapter["Jellyfin Adapter"]
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    EmbyAdapter["Emby Adapter"]
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    Plex["Plex Server"]
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    Jellyfin["Jellyfin Server"]
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    Emby["Emby Server"]
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    Secrets["Secret Store"]
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    Jobs["Background Jobs"]
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    Health["Health Services"]
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    Domain --&gt; Ports
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>    Ports --&gt; Registry
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>    Registry --&gt; PlexAdapter
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    Registry --&gt; JellyfinAdapter
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>    Registry --&gt; EmbyAdapter
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>    PlexAdapter --&gt; Plex
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>    JellyfinAdapter --&gt; Jellyfin
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>    EmbyAdapter --&gt; Emby
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>    PlexAdapter --&gt; Secrets
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>    JellyfinAdapter --&gt; Secrets
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>    EmbyAdapter --&gt; Secrets
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    Jobs --&gt; Ports
+</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>    Health --&gt; Ports
+</span></code></pre></div>
+<p>The domain depends on integration ports.</p>
+<p>Adapters depend on provider APIs.</p>
+<p>The domain must not depend directly on:</p>
+<ul>
+<li>Plex response types</li>
+<li>Jellyfin response types</li>
+<li>Emby response types</li>
+<li>Provider-specific URL formats</li>
+<li>Provider-specific authentication headers</li>
+<li>Provider-specific pagination structures</li>
+<li>Provider-specific error payloads</li>
+</ul>
+<h2 id="core-principles">Core Principles<a class="headerlink" href="#core-principles" title="Permanent link">¶</a></h2>
+<ol>
+<li>External systems are replaceable dependencies.</li>
+<li>Provider-specific identity remains qualified by Media Source.</li>
+<li>Provider payloads are normalized before entering the domain.</li>
+<li>Credentials remain inside restricted integration boundaries.</li>
+<li>Runtime playback URLs are resolved late.</li>
+<li>External calls are bounded by timeouts and cancellation.</li>
+<li>Retries are explicit and classified.</li>
+<li>Synchronization is idempotent.</li>
+<li>Adapter behavior is versioned.</li>
+<li>Provider failures do not mutate unrelated source state.</li>
+<li>Health is observed separately from catalog availability history.</li>
+<li>Webhooks are hints, not unquestioned truth.</li>
+<li>Full reconciliation remains authoritative.</li>
+<li>Adapters expose capabilities rather than forcing provider assumptions.</li>
+<li>Compatibility behavior is testable through recorded fixtures.</li>
+</ol>
+<h2 id="integration-terms">Integration Terms<a class="headerlink" href="#integration-terms" title="Permanent link">¶</a></h2>
+<h3 id="integration">Integration<a class="headerlink" href="#integration" title="Permanent link">¶</a></h3>
+<p>An Integration is a configured connection between ChannelForge and an external
+system.</p>
+<h3 id="media-source">Media Source<a class="headerlink" href="#media-source" title="Permanent link">¶</a></h3>
+<p>A Media Source is an Integration that provides media libraries, metadata,
+artwork, and playback access.</p>
+<h3 id="adapter">Adapter<a class="headerlink" href="#adapter" title="Permanent link">¶</a></h3>
+<p>An Adapter implements one or more ChannelForge integration ports for a provider.</p>
+<h3 id="provider">Provider<a class="headerlink" href="#provider" title="Permanent link">¶</a></h3>
+<p>A Provider is the external product or service.</p>
+<h3 id="provider-instance">Provider Instance<a class="headerlink" href="#provider-instance" title="Permanent link">¶</a></h3>
+<p>A Provider Instance is one configured server or service account.</p>
+<h3 id="capability">Capability<a class="headerlink" href="#capability" title="Permanent link">¶</a></h3>
+<p>A Capability is a provider behavior detected or declared for one Provider
+Instance.</p>
+<h3 id="credential-reference">Credential Reference<a class="headerlink" href="#credential-reference" title="Permanent link">¶</a></h3>
+<p>A Credential Reference points to secret material without embedding it in normal
+domain records.</p>
+<h3 id="source-descriptor">Source Descriptor<a class="headerlink" href="#source-descriptor" title="Permanent link">¶</a></h3>
+<p>A Source Descriptor is the normalized configuration required to contact a
+Provider Instance.</p>
+<h3 id="integration-observation">Integration Observation<a class="headerlink" href="#integration-observation" title="Permanent link">¶</a></h3>
+<p>An Integration Observation is a timestamped result from an external call.</p>
+<h3 id="integration-health">Integration Health<a class="headerlink" href="#integration-health" title="Permanent link">¶</a></h3>
+<p>Integration Health summarizes current operational reachability and capability.</p>
+<h3 id="synchronization-hint">Synchronization Hint<a class="headerlink" href="#synchronization-hint" title="Permanent link">¶</a></h3>
+<p>A Synchronization Hint indicates that provider state may have changed.</p>
+<h3 id="provider-cursor">Provider Cursor<a class="headerlink" href="#provider-cursor" title="Permanent link">¶</a></h3>
+<p>A Provider Cursor is an opaque provider-specific change or pagination token.</p>
+<h2 id="integration-aggregate">Integration Aggregate<a class="headerlink" href="#integration-aggregate" title="Permanent link">¶</a></h2>
+<p>A Media Source is the principal integration aggregate root.</p>
+<p>Required conceptual fields:</p>
+<ul>
+<li><code>mediaSourceId</code></li>
+<li>Provider type</li>
+<li>Display name</li>
+<li>Base address</li>
+<li>Credential Reference</li>
+<li>Enabled state</li>
+<li>Trust policy</li>
+<li>Connection policy</li>
+<li>Included libraries</li>
+<li>Preferred metadata priority</li>
+<li>Playback priority</li>
+<li>Synchronization policy</li>
+<li>Health state</li>
+<li>Capability snapshot</li>
+<li>Adapter version</li>
+<li>Created timestamp</li>
+<li>Updated timestamp</li>
+<li>Archived timestamp</li>
+</ul>
+<h2 id="provider-types">Provider Types<a class="headerlink" href="#provider-types" title="Permanent link">¶</a></h2>
+<p>Suggested built-in provider types:</p>
+<ul>
+<li><code>PLEX</code></li>
+<li><code>JELLYFIN</code></li>
+<li><code>EMBY</code></li>
+</ul>
+<p>Future provider types may include:</p>
+<ul>
+<li><code>LOCAL_INDEX</code></li>
+<li><code>GENERIC_HTTP</code></li>
+<li><code>METADATA_PROVIDER</code></li>
+<li><code>CUSTOM_PLUGIN</code></li>
+</ul>
+<p>Provider type values are stable domain identifiers.</p>
+<p>They must not be inferred from display names.</p>
+<h2 id="source-identity">Source Identity<a class="headerlink" href="#source-identity" title="Permanent link">¶</a></h2>
+<p>Every Media Source has a ChannelForge-owned <code>mediaSourceId</code>.</p>
+<p>Changing:</p>
+<ul>
+<li>Display name</li>
+<li>Hostname</li>
+<li>Port</li>
+<li>Scheme</li>
+<li>Credential</li>
+<li>Preferred source priority</li>
+</ul>
+<p>does not automatically create a new Media Source.</p>
+<p>A new Media Source is required when the configured provider instance should be
+treated as independently addressable and auditable.</p>
+<h2 id="source-descriptor_1">Source Descriptor<a class="headerlink" href="#source-descriptor_1" title="Permanent link">¶</a></h2>
+<p>A Source Descriptor includes:</p>
+<ul>
+<li>Provider type</li>
+<li>Base URI</li>
+<li>Optional externally reachable URI</li>
+<li>Optional internal URI</li>
+<li>Credential Reference</li>
+<li>TLS policy</li>
+<li>Proxy policy</li>
+<li>Timeout policy</li>
+<li>Custom headers allowed by adapter</li>
+<li>Included library IDs</li>
+<li>Excluded library IDs</li>
+<li>Source labels</li>
+<li>Enabled state</li>
+</ul>
+<p>The descriptor must not contain decrypted credential material in ordinary
+serialization.</p>
+<h2 id="internal-and-external-addresses">Internal and External Addresses<a class="headerlink" href="#internal-and-external-addresses" title="Permanent link">¶</a></h2>
+<p>A Media Source may require more than one address.</p>
+<p>Examples:</p>
+<ul>
+<li>Internal Docker address for server-to-server calls</li>
+<li>External client address</li>
+<li>Reverse-proxy address</li>
+<li>Local LAN address</li>
+</ul>
+<p>Address purpose must be explicit.</p>
+<p>ChannelForge must not assume one provider URL is appropriate for every context.</p>
+<h2 id="base-uri-validation">Base URI Validation<a class="headerlink" href="#base-uri-validation" title="Permanent link">¶</a></h2>
+<p>Validation must check:</p>
+<ul>
+<li>Supported scheme</li>
+<li>Host presence</li>
+<li>Port range</li>
+<li>Path normalization</li>
+<li>No embedded credentials</li>
+<li>No unapproved fragment</li>
+<li>No unsafe protocol</li>
+<li>No loopback restriction violation under policy</li>
+<li>No link-local or metadata-service address under restricted deployments</li>
+<li>Valid trusted-host policy</li>
+</ul>
+<h2 id="secret-boundary">Secret Boundary<a class="headerlink" href="#secret-boundary" title="Permanent link">¶</a></h2>
+<p>Credential material is accessed only through a secret service.</p>
+<p>Adapters receive secret material in restricted runtime objects.</p>
+<p>Secrets must not be:</p>
+<ul>
+<li>Stored in catalog records</li>
+<li>Returned through normal API responses</li>
+<li>Included in schedule data</li>
+<li>Included in generated M3U unless ChannelForge access tokens are intentional</li>
+<li>Logged</li>
+<li>Included in exceptions</li>
+<li>Embedded in audit notes</li>
+<li>Included in diagnostics exports without explicit redaction</li>
+</ul>
+<h2 id="credential-types">Credential Types<a class="headerlink" href="#credential-types" title="Permanent link">¶</a></h2>
+<p>Possible provider credential types:</p>
+<ul>
+<li>API token</li>
+<li>Access token</li>
+<li>Username and password</li>
+<li>Device authorization result</li>
+<li>OAuth-style refresh credential</li>
+<li>Client certificate</li>
+<li>Custom header secret</li>
+</ul>
+<p>Version 1 should prefer provider-issued tokens over reusable account passwords.</p>
+<h2 id="credential-rotation">Credential Rotation<a class="headerlink" href="#credential-rotation" title="Permanent link">¶</a></h2>
+<p>Credential rotation must:</p>
+<ul>
+<li>Create or update secret material atomically</li>
+<li>Preserve Media Source identity</li>
+<li>Trigger connection verification</li>
+<li>Avoid exposing prior secret</li>
+<li>Record audit event</li>
+<li>Recalculate health</li>
+<li>Avoid deleting catalog state on transient failure</li>
+</ul>
+<h2 id="credential-revocation">Credential Revocation<a class="headerlink" href="#credential-revocation" title="Permanent link">¶</a></h2>
+<p>Revocation marks the Media Source unavailable for new external calls.</p>
+<p>Existing approved plans remain intact.</p>
+<p>Runtime may continue only if a valid cached access descriptor remains and policy
+allows it.</p>
+<h2 id="adapter-registry">Adapter Registry<a class="headerlink" href="#adapter-registry" title="Permanent link">¶</a></h2>
+<p>The Adapter Registry maps provider type and adapter version to implementation.</p>
+<p>Each registration includes:</p>
+<ul>
+<li>Provider type</li>
+<li>Adapter version</li>
+<li>Supported integration ports</li>
+<li>Configuration schema</li>
+<li>Capability declarations</li>
+<li>Provider-version compatibility range</li>
+<li>Fixture version</li>
+<li>Migration support</li>
+<li>Deprecation state</li>
+</ul>
+<p>Unknown provider types cannot be activated.</p>
+<h2 id="integration-ports">Integration Ports<a class="headerlink" href="#integration-ports" title="Permanent link">¶</a></h2>
+<p>Suggested core ports:</p>
+<ul>
+<li><code>ConnectionProbePort</code></li>
+<li><code>CapabilityDiscoveryPort</code></li>
+<li><code>LibraryDiscoveryPort</code></li>
+<li><code>CatalogEnumerationPort</code></li>
+<li><code>CatalogItemDetailPort</code></li>
+<li><code>ArtworkAccessPort</code></li>
+<li><code>PlaybackResolutionPort</code></li>
+<li><code>ChangeFeedPort</code></li>
+<li><code>WebhookVerificationPort</code></li>
+<li><code>ProviderHealthPort</code></li>
+<li><code>ProviderIdentityPort</code></li>
+</ul>
+<p>An adapter may implement only the ports supported by its provider type.</p>
+<h2 id="connection-probe-port">Connection Probe Port<a class="headerlink" href="#connection-probe-port" title="Permanent link">¶</a></h2>
+<p>The connection probe verifies that ChannelForge can reach and authenticate to a
+Provider Instance.</p>
+<p>Input:</p>
+<ul>
+<li>Media Source descriptor</li>
+<li>Credential Reference</li>
+<li>Timeout</li>
+<li>Cancellation signal</li>
+</ul>
+<p>Output:</p>
+<ul>
+<li>Reachability</li>
+<li>Authentication result</li>
+<li>Provider identity</li>
+<li>Provider version</li>
+<li>Server time where available</li>
+<li>Latency</li>
+<li>TLS observation</li>
+<li>Warning list</li>
+<li>Error classification</li>
+</ul>
+<h2 id="capability-discovery-port">Capability Discovery Port<a class="headerlink" href="#capability-discovery-port" title="Permanent link">¶</a></h2>
+<p>Capability discovery returns a normalized Capability Snapshot.</p>
+<p>Potential capabilities:</p>
+<ul>
+<li>Library enumeration</li>
+<li>Incremental updates</li>
+<li>Webhooks</li>
+<li>Artwork access</li>
+<li>Direct stream</li>
+<li>Transcode endpoint</li>
+<li>Byte ranges</li>
+<li>Offset seek</li>
+<li>Multiple media parts</li>
+<li>Multiple versions</li>
+<li>Audio track selection</li>
+<li>Subtitle track selection</li>
+<li>Server-side transcoding</li>
+<li>User-scoped visibility</li>
+<li>Library filtering</li>
+<li>Update tokens</li>
+<li>Item version tokens</li>
+<li>Deletion events</li>
+<li>Remote access</li>
+<li>Local path exposure</li>
+</ul>
+<p>Capabilities must be observations, not permanent provider assumptions.</p>
+<h2 id="capability-snapshot">Capability Snapshot<a class="headerlink" href="#capability-snapshot" title="Permanent link">¶</a></h2>
+<p>A Capability Snapshot includes:</p>
+<ul>
+<li>Snapshot ID</li>
+<li>Media Source ID</li>
+<li>Adapter version</li>
+<li>Provider version</li>
+<li>Observed timestamp</li>
+<li>Capability values</li>
+<li>Confidence</li>
+<li>Warnings</li>
+<li>Expiration policy</li>
+<li>Content checksum</li>
+</ul>
+<p>A later provider upgrade may produce a different snapshot.</p>
+<h2 id="capability-states">Capability States<a class="headerlink" href="#capability-states" title="Permanent link">¶</a></h2>
+<p>Suggested states:</p>
+<ul>
+<li><code>SUPPORTED</code></li>
+<li><code>UNSUPPORTED</code></li>
+<li><code>UNKNOWN</code></li>
+<li><code>DEGRADED</code></li>
+<li><code>REQUIRES_CONFIGURATION</code></li>
+</ul>
+<h2 id="library-discovery-port">Library Discovery Port<a class="headerlink" href="#library-discovery-port" title="Permanent link">¶</a></h2>
+<p>Library discovery returns normalized library descriptors.</p>
+<p>A Library Descriptor includes:</p>
+<ul>
+<li>External library ID</li>
+<li>Name</li>
+<li>Library type</li>
+<li>Included media kinds</li>
+<li>Item count estimate</li>
+<li>Enabled or hidden state</li>
+<li>Last updated provider timestamp</li>
+<li>Parent scope</li>
+<li>Access state</li>
+<li>Provider metadata</li>
+<li>Warning list</li>
+</ul>
+<h2 id="library-types">Library Types<a class="headerlink" href="#library-types" title="Permanent link">¶</a></h2>
+<p>Suggested normalized library types:</p>
+<ul>
+<li><code>MOVIES</code></li>
+<li><code>TV</code></li>
+<li><code>MIXED</code></li>
+<li><code>MUSIC</code></li>
+<li><code>PHOTOS</code></li>
+<li><code>OTHER</code></li>
+</ul>
+<p>Version 1 catalog import may exclude unsupported types.</p>
+<p>Unsupported libraries remain visible for diagnostics where practical.</p>
+<h2 id="library-inclusion">Library Inclusion<a class="headerlink" href="#library-inclusion" title="Permanent link">¶</a></h2>
+<p>Library inclusion is explicit.</p>
+<p>A newly discovered library may default to:</p>
+<ul>
+<li>Included</li>
+<li>Excluded</li>
+<li>Pending operator review</li>
+</ul>
+<p>The default is an instance policy.</p>
+<p>Changing inclusion triggers synchronization.</p>
+<h2 id="catalog-enumeration-port">Catalog Enumeration Port<a class="headerlink" href="#catalog-enumeration-port" title="Permanent link">¶</a></h2>
+<p>Catalog enumeration emits source-neutral import records.</p>
+<p>Inputs:</p>
+<ul>
+<li>Media Source</li>
+<li>Included libraries</li>
+<li>Synchronization mode</li>
+<li>Provider Cursor</li>
+<li>Page size</li>
+<li>Cancellation signal</li>
+<li>Adapter options</li>
+</ul>
+<p>Outputs:</p>
+<ul>
+<li>Import records</li>
+<li>Next cursor</li>
+<li>Completion state</li>
+<li>Provider checkpoint</li>
+<li>Warnings</li>
+<li>Rate-limit observation</li>
+<li>Source timestamp</li>
+</ul>
+<h2 id="import-record">Import Record<a class="headerlink" href="#import-record" title="Permanent link">¶</a></h2>
+<p>A normalized import record includes:</p>
+<ul>
+<li>Qualified external identity</li>
+<li>External item type</li>
+<li>Parent external identities</li>
+<li>Library identity</li>
+<li>Field observations</li>
+<li>Artwork observations</li>
+<li>Playback Variant observations</li>
+<li>Provider version token</li>
+<li>Provider timestamps</li>
+<li>Raw reference</li>
+<li>Parse warnings</li>
+</ul>
+<p>The import record must not contain provider SDK objects.</p>
+<h2 id="detail-retrieval-port">Detail Retrieval Port<a class="headerlink" href="#detail-retrieval-port" title="Permanent link">¶</a></h2>
+<p>Some providers expose summary records and detail records separately.</p>
+<p>Detail retrieval may be:</p>
+<ul>
+<li>Required for every item</li>
+<li>Batched</li>
+<li>Lazy</li>
+<li>Conditional on version change</li>
+<li>Deferred until playback</li>
+</ul>
+<p>The adapter declares its strategy.</p>
+<h2 id="artwork-access-port">Artwork Access Port<a class="headerlink" href="#artwork-access-port" title="Permanent link">¶</a></h2>
+<p>Artwork access resolves provider artwork references.</p>
+<p>It may return:</p>
+<ul>
+<li>Authorized provider URL</li>
+<li>Required headers</li>
+<li>Expiration</li>
+<li>MIME type</li>
+<li>Dimensions</li>
+<li>Checksum where available</li>
+<li>Cache recommendation</li>
+</ul>
+<p>Secrets remain server-side.</p>
+<h2 id="playback-resolution-port">Playback Resolution Port<a class="headerlink" href="#playback-resolution-port" title="Permanent link">¶</a></h2>
+<p>Playback resolution returns a restricted runtime Source Access Descriptor.</p>
+<p>Inputs:</p>
+<ul>
+<li>Media Source</li>
+<li>Source Binding</li>
+<li>Playback Variant</li>
+<li>Runtime offset</li>
+<li>Output intent</li>
+<li>Selected tracks</li>
+<li>Client-independent playback policy</li>
+<li>Cancellation signal</li>
+</ul>
+<p>Outputs:</p>
+<ul>
+<li>Access URL or local path</li>
+<li>Required headers</li>
+<li>Required cookies</li>
+<li>Expiration</li>
+<li>Input protocol</li>
+<li>Seek method</li>
+<li>Range support</li>
+<li>Provider transcode option where supported</li>
+<li>Input format hints</li>
+<li>Warnings</li>
+</ul>
+<h2 id="change-feed-port">Change Feed Port<a class="headerlink" href="#change-feed-port" title="Permanent link">¶</a></h2>
+<p>A Change Feed Port reads provider-supported incremental changes.</p>
+<p>Outputs may include:</p>
+<ul>
+<li>Added item</li>
+<li>Updated item</li>
+<li>Deleted item</li>
+<li>Library changed</li>
+<li>Artwork changed</li>
+<li>Playback Variant changed</li>
+<li>Provider Cursor</li>
+<li>Reset-required indication</li>
+</ul>
+<p>Provider events are normalized before scheduling synchronization work.</p>
+<h2 id="webhook-verification-port">Webhook Verification Port<a class="headerlink" href="#webhook-verification-port" title="Permanent link">¶</a></h2>
+<p>Webhook verification validates:</p>
+<ul>
+<li>Signature</li>
+<li>Source identity</li>
+<li>Timestamp</li>
+<li>Replay tolerance</li>
+<li>Event type</li>
+<li>Payload structure</li>
+</ul>
+<p>A webhook accepted as authentic is still only a synchronization hint.</p>
+<h2 id="provider-health-port">Provider Health Port<a class="headerlink" href="#provider-health-port" title="Permanent link">¶</a></h2>
+<p>Provider health may test:</p>
+<ul>
+<li>Reachability</li>
+<li>Authentication</li>
+<li>Library visibility</li>
+<li>Playback resolution</li>
+<li>Artwork access</li>
+<li>Clock skew</li>
+<li>Provider version</li>
+<li>Rate limiting</li>
+<li>Latency</li>
+</ul>
+<p>Health checks must avoid excessive provider load.</p>
+<h2 id="provider-identity-port">Provider Identity Port<a class="headerlink" href="#provider-identity-port" title="Permanent link">¶</a></h2>
+<p>Provider identity retrieves stable provider-instance observations.</p>
+<p>Potential fields:</p>
+<ul>
+<li>Machine identifier</li>
+<li>Server identifier</li>
+<li>Friendly name</li>
+<li>Provider version</li>
+<li>Platform</li>
+<li>Public address hints</li>
+<li>Time zone</li>
+<li>Server time</li>
+</ul>
+<p>Provider identity changes may create a conflict if a configured Media Source
+appears to point to a different server.</p>
+<h2 id="provider-instance-replacement">Provider Instance Replacement<a class="headerlink" href="#provider-instance-replacement" title="Permanent link">¶</a></h2>
+<p>If the same Media Source configuration begins returning a different stable
+provider identifier, ChannelForge must not silently accept it as the original
+server.</p>
+<p>Policy may require:</p>
+<ul>
+<li>Operator confirmation</li>
+<li>New Media Source creation</li>
+<li>Explicit replacement workflow</li>
+<li>Binding migration review</li>
+</ul>
+<h2 id="error-model">Error Model<a class="headerlink" href="#error-model" title="Permanent link">¶</a></h2>
+<p>Adapters convert provider failures into normalized error classifications.</p>
+<p>Suggested classes:</p>
+<ul>
+<li><code>CONFIGURATION_INVALID</code></li>
+<li><code>DNS_FAILURE</code></li>
+<li><code>CONNECTION_REFUSED</code></li>
+<li><code>CONNECTION_TIMEOUT</code></li>
+<li><code>TLS_FAILURE</code></li>
+<li><code>AUTHENTICATION_FAILED</code></li>
+<li><code>AUTHORIZATION_FAILED</code></li>
+<li><code>NOT_FOUND</code></li>
+<li><code>RATE_LIMITED</code></li>
+<li><code>PROVIDER_UNAVAILABLE</code></li>
+<li><code>PROVIDER_MAINTENANCE</code></li>
+<li><code>UNSUPPORTED_PROVIDER_VERSION</code></li>
+<li><code>CAPABILITY_UNAVAILABLE</code></li>
+<li><code>INVALID_PROVIDER_RESPONSE</code></li>
+<li><code>PAGINATION_FAILURE</code></li>
+<li><code>CURSOR_EXPIRED</code></li>
+<li><code>PLAYBACK_RESOLUTION_FAILED</code></li>
+<li><code>ARTWORK_RESOLUTION_FAILED</code></li>
+<li><code>CANCELLED</code></li>
+<li><code>UNKNOWN</code></li>
+</ul>
+<h2 id="error-properties">Error Properties<a class="headerlink" href="#error-properties" title="Permanent link">¶</a></h2>
+<p>A normalized integration error includes:</p>
+<ul>
+<li>Error class</li>
+<li>Retryable state</li>
+<li>Provider type</li>
+<li>Media Source ID</li>
+<li>Operation</li>
+<li>HTTP or transport status where safe</li>
+<li>Provider error code where safe</li>
+<li>Correlation ID</li>
+<li>Occurred timestamp</li>
+<li>Redacted diagnostic message</li>
+<li>Suggested action category</li>
+</ul>
+<h2 id="retryability">Retryability<a class="headerlink" href="#retryability" title="Permanent link">¶</a></h2>
+<p>Retryability must be explicit.</p>
+<p>Typical retryable categories may include:</p>
+<ul>
+<li>Timeout</li>
+<li>Temporary provider unavailable</li>
+<li>Rate limiting</li>
+<li>Connection reset</li>
+<li>Selected server errors</li>
+<li>Cursor transient failure</li>
+</ul>
+<p>Typical non-retryable categories may include:</p>
+<ul>
+<li>Invalid configuration</li>
+<li>Authentication failed</li>
+<li>Authorization failed</li>
+<li>Unsupported provider version</li>
+<li>Invalid permanent identifier</li>
+<li>Explicit item not found</li>
+</ul>
+<p>Provider-specific exceptions are mapped by the adapter.</p>
+<h2 id="timeout-policy">Timeout Policy<a class="headerlink" href="#timeout-policy" title="Permanent link">¶</a></h2>
+<p>Timeout categories may include:</p>
+<ul>
+<li>Connection timeout</li>
+<li>Request timeout</li>
+<li>Streaming response timeout</li>
+<li>Idle read timeout</li>
+<li>Full-operation budget</li>
+</ul>
+<p>Large library synchronization must not use one unbounded request.</p>
+<h2 id="cancellation">Cancellation<a class="headerlink" href="#cancellation" title="Permanent link">¶</a></h2>
+<p>Every external operation used by a Background Job must accept cancellation.</p>
+<p>Cancellation must:</p>
+<ul>
+<li>Stop further pagination</li>
+<li>Close response bodies</li>
+<li>Release sockets</li>
+<li>Mark job state</li>
+<li>Preserve completed checkpoints</li>
+<li>Avoid corrupting source state</li>
+</ul>
+<h2 id="retry-policy">Retry Policy<a class="headerlink" href="#retry-policy" title="Permanent link">¶</a></h2>
+<p>Retry policy includes:</p>
+<ul>
+<li>Maximum attempts</li>
+<li>Backoff</li>
+<li>Maximum delay</li>
+<li>Jitter</li>
+<li>Retryable classes</li>
+<li>Rate-limit handling</li>
+<li>Operation budget</li>
+<li>Cancellation</li>
+</ul>
+<p>Retry state is recorded in job diagnostics.</p>
+<h2 id="rate-limiting">Rate Limiting<a class="headerlink" href="#rate-limiting" title="Permanent link">¶</a></h2>
+<p>Adapters must respect provider rate limits where exposed.</p>
+<p>Rate-limit observations may include:</p>
+<ul>
+<li>Remaining requests</li>
+<li>Reset time</li>
+<li>Retry-after duration</li>
+<li>Provider-specific quota</li>
+</ul>
+<p>ChannelForge may apply its own per-source request limiter.</p>
+<h2 id="request-concurrency">Request Concurrency<a class="headerlink" href="#request-concurrency" title="Permanent link">¶</a></h2>
+<p>Per-source concurrency is bounded.</p>
+<p>Different operation classes may have separate limits:</p>
+<ul>
+<li>Catalog listing</li>
+<li>Item detail</li>
+<li>Artwork</li>
+<li>Playback resolution</li>
+<li>Health check</li>
+</ul>
+<h2 id="connection-pooling">Connection Pooling<a class="headerlink" href="#connection-pooling" title="Permanent link">¶</a></h2>
+<p>HTTP clients should be reused per provider policy.</p>
+<p>Connection pooling must account for:</p>
+<ul>
+<li>TLS</li>
+<li>DNS changes</li>
+<li>Proxy settings</li>
+<li>Provider connection limits</li>
+<li>Idle expiration</li>
+<li>Credential rotation</li>
+</ul>
+<h2 id="http-client-boundary">HTTP Client Boundary<a class="headerlink" href="#http-client-boundary" title="Permanent link">¶</a></h2>
+<p>Adapters use a controlled HTTP client abstraction.</p>
+<p>The abstraction supports:</p>
+<ul>
+<li>Timeouts</li>
+<li>Cancellation</li>
+<li>Redaction</li>
+<li>Correlation IDs</li>
+<li>Retry hooks</li>
+<li>Metrics</li>
+<li>TLS policy</li>
+<li>Proxy policy</li>
+<li>Response-size limits</li>
+<li>Streaming</li>
+<li>Test substitution</li>
+</ul>
+<h2 id="response-size-limits">Response Size Limits<a class="headerlink" href="#response-size-limits" title="Permanent link">¶</a></h2>
+<p>Adapters must bound:</p>
+<ul>
+<li>Metadata response size</li>
+<li>Error body size</li>
+<li>Artwork size</li>
+<li>Webhook payload size</li>
+<li>Pagination page size</li>
+</ul>
+<p>Large expected streams use streaming APIs rather than full buffering.</p>
+<h2 id="tls-policy">TLS Policy<a class="headerlink" href="#tls-policy" title="Permanent link">¶</a></h2>
+<p>TLS policy may include:</p>
+<ul>
+<li>Normal certificate validation</li>
+<li>Custom trust store</li>
+<li>Explicit self-signed certificate trust</li>
+<li>Certificate pinning</li>
+<li>Insecure mode for isolated local networks</li>
+</ul>
+<p>Insecure mode must:</p>
+<ul>
+<li>Be disabled by default</li>
+<li>Display warning</li>
+<li>Be auditable</li>
+<li>Avoid applying globally</li>
+<li>Apply only to the configured Media Source</li>
+</ul>
+<h2 id="proxy-policy">Proxy Policy<a class="headerlink" href="#proxy-policy" title="Permanent link">¶</a></h2>
+<p>A Media Source may use:</p>
+<ul>
+<li>Direct connection</li>
+<li>Instance HTTP proxy</li>
+<li>Source-specific proxy</li>
+<li>No proxy for local addresses</li>
+</ul>
+<p>Proxy credentials are secrets.</p>
+<h2 id="dns-and-address-rebinding">DNS and Address Rebinding<a class="headerlink" href="#dns-and-address-rebinding" title="Permanent link">¶</a></h2>
+<p>ChannelForge should resolve and validate addresses according to deployment
+security policy.</p>
+<p>A source configured for local access must not be allowed to redirect to
+untrusted destinations without policy.</p>
+<h2 id="redirect-policy">Redirect Policy<a class="headerlink" href="#redirect-policy" title="Permanent link">¶</a></h2>
+<p>Redirect behavior is adapter-controlled.</p>
+<p>The adapter must define:</p>
+<ul>
+<li>Maximum redirects</li>
+<li>Cross-host redirect policy</li>
+<li>Scheme downgrade policy</li>
+<li>Credential forwarding policy</li>
+</ul>
+<p>Authorization headers must not be forwarded to an unrelated host.</p>
+<h2 id="authentication-state">Authentication State<a class="headerlink" href="#authentication-state" title="Permanent link">¶</a></h2>
+<p>Suggested states:</p>
+<ul>
+<li><code>UNCONFIGURED</code></li>
+<li><code>UNVERIFIED</code></li>
+<li><code>VALID</code></li>
+<li><code>EXPIRED</code></li>
+<li><code>REVOKED</code></li>
+<li><code>INVALID</code></li>
+<li><code>INSUFFICIENT_SCOPE</code></li>
+</ul>
+<h2 id="connection-setup-workflow">Connection Setup Workflow<a class="headerlink" href="#connection-setup-workflow" title="Permanent link">¶</a></h2>
+<p>A standard setup flow:</p>
+<ol>
+<li>User selects provider type.</li>
+<li>User enters base address.</li>
+<li>User provides or authorizes credential.</li>
+<li>ChannelForge validates address.</li>
+<li>Connection probe runs.</li>
+<li>Provider identity is shown.</li>
+<li>Capability discovery runs.</li>
+<li>Libraries are listed.</li>
+<li>User selects libraries.</li>
+<li>Configuration is saved.</li>
+<li>Initial synchronization is queued.</li>
+<li>Health state is established.</li>
+</ol>
+<h2 id="connection-test">Connection Test<a class="headerlink" href="#connection-test" title="Permanent link">¶</a></h2>
+<p>A connection test must not mutate the Catalog.</p>
+<p>It may persist:</p>
+<ul>
+<li>Test timestamp</li>
+<li>Result</li>
+<li>Provider identity</li>
+<li>Capability observation</li>
+<li>Latency</li>
+<li>Error classification</li>
+</ul>
+<h2 id="source-activation">Source Activation<a class="headerlink" href="#source-activation" title="Permanent link">¶</a></h2>
+<p>A Media Source becomes active only after:</p>
+<ul>
+<li>Valid configuration</li>
+<li>Successful identity resolution or explicit override</li>
+<li>Valid credential</li>
+<li>Adapter compatibility</li>
+<li>At least one supported library or explicit source purpose</li>
+<li>No blocking conflict</li>
+</ul>
+<h2 id="source-disable">Source Disable<a class="headerlink" href="#source-disable" title="Permanent link">¶</a></h2>
+<p>Disabling a Media Source:</p>
+<ul>
+<li>Stops new synchronization</li>
+<li>Stops new runtime selection</li>
+<li>Preserves Catalog Items</li>
+<li>Preserves Source Bindings</li>
+<li>Preserves history</li>
+<li>Recalculates availability</li>
+<li>May mark plans stale</li>
+<li>Does not delete credentials automatically</li>
+</ul>
+<h2 id="source-archive">Source Archive<a class="headerlink" href="#source-archive" title="Permanent link">¶</a></h2>
+<p>Archiving a Media Source:</p>
+<ul>
+<li>Disables it</li>
+<li>Preserves identity</li>
+<li>Preserves historical bindings</li>
+<li>Removes it from normal management lists</li>
+<li>Requires explicit restoration</li>
+</ul>
+<h2 id="plex-integration">Plex Integration<a class="headerlink" href="#plex-integration" title="Permanent link">¶</a></h2>
+<h3 id="plex-adapter-purpose">Plex Adapter Purpose<a class="headerlink" href="#plex-adapter-purpose" title="Permanent link">¶</a></h3>
+<p>The Plex adapter connects ChannelForge to one Plex server instance.</p>
+<p>It provides:</p>
+<ul>
+<li>Server identity</li>
+<li>Authentication</li>
+<li>Library discovery</li>
+<li>Movie and episodic metadata</li>
+<li>Artwork references</li>
+<li>Media parts and versions</li>
+<li>Playback resolution</li>
+<li>Health observations</li>
+<li>Change hints where supported</li>
+</ul>
+<h3 id="plex-source-identity">Plex Source Identity<a class="headerlink" href="#plex-source-identity" title="Permanent link">¶</a></h3>
+<p>Plex-specific identifiers are stored as qualified external identifiers.</p>
+<p>They do not become ChannelForge Catalog Item IDs.</p>
+<p>The adapter should preserve:</p>
+<ul>
+<li>Server identity</li>
+<li>Library identity</li>
+<li>Item identity</li>
+<li>Parent identities</li>
+<li>Media-part identities</li>
+<li>Provider metadata IDs where present</li>
+</ul>
+<h3 id="plex-authentication">Plex Authentication<a class="headerlink" href="#plex-authentication" title="Permanent link">¶</a></h3>
+<p>The adapter accepts a configured provider-issued access credential.</p>
+<p>Credential acquisition flow is separate from ordinary synchronization.</p>
+<p>The credential must remain server-side.</p>
+<h3 id="plex-connection-probe">Plex Connection Probe<a class="headerlink" href="#plex-connection-probe" title="Permanent link">¶</a></h3>
+<p>The probe should verify:</p>
+<ul>
+<li>Base address reachability</li>
+<li>Authentication</li>
+<li>Server identity</li>
+<li>Basic library access</li>
+<li>Provider version compatibility</li>
+<li>Response parsing</li>
+<li>Timeouts</li>
+</ul>
+<h3 id="plex-library-discovery">Plex Library Discovery<a class="headerlink" href="#plex-library-discovery" title="Permanent link">¶</a></h3>
+<p>The adapter normalizes Plex library sections into Library Descriptors.</p>
+<p>Unsupported sections remain excluded from catalog synchronization.</p>
+<h3 id="plex-media-kinds">Plex Media Kinds<a class="headerlink" href="#plex-media-kinds" title="Permanent link">¶</a></h3>
+<p>The adapter should normalize provider item types into:</p>
+<ul>
+<li>Movie</li>
+<li>Series</li>
+<li>Season</li>
+<li>Episode</li>
+<li>Special where inferable</li>
+<li>Trailer or extra where configured</li>
+<li>Other</li>
+</ul>
+<p>Provider-specific extras must not automatically enter programming inventory.</p>
+<h3 id="plex-hierarchy">Plex Hierarchy<a class="headerlink" href="#plex-hierarchy" title="Permanent link">¶</a></h3>
+<p>The adapter preserves parent relationships sufficient to resolve:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>Series -&gt; Season -&gt; Episode
+</span></code></pre></div>
+<p>Missing parent records create hierarchy warnings rather than fabricated
+identities.</p>
+<h3 id="plex-metadata-observations">Plex Metadata Observations<a class="headerlink" href="#plex-metadata-observations" title="Permanent link">¶</a></h3>
+<p>Potential observations include:</p>
+<ul>
+<li>Title</li>
+<li>Sort title</li>
+<li>Original title</li>
+<li>Summary</li>
+<li>Tagline</li>
+<li>Year</li>
+<li>Original air date</li>
+<li>Rating</li>
+<li>Genres</li>
+<li>Studios</li>
+<li>Countries</li>
+<li>Languages</li>
+<li>Credits</li>
+<li>Provider metadata IDs</li>
+<li>Artwork keys</li>
+<li>Duration</li>
+<li>Added timestamp</li>
+<li>Updated timestamp</li>
+</ul>
+<p>The adapter preserves source values and parsing warnings.</p>
+<h3 id="plex-media-parts">Plex Media Parts<a class="headerlink" href="#plex-media-parts" title="Permanent link">¶</a></h3>
+<p>Each usable media part or version becomes a Playback Variant observation.</p>
+<p>The adapter should preserve:</p>
+<ul>
+<li>Media-part identity</li>
+<li>Container</li>
+<li>Video codec</li>
+<li>Audio codec</li>
+<li>Resolution</li>
+<li>Bit rate</li>
+<li>Duration</li>
+<li>File size</li>
+<li>Stream information</li>
+<li>Source path or key</li>
+<li>Version token</li>
+</ul>
+<h3 id="plex-playback-resolution">Plex Playback Resolution<a class="headerlink" href="#plex-playback-resolution" title="Permanent link">¶</a></h3>
+<p>Playback resolution may produce:</p>
+<ul>
+<li>Direct media access</li>
+<li>Provider-mediated direct stream</li>
+<li>Provider-mediated transcode</li>
+<li>Required headers or query credentials</li>
+<li>Offset or seek parameters</li>
+</ul>
+<p>ChannelForge decides whether provider-side transcoding is allowed.</p>
+<h3 id="plex-provider-transcoding">Plex Provider Transcoding<a class="headerlink" href="#plex-provider-transcoding" title="Permanent link">¶</a></h3>
+<p>Provider-side transcoding may be disabled, preferred, or used as fallback.</p>
+<p>Policy must consider:</p>
+<ul>
+<li>Server capacity</li>
+<li>ChannelForge FFmpeg capacity</li>
+<li>Quality</li>
+<li>Subtitle behavior</li>
+<li>Runtime seek</li>
+<li>Network topology</li>
+<li>Observability</li>
+<li>Credential handling</li>
+</ul>
+<h3 id="plex-artwork">Plex Artwork<a class="headerlink" href="#plex-artwork" title="Permanent link">¶</a></h3>
+<p>Artwork access must hide provider credentials from clients.</p>
+<p>ChannelForge may proxy or cache provider artwork.</p>
+<h3 id="plex-incremental-change-strategy">Plex Incremental Change Strategy<a class="headerlink" href="#plex-incremental-change-strategy" title="Permanent link">¶</a></h3>
+<p>The adapter may use provider change observations where supported.</p>
+<p>Periodic full reconciliation remains required.</p>
+<h3 id="plex-failure-isolation">Plex Failure Isolation<a class="headerlink" href="#plex-failure-isolation" title="Permanent link">¶</a></h3>
+<p>One invalid item or response must not fail the entire synchronization unless
+continued enumeration is unsafe.</p>
+<h3 id="plex-compatibility-notes">Plex Compatibility Notes<a class="headerlink" href="#plex-compatibility-notes" title="Permanent link">¶</a></h3>
+<p>Provider-version-specific behavior belongs inside the adapter and contract
+fixtures.</p>
+<p>It must not leak into Catalog or Scheduling domain services.</p>
+<h2 id="jellyfin-integration">Jellyfin Integration<a class="headerlink" href="#jellyfin-integration" title="Permanent link">¶</a></h2>
+<h3 id="jellyfin-adapter-purpose">Jellyfin Adapter Purpose<a class="headerlink" href="#jellyfin-adapter-purpose" title="Permanent link">¶</a></h3>
+<p>The Jellyfin adapter connects ChannelForge to one Jellyfin server instance.</p>
+<p>It provides:</p>
+<ul>
+<li>Server identity</li>
+<li>Authentication</li>
+<li>Library discovery</li>
+<li>Catalog metadata</li>
+<li>Artwork references</li>
+<li>Playback information</li>
+<li>User-scoped visibility</li>
+<li>Health observations</li>
+<li>Change hints where supported</li>
+</ul>
+<h3 id="jellyfin-source-identity">Jellyfin Source Identity<a class="headerlink" href="#jellyfin-source-identity" title="Permanent link">¶</a></h3>
+<p>Jellyfin item identifiers remain qualified by Media Source.</p>
+<p>The adapter preserves:</p>
+<ul>
+<li>Server identity</li>
+<li>Library identity</li>
+<li>Item identity</li>
+<li>Parent identity</li>
+<li>Media source identity</li>
+<li>Provider metadata IDs</li>
+<li>Version observations</li>
+</ul>
+<h3 id="jellyfin-authentication">Jellyfin Authentication<a class="headerlink" href="#jellyfin-authentication" title="Permanent link">¶</a></h3>
+<p>The adapter uses a provider-supported API credential or authenticated token.</p>
+<p>The selected account must have access to included libraries and playback
+information.</p>
+<h3 id="jellyfin-connection-probe">Jellyfin Connection Probe<a class="headerlink" href="#jellyfin-connection-probe" title="Permanent link">¶</a></h3>
+<p>The probe should verify:</p>
+<ul>
+<li>Reachability</li>
+<li>Authentication</li>
+<li>Server identity</li>
+<li>User identity where relevant</li>
+<li>Library visibility</li>
+<li>Provider version compatibility</li>
+<li>Basic item query</li>
+<li>Playback information access where permitted</li>
+</ul>
+<h3 id="jellyfin-library-discovery">Jellyfin Library Discovery<a class="headerlink" href="#jellyfin-library-discovery" title="Permanent link">¶</a></h3>
+<p>The adapter normalizes visible libraries.</p>
+<p>User-specific library access is part of the source configuration.</p>
+<h3 id="jellyfin-media-kinds">Jellyfin Media Kinds<a class="headerlink" href="#jellyfin-media-kinds" title="Permanent link">¶</a></h3>
+<p>The adapter normalizes supported item types into ChannelForge media kinds.</p>
+<p>Unsupported item kinds are preserved as diagnostics or ignored according to
+policy.</p>
+<h3 id="jellyfin-hierarchy">Jellyfin Hierarchy<a class="headerlink" href="#jellyfin-hierarchy" title="Permanent link">¶</a></h3>
+<p>Parent relationships are normalized into Series, Season, and Episode hierarchy.</p>
+<p>Virtual or provider-generated folders must not be mistaken for canonical
+ChannelForge Seasons without type validation.</p>
+<h3 id="jellyfin-metadata-observations">Jellyfin Metadata Observations<a class="headerlink" href="#jellyfin-metadata-observations" title="Permanent link">¶</a></h3>
+<p>Potential observations include:</p>
+<ul>
+<li>Name</li>
+<li>Original title</li>
+<li>Sort name</li>
+<li>Overview</li>
+<li>Tagline</li>
+<li>Production year</li>
+<li>Premiere date</li>
+<li>Community rating</li>
+<li>Official rating</li>
+<li>Genres</li>
+<li>Tags</li>
+<li>Studios</li>
+<li>People</li>
+<li>Provider IDs</li>
+<li>Image tags</li>
+<li>Run time</li>
+<li>Date created</li>
+<li>Date last saved</li>
+</ul>
+<p>The adapter preserves precision and provenance.</p>
+<h3 id="jellyfin-media-sources">Jellyfin Media Sources<a class="headerlink" href="#jellyfin-media-sources" title="Permanent link">¶</a></h3>
+<p>Provider media-source options become Playback Variant observations.</p>
+<p>The adapter should preserve:</p>
+<ul>
+<li>Media source identity</li>
+<li>Path or remote key</li>
+<li>Container</li>
+<li>Protocol</li>
+<li>Run time</li>
+<li>Bit rate</li>
+<li>Video streams</li>
+<li>Audio streams</li>
+<li>Subtitle streams</li>
+<li>Direct-play observations</li>
+<li>Transcode observations</li>
+<li>Version token where available</li>
+</ul>
+<h3 id="jellyfin-playback-resolution">Jellyfin Playback Resolution<a class="headerlink" href="#jellyfin-playback-resolution" title="Permanent link">¶</a></h3>
+<p>Playback resolution may use provider playback information to obtain:</p>
+<ul>
+<li>Direct stream access</li>
+<li>Direct play access</li>
+<li>Provider transcode access</li>
+<li>Stream selection</li>
+<li>Required token handling</li>
+<li>Offset behavior</li>
+<li>Container hints</li>
+</ul>
+<h3 id="jellyfin-provider-transcoding">Jellyfin Provider Transcoding<a class="headerlink" href="#jellyfin-provider-transcoding" title="Permanent link">¶</a></h3>
+<p>Provider-side transcoding is controlled by source policy.</p>
+<p>ChannelForge may instead resolve direct media and perform local FFmpeg work.</p>
+<h3 id="jellyfin-artwork">Jellyfin Artwork<a class="headerlink" href="#jellyfin-artwork" title="Permanent link">¶</a></h3>
+<p>Artwork references may require tokenized access.</p>
+<p>Client-visible artwork must use a ChannelForge proxy, cache, or safe managed URL.</p>
+<h3 id="jellyfin-incremental-change-strategy">Jellyfin Incremental Change Strategy<a class="headerlink" href="#jellyfin-incremental-change-strategy" title="Permanent link">¶</a></h3>
+<p>The adapter may process provider change hints or update timestamps.</p>
+<p>Periodic full reconciliation remains authoritative.</p>
+<h3 id="jellyfin-user-scope">Jellyfin User Scope<a class="headerlink" href="#jellyfin-user-scope" title="Permanent link">¶</a></h3>
+<p>Catalog visibility depends on the configured Jellyfin user or credential scope.</p>
+<p>A permission change may cause items to become missing without being deleted.</p>
+<p>The missing-item grace policy applies.</p>
+<h3 id="jellyfin-failure-isolation">Jellyfin Failure Isolation<a class="headerlink" href="#jellyfin-failure-isolation" title="Permanent link">¶</a></h3>
+<p>Provider errors are normalized without exposing raw credentials or internal
+paths.</p>
+<h2 id="emby-integration">Emby Integration<a class="headerlink" href="#emby-integration" title="Permanent link">¶</a></h2>
+<h3 id="emby-adapter-purpose">Emby Adapter Purpose<a class="headerlink" href="#emby-adapter-purpose" title="Permanent link">¶</a></h3>
+<p>The Emby adapter connects ChannelForge to one Emby server instance.</p>
+<p>It provides:</p>
+<ul>
+<li>Server identity</li>
+<li>Authentication</li>
+<li>Library discovery</li>
+<li>Catalog metadata</li>
+<li>Artwork references</li>
+<li>Media source observations</li>
+<li>Playback resolution</li>
+<li>Health observations</li>
+<li>Change hints where supported</li>
+</ul>
+<h3 id="emby-source-identity">Emby Source Identity<a class="headerlink" href="#emby-source-identity" title="Permanent link">¶</a></h3>
+<p>Emby identifiers remain qualified by Media Source.</p>
+<p>The adapter preserves provider hierarchy and media source identities.</p>
+<h3 id="emby-authentication">Emby Authentication<a class="headerlink" href="#emby-authentication" title="Permanent link">¶</a></h3>
+<p>The adapter uses a provider-supported token or authenticated credential.</p>
+<p>Credentials remain inside the secret boundary.</p>
+<h3 id="emby-connection-probe">Emby Connection Probe<a class="headerlink" href="#emby-connection-probe" title="Permanent link">¶</a></h3>
+<p>The probe should verify:</p>
+<ul>
+<li>Reachability</li>
+<li>Authentication</li>
+<li>Provider identity</li>
+<li>User access</li>
+<li>Library visibility</li>
+<li>Provider compatibility</li>
+<li>Basic media queries</li>
+<li>Playback resolution access</li>
+</ul>
+<h3 id="emby-library-discovery">Emby Library Discovery<a class="headerlink" href="#emby-library-discovery" title="Permanent link">¶</a></h3>
+<p>Visible libraries are normalized into ChannelForge Library Descriptors.</p>
+<h3 id="emby-media-kinds">Emby Media Kinds<a class="headerlink" href="#emby-media-kinds" title="Permanent link">¶</a></h3>
+<p>Supported provider types map to ChannelForge media kinds.</p>
+<p>Unrecognized types remain unsupported until the adapter version explicitly maps
+them.</p>
+<h3 id="emby-hierarchy">Emby Hierarchy<a class="headerlink" href="#emby-hierarchy" title="Permanent link">¶</a></h3>
+<p>Series, Season, and Episode relationships are normalized through provider
+identifiers and type validation.</p>
+<h3 id="emby-metadata-observations">Emby Metadata Observations<a class="headerlink" href="#emby-metadata-observations" title="Permanent link">¶</a></h3>
+<p>Potential observations include:</p>
+<ul>
+<li>Name</li>
+<li>Original title</li>
+<li>Sort name</li>
+<li>Overview</li>
+<li>Tagline</li>
+<li>Production year</li>
+<li>Premiere date</li>
+<li>Ratings</li>
+<li>Genres</li>
+<li>Tags</li>
+<li>Studios</li>
+<li>People</li>
+<li>Provider IDs</li>
+<li>Image references</li>
+<li>Run time</li>
+<li>Creation and update timestamps</li>
+</ul>
+<h3 id="emby-media-sources">Emby Media Sources<a class="headerlink" href="#emby-media-sources" title="Permanent link">¶</a></h3>
+<p>Provider media-source records become Playback Variant observations.</p>
+<p>The adapter preserves:</p>
+<ul>
+<li>Variant identity</li>
+<li>Protocol</li>
+<li>Path or key</li>
+<li>Container</li>
+<li>Duration</li>
+<li>Bit rate</li>
+<li>Streams</li>
+<li>Direct-play support observations</li>
+<li>Transcode support observations</li>
+<li>Provider version state</li>
+</ul>
+<h3 id="emby-playback-resolution">Emby Playback Resolution<a class="headerlink" href="#emby-playback-resolution" title="Permanent link">¶</a></h3>
+<p>Playback resolution returns a restricted Source Access Descriptor.</p>
+<p>Provider-side transcoding remains policy-controlled.</p>
+<h3 id="emby-artwork">Emby Artwork<a class="headerlink" href="#emby-artwork" title="Permanent link">¶</a></h3>
+<p>Artwork access must avoid leaking provider credentials.</p>
+<h3 id="emby-incremental-change-strategy">Emby Incremental Change Strategy<a class="headerlink" href="#emby-incremental-change-strategy" title="Permanent link">¶</a></h3>
+<p>The adapter may use provider update hints where available.</p>
+<p>Full reconciliation remains required.</p>
+<h3 id="emby-failure-isolation">Emby Failure Isolation<a class="headerlink" href="#emby-failure-isolation" title="Permanent link">¶</a></h3>
+<p>One provider failure must not alter Plex or Jellyfin source state.</p>
+<h2 id="plex-jellyfin-and-emby-common-contract">Plex, Jellyfin, and Emby Common Contract<a class="headerlink" href="#plex-jellyfin-and-emby-common-contract" title="Permanent link">¶</a></h2>
+<p>All three built-in adapters must satisfy the same normalized behaviors for:</p>
+<ul>
+<li>Media Source identity</li>
+<li>Library discovery</li>
+<li>Item enumeration</li>
+<li>Hierarchy</li>
+<li>Metadata observations</li>
+<li>Playback Variants</li>
+<li>Artwork references</li>
+<li>Playback resolution</li>
+<li>Error classification</li>
+<li>Health</li>
+<li>Cancellation</li>
+<li>Pagination</li>
+<li>Versioning</li>
+<li>Test fixtures</li>
+</ul>
+<h2 id="provider-differences">Provider Differences<a class="headerlink" href="#provider-differences" title="Permanent link">¶</a></h2>
+<p>Differences remain inside adapters.</p>
+<p>Examples:</p>
+<ul>
+<li>Authentication format</li>
+<li>Library model</li>
+<li>Item type names</li>
+<li>Pagination</li>
+<li>Provider IDs</li>
+<li>Artwork URL construction</li>
+<li>Playback information</li>
+<li>Transcode support</li>
+<li>Event systems</li>
+<li>Error payloads</li>
+<li>Version behavior</li>
+</ul>
+<p>The ChannelForge domain consumes normalized outputs.</p>
+<h2 id="provider-side-transcoding-policy">Provider-Side Transcoding Policy<a class="headerlink" href="#provider-side-transcoding-policy" title="Permanent link">¶</a></h2>
+<p>A Media Source may declare:</p>
+<ul>
+<li><code>DISABLED</code></li>
+<li><code>ALLOWED</code></li>
+<li><code>PREFERRED</code></li>
+<li><code>FALLBACK_ONLY</code></li>
+</ul>
+<p>Policy evaluation considers:</p>
+<ul>
+<li>Source server load</li>
+<li>ChannelForge hardware</li>
+<li>Network topology</li>
+<li>Required output</li>
+<li>Subtitle handling</li>
+<li>Runtime offset</li>
+<li>Provider capability</li>
+<li>Quality</li>
+</ul>
+<h2 id="local-path-access">Local Path Access<a class="headerlink" href="#local-path-access" title="Permanent link">¶</a></h2>
+<p>Some providers expose file paths.</p>
+<p>ChannelForge may use a local path only when:</p>
+<ul>
+<li>The path is explicitly trusted</li>
+<li>The container can access it</li>
+<li>Path mapping is configured</li>
+<li>The file remains inside allowed roots</li>
+<li>Provider identity matches</li>
+<li>Runtime policy permits direct file input</li>
+</ul>
+<h2 id="path-mapping">Path Mapping<a class="headerlink" href="#path-mapping" title="Permanent link">¶</a></h2>
+<p>A Path Mapping maps provider-reported paths to ChannelForge container paths.</p>
+<p>Required conceptual fields:</p>
+<ul>
+<li>Path Mapping ID</li>
+<li>Media Source ID</li>
+<li>Provider path prefix</li>
+<li>ChannelForge path prefix</li>
+<li>Case-sensitivity policy</li>
+<li>Platform style</li>
+<li>Enabled state</li>
+<li>Validation state</li>
+</ul>
+<h2 id="path-mapping-safety">Path Mapping Safety<a class="headerlink" href="#path-mapping-safety" title="Permanent link">¶</a></h2>
+<p>Validation must prevent:</p>
+<ul>
+<li>Escaping allowed roots</li>
+<li>Ambiguous overlapping mappings</li>
+<li>Empty prefixes</li>
+<li>Relative destination paths</li>
+<li>Credential-like path content</li>
+<li>Unintended host filesystem access</li>
+</ul>
+<h2 id="path-mapping-precedence">Path Mapping Precedence<a class="headerlink" href="#path-mapping-precedence" title="Permanent link">¶</a></h2>
+<p>Most-specific matching prefix wins.</p>
+<p>Equal-specificity conflicts are configuration errors.</p>
+<h2 id="path-verification">Path Verification<a class="headerlink" href="#path-verification" title="Permanent link">¶</a></h2>
+<p>A mapped path may be verified for:</p>
+<ul>
+<li>Existence</li>
+<li>Read access</li>
+<li>File type</li>
+<li>Expected size</li>
+<li>Optional checksum</li>
+<li>Symlink policy</li>
+</ul>
+<p>Path verification failure may fall back to provider HTTP access.</p>
+<h2 id="remote-versus-local-source-preference">Remote Versus Local Source Preference<a class="headerlink" href="#remote-versus-local-source-preference" title="Permanent link">¶</a></h2>
+<p>Policy may prefer:</p>
+<ol>
+<li>Local mapped path</li>
+<li>Provider direct stream</li>
+<li>Provider direct play URL</li>
+<li>Provider transcode</li>
+<li>Alternate Media Source</li>
+</ol>
+<p>The order is configurable.</p>
+<h2 id="library-synchronization-policy">Library Synchronization Policy<a class="headerlink" href="#library-synchronization-policy" title="Permanent link">¶</a></h2>
+<p>A Synchronization Policy includes:</p>
+<ul>
+<li>Full synchronization cadence</li>
+<li>Incremental cadence</li>
+<li>Startup synchronization</li>
+<li>Webhook behavior</li>
+<li>Maximum concurrency</li>
+<li>Page size</li>
+<li>Batch size</li>
+<li>Missing-item grace period</li>
+<li>Detail retrieval policy</li>
+<li>Artwork prefetch policy</li>
+<li>Provider health requirement</li>
+<li>Retry policy</li>
+<li>Maintenance window</li>
+</ul>
+<h2 id="initial-synchronization">Initial Synchronization<a class="headerlink" href="#initial-synchronization" title="Permanent link">¶</a></h2>
+<p>Initial synchronization may be long-running.</p>
+<p>It must expose:</p>
+<ul>
+<li>Progress</li>
+<li>Current library</li>
+<li>Items observed</li>
+<li>Items committed</li>
+<li>Warnings</li>
+<li>Conflicts</li>
+<li>Estimated completion where defensible</li>
+<li>Cancellation</li>
+</ul>
+<h2 id="full-synchronization">Full Synchronization<a class="headerlink" href="#full-synchronization" title="Permanent link">¶</a></h2>
+<p>Full synchronization enumerates all included libraries.</p>
+<p>It is authoritative for detecting missing source items.</p>
+<h2 id="incremental-synchronization">Incremental Synchronization<a class="headerlink" href="#incremental-synchronization" title="Permanent link">¶</a></h2>
+<p>Incremental synchronization processes bounded provider changes.</p>
+<p>It is not authoritative for deletion unless the provider guarantees complete
+deletion events and the adapter explicitly supports that guarantee.</p>
+<h2 id="startup-synchronization">Startup Synchronization<a class="headerlink" href="#startup-synchronization" title="Permanent link">¶</a></h2>
+<p>Startup synchronization may:</p>
+<ul>
+<li>Verify provider health</li>
+<li>Resume incomplete job</li>
+<li>Process change cursor</li>
+<li>Defer full scan</li>
+<li>Mark source stale</li>
+</ul>
+<p>Startup must not block the entire application indefinitely.</p>
+<h2 id="synchronization-scheduling">Synchronization Scheduling<a class="headerlink" href="#synchronization-scheduling" title="Permanent link">¶</a></h2>
+<p>Synchronization jobs are coordinated to avoid:</p>
+<ul>
+<li>Duplicate concurrent full scans</li>
+<li>Excessive SQLite writes</li>
+<li>Provider overload</li>
+<li>Playback starvation</li>
+<li>Artwork request storms</li>
+</ul>
+<h2 id="synchronization-priority">Synchronization Priority<a class="headerlink" href="#synchronization-priority" title="Permanent link">¶</a></h2>
+<p>Suggested priority:</p>
+<ol>
+<li>Runtime playback resolution</li>
+<li>Manual connection test</li>
+<li>Webhook-triggered targeted synchronization</li>
+<li>Incremental synchronization</li>
+<li>Full synchronization</li>
+<li>Artwork prefetch</li>
+</ol>
+<h2 id="playback-priority-protection">Playback Priority Protection<a class="headerlink" href="#playback-priority-protection" title="Permanent link">¶</a></h2>
+<p>Catalog synchronization must not consume all provider connections needed for
+playout.</p>
+<h2 id="synchronization-checkpoint">Synchronization Checkpoint<a class="headerlink" href="#synchronization-checkpoint" title="Permanent link">¶</a></h2>
+<p>A checkpoint includes:</p>
+<ul>
+<li>Media Source ID</li>
+<li>Run ID</li>
+<li>Library ID</li>
+<li>Provider Cursor</li>
+<li>Last committed external identity</li>
+<li>Page count</li>
+<li>Item count</li>
+<li>Adapter version</li>
+<li>Timestamp</li>
+</ul>
+<p>A checkpoint is adapter-specific but stored through normalized job metadata.</p>
+<h2 id="cursor-expiration">Cursor Expiration<a class="headerlink" href="#cursor-expiration" title="Permanent link">¶</a></h2>
+<p>When a provider cursor expires:</p>
+<ul>
+<li>Mark incremental run failed with <code>CURSOR_EXPIRED</code>.</li>
+<li>Queue a full reconciliation.</li>
+<li>Preserve existing Catalog state.</li>
+<li>Reset cursor only through explicit adapter behavior.</li>
+</ul>
+<h2 id="partial-synchronization">Partial Synchronization<a class="headerlink" href="#partial-synchronization" title="Permanent link">¶</a></h2>
+<p>A partially completed run records committed progress.</p>
+<p>It must not mark unobserved items missing until authoritative reconciliation
+completes.</p>
+<h2 id="webhooks">Webhooks<a class="headerlink" href="#webhooks" title="Permanent link">¶</a></h2>
+<p>Webhooks may reduce synchronization latency.</p>
+<p>They do not replace periodic reconciliation.</p>
+<h2 id="webhook-endpoint-identity">Webhook Endpoint Identity<a class="headerlink" href="#webhook-endpoint-identity" title="Permanent link">¶</a></h2>
+<p>Each webhook configuration includes:</p>
+<ul>
+<li>Media Source ID</li>
+<li>Webhook secret reference</li>
+<li>Allowed event types</li>
+<li>Enabled state</li>
+<li>Replay window</li>
+<li>Last received timestamp</li>
+<li>Last accepted event</li>
+<li>Failure count</li>
+</ul>
+<h2 id="webhook-processing">Webhook Processing<a class="headerlink" href="#webhook-processing" title="Permanent link">¶</a></h2>
+<p>Webhook flow:</p>
+<ol>
+<li>Bound request body.</li>
+<li>Identify Media Source.</li>
+<li>Verify signature or source policy.</li>
+<li>Check replay tolerance.</li>
+<li>Parse event.</li>
+<li>Normalize Synchronization Hint.</li>
+<li>Persist receipt metadata.</li>
+<li>Queue targeted synchronization.</li>
+<li>Return bounded response.</li>
+</ol>
+<p>Long synchronization work must not run inside the webhook request.</p>
+<h2 id="webhook-replay-protection">Webhook Replay Protection<a class="headerlink" href="#webhook-replay-protection" title="Permanent link">¶</a></h2>
+<p>Replay protection may use:</p>
+<ul>
+<li>Provider event ID</li>
+<li>Timestamp</li>
+<li>Nonce</li>
+<li>Payload checksum</li>
+<li>Bounded recent-event cache</li>
+</ul>
+<h2 id="unauthenticated-webhooks">Unauthenticated Webhooks<a class="headerlink" href="#unauthenticated-webhooks" title="Permanent link">¶</a></h2>
+<p>An adapter may support unauthenticated provider webhooks only when:</p>
+<ul>
+<li>Source network policy restricts access</li>
+<li>Payload cannot trigger unsafe direct mutations</li>
+<li>Events are treated only as hints</li>
+<li>Rate limits apply</li>
+<li>Full reconciliation verifies changes</li>
+</ul>
+<h2 id="event-deduplication">Event Deduplication<a class="headerlink" href="#event-deduplication" title="Permanent link">¶</a></h2>
+<p>Duplicate webhook events must not create duplicate catalog mutations.</p>
+<h2 id="polling">Polling<a class="headerlink" href="#polling" title="Permanent link">¶</a></h2>
+<p>Polling remains the fallback when webhooks or change feeds are unavailable.</p>
+<p>Polling cadence should account for:</p>
+<ul>
+<li>Provider load</li>
+<li>Catalog size</li>
+<li>User expectations</li>
+<li>Playback priority</li>
+<li>Recent changes</li>
+<li>Failure state</li>
+</ul>
+<h2 id="adaptive-polling">Adaptive Polling<a class="headerlink" href="#adaptive-polling" title="Permanent link">¶</a></h2>
+<p>Future versions may adjust polling based on observed activity.</p>
+<p>Version 1 may use configured static intervals.</p>
+<h2 id="health-model">Health Model<a class="headerlink" href="#health-model" title="Permanent link">¶</a></h2>
+<p>Suggested Media Source health states:</p>
+<ul>
+<li><code>UNKNOWN</code></li>
+<li><code>HEALTHY</code></li>
+<li><code>DEGRADED</code></li>
+<li><code>UNREACHABLE</code></li>
+<li><code>AUTHENTICATION_FAILED</code></li>
+<li><code>AUTHORIZATION_FAILED</code></li>
+<li><code>UNSUPPORTED</code></li>
+<li><code>DISABLED</code></li>
+<li><code>ARCHIVED</code></li>
+</ul>
+<h2 id="health-dimensions">Health Dimensions<a class="headerlink" href="#health-dimensions" title="Permanent link">¶</a></h2>
+<p>Health may include:</p>
+<ul>
+<li>Network reachability</li>
+<li>Authentication</li>
+<li>Provider identity</li>
+<li>Provider compatibility</li>
+<li>Library access</li>
+<li>Catalog synchronization freshness</li>
+<li>Playback resolution</li>
+<li>Artwork access</li>
+<li>Latency</li>
+<li>Error rate</li>
+<li>Clock skew</li>
+</ul>
+<h2 id="health-observation">Health Observation<a class="headerlink" href="#health-observation" title="Permanent link">¶</a></h2>
+<p>A Health Observation includes:</p>
+<ul>
+<li>Observation ID</li>
+<li>Media Source ID</li>
+<li>Check type</li>
+<li>Started timestamp</li>
+<li>Completed timestamp</li>
+<li>Outcome</li>
+<li>Latency</li>
+<li>Error class</li>
+<li>Provider version</li>
+<li>Capability changes</li>
+<li>Diagnostic summary</li>
+</ul>
+<h2 id="health-aggregation">Health Aggregation<a class="headerlink" href="#health-aggregation" title="Permanent link">¶</a></h2>
+<p>Overall health is derived from dimension severity.</p>
+<p>A failed artwork check should not necessarily mark playback unavailable.</p>
+<p>A failed authentication check normally affects all authenticated operations.</p>
+<h2 id="health-check-cadence">Health Check Cadence<a class="headerlink" href="#health-check-cadence" title="Permanent link">¶</a></h2>
+<p>Health checks are bounded and configurable.</p>
+<p>A degraded source may use backoff.</p>
+<p>Runtime success may contribute positive health evidence.</p>
+<h2 id="health-versus-availability">Health Versus Availability<a class="headerlink" href="#health-versus-availability" title="Permanent link">¶</a></h2>
+<p>Integration Health is current operational status.</p>
+<p>Catalog availability is derived catalog state.</p>
+<p>They are related but not identical.</p>
+<p>A brief source timeout may mark health degraded without immediately marking every
+Catalog Item unavailable.</p>
+<h2 id="staleness">Staleness<a class="headerlink" href="#staleness" title="Permanent link">¶</a></h2>
+<p>A Media Source may be stale when:</p>
+<ul>
+<li>Synchronization age exceeds policy</li>
+<li>Health has not been observed recently</li>
+<li>Provider version changed</li>
+<li>Adapter version changed</li>
+<li>Capability snapshot expired</li>
+<li>Credential changed</li>
+<li>Library inclusion changed</li>
+</ul>
+<h2 id="source-staleness-states">Source Staleness States<a class="headerlink" href="#source-staleness-states" title="Permanent link">¶</a></h2>
+<p>Suggested states:</p>
+<ul>
+<li><code>CURRENT</code></li>
+<li><code>CATALOG_STALE</code></li>
+<li><code>HEALTH_STALE</code></li>
+<li><code>CAPABILITY_STALE</code></li>
+<li><code>CREDENTIAL_RECHECK_REQUIRED</code></li>
+<li><code>FULL_RECONCILIATION_REQUIRED</code></li>
+</ul>
+<h2 id="capability-change">Capability Change<a class="headerlink" href="#capability-change" title="Permanent link">¶</a></h2>
+<p>When capability changes:</p>
+<ul>
+<li>Store new snapshot.</li>
+<li>Compare with prior snapshot.</li>
+<li>Recalculate affected policies.</li>
+<li>Mark plans or catalog state stale where necessary.</li>
+<li>Create health finding.</li>
+<li>Preserve prior snapshot.</li>
+</ul>
+<h2 id="provider-upgrade">Provider Upgrade<a class="headerlink" href="#provider-upgrade" title="Permanent link">¶</a></h2>
+<p>A provider upgrade may alter:</p>
+<ul>
+<li>API behavior</li>
+<li>Authentication</li>
+<li>Item fields</li>
+<li>Playback support</li>
+<li>Pagination</li>
+<li>Event behavior</li>
+</ul>
+<p>The adapter must detect unsupported changes and fail safely.</p>
+<h2 id="adapter-compatibility-range">Adapter Compatibility Range<a class="headerlink" href="#adapter-compatibility-range" title="Permanent link">¶</a></h2>
+<p>An adapter registration may declare:</p>
+<ul>
+<li>Minimum provider version</li>
+<li>Maximum tested provider version</li>
+<li>Known unsupported versions</li>
+<li>Compatibility warnings</li>
+<li>Feature-specific version gates</li>
+</ul>
+<p>Unknown newer versions may run with warning according to policy.</p>
+<h2 id="adapter-versioning">Adapter Versioning<a class="headerlink" href="#adapter-versioning" title="Permanent link">¶</a></h2>
+<p>Every adapter has a version.</p>
+<p>Adapter version changes when behavior affecting normalized output changes.</p>
+<p>Examples:</p>
+<ul>
+<li>Metadata field mapping</li>
+<li>Match identity inputs</li>
+<li>Hierarchy interpretation</li>
+<li>Playback resolution</li>
+<li>Error mapping</li>
+<li>Pagination</li>
+<li>Capability detection</li>
+</ul>
+<h2 id="adapter-migration">Adapter Migration<a class="headerlink" href="#adapter-migration" title="Permanent link">¶</a></h2>
+<p>An adapter upgrade may require:</p>
+<ul>
+<li>Resynchronization</li>
+<li>Capability rediscovery</li>
+<li>Source Binding revision</li>
+<li>Playback Variant refresh</li>
+<li>Catalog conflict generation</li>
+<li>Provider cursor reset</li>
+</ul>
+<p>Migration behavior must be explicit.</p>
+<h2 id="raw-provider-payloads">Raw Provider Payloads<a class="headerlink" href="#raw-provider-payloads" title="Permanent link">¶</a></h2>
+<p>Raw payload retention is optional and bounded.</p>
+<p>Potential uses:</p>
+<ul>
+<li>Debugging</li>
+<li>Adapter regression tests</li>
+<li>Conflict review</li>
+<li>Migration</li>
+</ul>
+<p>Raw payloads may contain sensitive data and require restricted access.</p>
+<h2 id="payload-redaction">Payload Redaction<a class="headerlink" href="#payload-redaction" title="Permanent link">¶</a></h2>
+<p>Before retention or export, redact:</p>
+<ul>
+<li>Tokens</li>
+<li>Cookies</li>
+<li>Authorization headers</li>
+<li>Signed URLs</li>
+<li>User account data not required for diagnostics</li>
+<li>Local paths where policy treats them as sensitive</li>
+</ul>
+<h2 id="diagnostic-bundle">Diagnostic Bundle<a class="headerlink" href="#diagnostic-bundle" title="Permanent link">¶</a></h2>
+<p>An integration diagnostic bundle may include:</p>
+<ul>
+<li>Media Source configuration with secrets removed</li>
+<li>Adapter version</li>
+<li>Provider version</li>
+<li>Capability snapshot</li>
+<li>Recent health observations</li>
+<li>Recent normalized errors</li>
+<li>Synchronization summary</li>
+<li>Redacted sample payloads</li>
+<li>Correlation IDs</li>
+</ul>
+<p>Diagnostic export requires authorization and audit.</p>
+<h2 id="observability">Observability<a class="headerlink" href="#observability" title="Permanent link">¶</a></h2>
+<h3 id="structured-logs">Structured Logs<a class="headerlink" href="#structured-logs" title="Permanent link">¶</a></h3>
+<p>Integration logs should include:</p>
+<ul>
+<li>Media Source ID</li>
+<li>Provider type</li>
+<li>Adapter version</li>
+<li>Operation</li>
+<li>Correlation ID</li>
+<li>Synchronization Run ID</li>
+<li>Library ID</li>
+<li>External item identity when safe</li>
+<li>Attempt</li>
+<li>Latency</li>
+<li>Result</li>
+<li>Error class</li>
+<li>Rate-limit observation</li>
+</ul>
+<h3 id="metrics">Metrics<a class="headerlink" href="#metrics" title="Permanent link">¶</a></h3>
+<p>Suggested metrics:</p>
+<ul>
+<li>Request count</li>
+<li>Request latency</li>
+<li>Request failures</li>
+<li>Authentication failures</li>
+<li>Rate-limit events</li>
+<li>Synchronization duration</li>
+<li>Items per second</li>
+<li>Pages processed</li>
+<li>Webhooks received</li>
+<li>Webhooks rejected</li>
+<li>Playback-resolution latency</li>
+<li>Artwork-resolution latency</li>
+<li>Health state</li>
+<li>Cursor resets</li>
+<li>Provider-version changes</li>
+<li>Connection pool use</li>
+</ul>
+<h3 id="tracing">Tracing<a class="headerlink" href="#tracing" title="Permanent link">¶</a></h3>
+<p>Potential spans:</p>
+<ul>
+<li>Connection probe</li>
+<li>Capability discovery</li>
+<li>Library discovery</li>
+<li>Catalog page fetch</li>
+<li>Item detail fetch</li>
+<li>Artwork resolve</li>
+<li>Playback resolve</li>
+<li>Webhook verify</li>
+<li>Health check</li>
+<li>Provider retry</li>
+<li>Path verification</li>
+</ul>
+<h2 id="correlation-ids">Correlation IDs<a class="headerlink" href="#correlation-ids" title="Permanent link">¶</a></h2>
+<p>Every external operation should have a correlation ID.</p>
+<p>Provider request IDs may be recorded separately where available.</p>
+<h2 id="audit-requirements">Audit Requirements<a class="headerlink" href="#audit-requirements" title="Permanent link">¶</a></h2>
+<p>Audit records are required for:</p>
+<ul>
+<li>Media Source creation</li>
+<li>Media Source update</li>
+<li>Media Source enable or disable</li>
+<li>Media Source archive or restore</li>
+<li>Credential rotation</li>
+<li>TLS trust override</li>
+<li>Insecure TLS activation</li>
+<li>Proxy change</li>
+<li>Library inclusion change</li>
+<li>Path Mapping change</li>
+<li>Provider-side transcode policy change</li>
+<li>Manual provider identity replacement</li>
+<li>Webhook configuration change</li>
+<li>Diagnostic export</li>
+<li>Manual synchronization start or cancellation</li>
+</ul>
+<h2 id="authorization">Authorization<a class="headerlink" href="#authorization" title="Permanent link">¶</a></h2>
+<p>Suggested permissions:</p>
+<ul>
+<li>View Media Sources</li>
+<li>Create Media Source</li>
+<li>Edit Media Source</li>
+<li>Test connection</li>
+<li>Manage credentials</li>
+<li>Manage libraries</li>
+<li>Start synchronization</li>
+<li>Cancel synchronization</li>
+<li>View integration diagnostics</li>
+<li>Export diagnostics</li>
+<li>Manage TLS policy</li>
+<li>Manage Path Mappings</li>
+<li>Archive Media Source</li>
+</ul>
+<h2 id="security">Security<a class="headerlink" href="#security" title="Permanent link">¶</a></h2>
+<h3 id="ssrf-protection">SSRF Protection<a class="headerlink" href="#ssrf-protection" title="Permanent link">¶</a></h3>
+<p>Media Source configuration can cause server-side network requests.</p>
+<p>Controls must include:</p>
+<ul>
+<li>Scheme allowlist</li>
+<li>Host validation</li>
+<li>Address classification</li>
+<li>Redirect restrictions</li>
+<li>Port policy</li>
+<li>DNS rebinding defenses where practical</li>
+<li>Metadata-service blocking in restricted deployments</li>
+<li>Explicit local-network configuration</li>
+<li>Audit</li>
+</ul>
+<h3 id="credential-isolation">Credential Isolation<a class="headerlink" href="#credential-isolation" title="Permanent link">¶</a></h3>
+<p>Adapters receive only credentials required for that source.</p>
+<h3 id="header-allowlist">Header Allowlist<a class="headerlink" href="#header-allowlist" title="Permanent link">¶</a></h3>
+<p>Custom headers are provider-specific and allowlisted.</p>
+<p>Users cannot add arbitrary authorization forwarding behavior.</p>
+<h3 id="url-logging">URL Logging<a class="headerlink" href="#url-logging" title="Permanent link">¶</a></h3>
+<p>Full source URLs are not logged when they may contain secrets.</p>
+<h3 id="local-path-safety">Local Path Safety<a class="headerlink" href="#local-path-safety" title="Permanent link">¶</a></h3>
+<p>Provider-reported paths are untrusted until mapped and validated.</p>
+<h3 id="webhook-safety">Webhook Safety<a class="headerlink" href="#webhook-safety" title="Permanent link">¶</a></h3>
+<p>Webhook payloads are untrusted.</p>
+<p>They cannot directly execute:</p>
+<ul>
+<li>Catalog deletion</li>
+<li>Source credential changes</li>
+<li>Arbitrary URL fetches</li>
+<li>Filesystem access</li>
+<li>FFmpeg commands</li>
+</ul>
+<h3 id="denial-of-service-protection">Denial-of-Service Protection<a class="headerlink" href="#denial-of-service-protection" title="Permanent link">¶</a></h3>
+<p>Controls include:</p>
+<ul>
+<li>Request body limits</li>
+<li>Page limits</li>
+<li>Item limits</li>
+<li>Synchronization budgets</li>
+<li>Backoff</li>
+<li>Per-source concurrency</li>
+<li>Webhook rate limits</li>
+<li>Bounded diagnostics</li>
+<li>Cancellation</li>
+</ul>
+<h2 id="privacy">Privacy<a class="headerlink" href="#privacy" title="Permanent link">¶</a></h2>
+<p>Provider user information must be minimized.</p>
+<p>ChannelForge should retain only what is required for:</p>
+<ul>
+<li>Authentication reference</li>
+<li>Authorization diagnostics</li>
+<li>Library scope</li>
+<li>Audit</li>
+</ul>
+<p>Provider viewing history is outside version 1 scope unless explicitly imported
+in a future feature.</p>
+<h2 id="integration-api-concepts">Integration API Concepts<a class="headerlink" href="#integration-api-concepts" title="Permanent link">¶</a></h2>
+<p>Exact routes are defined later.</p>
+<p>Required conceptual operations include:</p>
+<ul>
+<li>List Media Sources</li>
+<li>Read Media Source</li>
+<li>Create Media Source</li>
+<li>Update Media Source</li>
+<li>Test connection</li>
+<li>Discover capabilities</li>
+<li>Discover libraries</li>
+<li>Set included libraries</li>
+<li>Rotate credential</li>
+<li>Enable Media Source</li>
+<li>Disable Media Source</li>
+<li>Archive Media Source</li>
+<li>Restore Media Source</li>
+<li>Start full synchronization</li>
+<li>Start incremental synchronization</li>
+<li>Cancel synchronization</li>
+<li>Read synchronization status</li>
+<li>Read health</li>
+<li>Read capability snapshot</li>
+<li>Manage Path Mappings</li>
+<li>Read normalized errors</li>
+<li>Export diagnostic bundle</li>
+<li>Configure webhook</li>
+</ul>
+<h2 id="background-jobs">Background Jobs<a class="headerlink" href="#background-jobs" title="Permanent link">¶</a></h2>
+<p>Integration jobs may include:</p>
+<ul>
+<li>Initial synchronization</li>
+<li>Full synchronization</li>
+<li>Incremental synchronization</li>
+<li>Targeted item refresh</li>
+<li>Artwork refresh</li>
+<li>Capability refresh</li>
+<li>Health check</li>
+<li>Provider cursor reset</li>
+<li>Path verification</li>
+</ul>
+<h2 id="job-concurrency">Job Concurrency<a class="headerlink" href="#job-concurrency" title="Permanent link">¶</a></h2>
+<p>Recommended constraints:</p>
+<ul>
+<li>One full synchronization per Media Source</li>
+<li>One cursor-mutating incremental synchronization per Media Source</li>
+<li>Multiple bounded item detail operations where supported</li>
+<li>Runtime playback resolution outside synchronization queue</li>
+<li>Artwork work at lower priority</li>
+</ul>
+<h2 id="job-idempotency">Job Idempotency<a class="headerlink" href="#job-idempotency" title="Permanent link">¶</a></h2>
+<p>An idempotency key may include:</p>
+<ul>
+<li>Media Source ID</li>
+<li>Operation type</li>
+<li>Requested scope</li>
+<li>Provider cursor</li>
+<li>Trigger event ID</li>
+<li>Time bucket where appropriate</li>
+</ul>
+<h2 id="integration-persistence-expectations">Integration Persistence Expectations<a class="headerlink" href="#integration-persistence-expectations" title="Permanent link">¶</a></h2>
+<p>Persistence must support:</p>
+<ul>
+<li>Media Source configuration</li>
+<li>Secret references</li>
+<li>Capability snapshots</li>
+<li>Provider identity observations</li>
+<li>Library descriptors</li>
+<li>Synchronization policy</li>
+<li>Synchronization runs</li>
+<li>Provider cursors</li>
+<li>Health observations</li>
+<li>Normalized errors</li>
+<li>Path Mappings</li>
+<li>Webhook receipts</li>
+<li>Adapter migration state</li>
+<li>Audit references</li>
+</ul>
+<h2 id="repository-boundaries">Repository Boundaries<a class="headerlink" href="#repository-boundaries" title="Permanent link">¶</a></h2>
+<p>Suggested repositories:</p>
+<ul>
+<li><code>MediaSourceRepository</code></li>
+<li><code>CapabilitySnapshotRepository</code></li>
+<li><code>ProviderIdentityRepository</code></li>
+<li><code>SourceLibraryRepository</code></li>
+<li><code>SynchronizationRunRepository</code></li>
+<li><code>ProviderCursorRepository</code></li>
+<li><code>IntegrationHealthRepository</code></li>
+<li><code>PathMappingRepository</code></li>
+<li><code>WebhookReceiptRepository</code></li>
+</ul>
+<h2 id="integration-services">Integration Services<a class="headerlink" href="#integration-services" title="Permanent link">¶</a></h2>
+<p>Suggested services:</p>
+<ul>
+<li><code>MediaSourceService</code></li>
+<li><code>ConnectionProbeService</code></li>
+<li><code>CapabilityDiscoveryService</code></li>
+<li><code>LibraryDiscoveryService</code></li>
+<li><code>CatalogSynchronizationService</code></li>
+<li><code>PlaybackResolutionService</code></li>
+<li><code>ArtworkResolutionService</code></li>
+<li><code>IntegrationHealthService</code></li>
+<li><code>WebhookIngestionService</code></li>
+<li><code>ProviderCursorService</code></li>
+<li><code>PathMappingService</code></li>
+<li><code>IntegrationDiagnosticService</code></li>
+</ul>
+<h2 id="plugin-integration-boundary">Plugin Integration Boundary<a class="headerlink" href="#plugin-integration-boundary" title="Permanent link">¶</a></h2>
+<p>Future plugin-provided integrations must implement the same normalized ports.</p>
+<p>A plugin adapter must not receive unrestricted application access.</p>
+<p>Potential controls:</p>
+<ul>
+<li>Declared permissions</li>
+<li>Network host allowlist</li>
+<li>Secret scope</li>
+<li>CPU and memory budget</li>
+<li>Operation timeout</li>
+<li>Version compatibility</li>
+<li>Signed package policy</li>
+<li>Audit</li>
+<li>Disable switch</li>
+</ul>
+<p>The plugin specification defines the exact model.</p>
+<h2 id="metadata-provider-integrations">Metadata Provider Integrations<a class="headerlink" href="#metadata-provider-integrations" title="Permanent link">¶</a></h2>
+<p>A metadata provider adapter may implement:</p>
+<ul>
+<li>Search</li>
+<li>Entity lookup</li>
+<li>Metadata enrichment</li>
+<li>Artwork lookup</li>
+<li>Provider ID mapping</li>
+<li>Rate-limit observations</li>
+</ul>
+<p>Metadata providers do not provide playback unless they also implement Media
+Source ports.</p>
+<h2 id="notification-integrations">Notification Integrations<a class="headerlink" href="#notification-integrations" title="Permanent link">¶</a></h2>
+<p>Future notification adapters may publish:</p>
+<ul>
+<li>Synchronization failure</li>
+<li>Source health degradation</li>
+<li>Plan publication failure</li>
+<li>Playout failure</li>
+<li>Credential expiration</li>
+</ul>
+<p>Notification delivery must remain outside core domain state transitions.</p>
+<h2 id="schedule-import-integrations">Schedule Import Integrations<a class="headerlink" href="#schedule-import-integrations" title="Permanent link">¶</a></h2>
+<p>Future schedule import adapters may provide:</p>
+<ul>
+<li>XMLTV import</li>
+<li>CSV import</li>
+<li>JSON import</li>
+<li>Third-party programming feeds</li>
+</ul>
+<p>Imported data is normalized into draft or compatibility models.</p>
+<p>It does not bypass validation.</p>
+<h2 id="monitoring-integrations">Monitoring Integrations<a class="headerlink" href="#monitoring-integrations" title="Permanent link">¶</a></h2>
+<p>Future monitoring adapters may expose:</p>
+<ul>
+<li>Metrics</li>
+<li>Logs</li>
+<li>Traces</li>
+<li>Health endpoints</li>
+<li>Alert delivery</li>
+</ul>
+<p>Monitoring adapters must not gain source credentials unnecessarily.</p>
+<h2 id="backup-integrations">Backup Integrations<a class="headerlink" href="#backup-integrations" title="Permanent link">¶</a></h2>
+<p>Future backup adapters may target:</p>
+<ul>
+<li>Local path</li>
+<li>Network storage</li>
+<li>Object storage</li>
+</ul>
+<p>Backup integration is distinct from Media Source integration.</p>
+<h2 id="test-strategy">Test Strategy<a class="headerlink" href="#test-strategy" title="Permanent link">¶</a></h2>
+<h3 id="adapter-unit-tests">Adapter Unit Tests<a class="headerlink" href="#adapter-unit-tests" title="Permanent link">¶</a></h3>
+<p>Required categories:</p>
+<ul>
+<li>Configuration validation</li>
+<li>Base URI normalization</li>
+<li>Authentication header construction</li>
+<li>Provider identity parsing</li>
+<li>Capability mapping</li>
+<li>Library mapping</li>
+<li>Media kind mapping</li>
+<li>Hierarchy mapping</li>
+<li>Metadata field mapping</li>
+<li>Playback Variant mapping</li>
+<li>Artwork mapping</li>
+<li>Playback resolution</li>
+<li>Error classification</li>
+<li>Retryability</li>
+<li>Redaction</li>
+<li>Pagination</li>
+<li>Cursor handling</li>
+<li>Cancellation</li>
+</ul>
+<h3 id="contract-fixtures">Contract Fixtures<a class="headerlink" href="#contract-fixtures" title="Permanent link">¶</a></h3>
+<p>Each built-in adapter requires recorded or synthetic fixtures for:</p>
+<ul>
+<li>Successful server identity</li>
+<li>Invalid credential</li>
+<li>Permission denied</li>
+<li>Empty libraries</li>
+<li>Movie library</li>
+<li>Television library</li>
+<li>Mixed library</li>
+<li>Multi-version media</li>
+<li>Multiple media parts</li>
+<li>Missing duration</li>
+<li>Missing parent</li>
+<li>Deleted item</li>
+<li>Malformed item</li>
+<li>Pagination</li>
+<li>Rate limiting</li>
+<li>Server error</li>
+<li>Provider upgrade variation</li>
+<li>Artwork</li>
+<li>Playback resolution</li>
+<li>Direct stream</li>
+<li>Provider transcode</li>
+<li>Unsupported media type</li>
+</ul>
+<h3 id="plex-contract-tests">Plex Contract Tests<a class="headerlink" href="#plex-contract-tests" title="Permanent link">¶</a></h3>
+<p>Plex fixtures must cover:</p>
+<ul>
+<li>Server identity</li>
+<li>Library sections</li>
+<li>Movies</li>
+<li>Series</li>
+<li>Seasons</li>
+<li>Episodes</li>
+<li>Media parts</li>
+<li>Multiple versions</li>
+<li>Artwork references</li>
+<li>Provider IDs</li>
+<li>Authentication failure</li>
+<li>Playback access</li>
+<li>Pagination or batched enumeration</li>
+<li>Missing parent</li>
+<li>Unsupported extras</li>
+</ul>
+<h3 id="jellyfin-contract-tests">Jellyfin Contract Tests<a class="headerlink" href="#jellyfin-contract-tests" title="Permanent link">¶</a></h3>
+<p>Jellyfin fixtures must cover:</p>
+<ul>
+<li>Server identity</li>
+<li>User scope</li>
+<li>Virtual folders</li>
+<li>Movies</li>
+<li>Series</li>
+<li>Seasons</li>
+<li>Episodes</li>
+<li>Media sources</li>
+<li>Streams</li>
+<li>Artwork references</li>
+<li>Provider IDs</li>
+<li>Authentication failure</li>
+<li>Playback information</li>
+<li>Permission change</li>
+<li>Missing item</li>
+<li>Unsupported item type</li>
+</ul>
+<h3 id="emby-contract-tests">Emby Contract Tests<a class="headerlink" href="#emby-contract-tests" title="Permanent link">¶</a></h3>
+<p>Emby fixtures must cover:</p>
+<ul>
+<li>Server identity</li>
+<li>User scope</li>
+<li>Libraries</li>
+<li>Movies</li>
+<li>Series</li>
+<li>Seasons</li>
+<li>Episodes</li>
+<li>Media sources</li>
+<li>Streams</li>
+<li>Artwork</li>
+<li>Provider IDs</li>
+<li>Authentication failure</li>
+<li>Playback information</li>
+<li>Missing item</li>
+<li>Unsupported item type</li>
+</ul>
+<h3 id="http-behavior-tests">HTTP Behavior Tests<a class="headerlink" href="#http-behavior-tests" title="Permanent link">¶</a></h3>
+<p>Tests should cover:</p>
+<ul>
+<li>Timeout</li>
+<li>Cancellation</li>
+<li>Redirect</li>
+<li>Cross-host redirect</li>
+<li>TLS failure</li>
+<li>Custom trust</li>
+<li>Proxy</li>
+<li>DNS failure</li>
+<li>Connection reset</li>
+<li>Oversized body</li>
+<li>Malformed JSON or XML</li>
+<li>Retry-after</li>
+<li>Bounded error body</li>
+<li>Secret redaction</li>
+</ul>
+<h3 id="synchronization-tests">Synchronization Tests<a class="headerlink" href="#synchronization-tests" title="Permanent link">¶</a></h3>
+<p>Tests should cover:</p>
+<ul>
+<li>Initial synchronization</li>
+<li>Full synchronization</li>
+<li>Incremental synchronization</li>
+<li>Interrupted pagination</li>
+<li>Cursor expiration</li>
+<li>Resume from checkpoint</li>
+<li>Duplicate webhook</li>
+<li>Missed webhook</li>
+<li>Partial provider outage</li>
+<li>Permission change</li>
+<li>Library exclusion</li>
+<li>Source disable</li>
+<li>Source archive</li>
+<li>Adapter upgrade</li>
+</ul>
+<h3 id="path-mapping-tests">Path Mapping Tests<a class="headerlink" href="#path-mapping-tests" title="Permanent link">¶</a></h3>
+<p>Tests should cover:</p>
+<ul>
+<li>Windows provider path to Linux container path</li>
+<li>Linux provider path</li>
+<li>Case sensitivity</li>
+<li>Overlapping prefixes</li>
+<li>Missing target</li>
+<li>Path escape</li>
+<li>Symlink policy</li>
+<li>Fallback to HTTP</li>
+<li>Most-specific mapping</li>
+</ul>
+<h3 id="determinism-tests">Determinism Tests<a class="headerlink" href="#determinism-tests" title="Permanent link">¶</a></h3>
+<p>Given fixed provider fixtures and configuration, adapters must produce:</p>
+<ul>
+<li>Same normalized import records</li>
+<li>Same qualified external identities</li>
+<li>Same hierarchy</li>
+<li>Same Playback Variants</li>
+<li>Same error classifications</li>
+<li>Same capability snapshots</li>
+<li>Same stable ordering</li>
+</ul>
+<h3 id="property-tests">Property Tests<a class="headerlink" href="#property-tests" title="Permanent link">¶</a></h3>
+<p>Useful properties:</p>
+<ul>
+<li>Credentials never appear in normalized import records.</li>
+<li>External IDs remain qualified by Media Source.</li>
+<li>Pagination preserves every item exactly once under stable provider input.</li>
+<li>Identical provider input produces idempotent normalized output.</li>
+<li>Webhook duplicates do not duplicate synchronization mutation.</li>
+<li>Full reconciliation does not mark unseen items missing until completion.</li>
+<li>Source disable does not delete Catalog Items.</li>
+<li>One provider failure does not modify another Media Source.</li>
+<li>Redirects do not forward credentials to untrusted hosts.</li>
+<li>Path Mapping cannot escape allowed roots.</li>
+<li>Runtime URLs do not enter ordinary API responses.</li>
+<li>Cancellation closes external response bodies.</li>
+</ul>
+<h3 id="live-compatibility-tests">Live Compatibility Tests<a class="headerlink" href="#live-compatibility-tests" title="Permanent link">¶</a></h3>
+<p>Optional controlled tests may run against representative provider installations.</p>
+<p>Live tests must:</p>
+<ul>
+<li>Use dedicated test credentials</li>
+<li>Avoid production mutation</li>
+<li>Record provider version</li>
+<li>Avoid storing secrets</li>
+<li>Be skippable in normal CI</li>
+<li>Produce compatibility reports</li>
+</ul>
+<h3 id="migration-tests">Migration Tests<a class="headerlink" href="#migration-tests" title="Permanent link">¶</a></h3>
+<p>Migration tests should cover:</p>
+<ul>
+<li>Existing Tunarr Plex source</li>
+<li>Existing Tunarr Jellyfin source</li>
+<li>Existing Tunarr Emby source</li>
+<li>Legacy credentials</li>
+<li>Legacy server URLs</li>
+<li>Legacy media identifiers</li>
+<li>Existing channel playback references</li>
+<li>Invalid legacy source</li>
+<li>Duplicate legacy source</li>
+<li>Source replacement</li>
+</ul>
+<h2 id="reference-plex-import-example">Reference Plex Import Example<a class="headerlink" href="#reference-plex-import-example" title="Permanent link">¶</a></h2>
+<p>Assume:</p>
+<ul>
+<li>One Plex server</li>
+<li>One movie library</li>
+<li>One television library</li>
+<li>Movie A exists in 1080p and 4K</li>
+<li>Episode B has one media part</li>
+<li>A Plex token is configured</li>
+</ul>
+<p>Expected integration output:</p>
+<ul>
+<li>One Media Source</li>
+<li>Two included Library Descriptors</li>
+<li>One Import Record for Movie A</li>
+<li>Two Playback Variant observations for Movie A</li>
+<li>Series, Season, and Episode Import Records for Episode B</li>
+<li>Artwork references without client-visible token</li>
+<li>Qualified Plex external identities</li>
+<li>No ChannelForge Catalog IDs generated inside the adapter</li>
+</ul>
+<h2 id="reference-jellyfin-permission-change-example">Reference Jellyfin Permission Change Example<a class="headerlink" href="#reference-jellyfin-permission-change-example" title="Permanent link">¶</a></h2>
+<p>Assume:</p>
+<ul>
+<li>A Jellyfin user previously saw 5,000 items.</li>
+<li>Library permission changes.</li>
+<li>The next incremental query returns fewer items.</li>
+<li>No authoritative full reconciliation completed.</li>
+</ul>
+<p>Expected behavior:</p>
+<ul>
+<li>Media Source health may show authorization or scope warning.</li>
+<li>Existing Source Bindings are not immediately archived.</li>
+<li>A full synchronization is queued.</li>
+<li>Missing-item grace applies.</li>
+<li>Existing approved schedules remain unchanged.</li>
+</ul>
+<h2 id="reference-emby-playback-example">Reference Emby Playback Example<a class="headerlink" href="#reference-emby-playback-example" title="Permanent link">¶</a></h2>
+<p>Assume:</p>
+<ul>
+<li>Emby exposes two media-source options.</li>
+<li>One direct-play option cannot seek.</li>
+<li>One provider stream can seek to the required Runtime Offset.</li>
+</ul>
+<p>Expected adapter output:</p>
+<ul>
+<li>Both Playback Variant observations remain in the Catalog.</li>
+<li>Playback resolution returns the seek-capable option for the current request.</li>
+<li>The selection reason is available to the playout layer.</li>
+<li>Source credentials remain restricted.</li>
+</ul>
+<h2 id="reference-webhook-example">Reference Webhook Example<a class="headerlink" href="#reference-webhook-example" title="Permanent link">¶</a></h2>
+<p>Assume:</p>
+<ul>
+<li>Plex sends an event indicating an item changed.</li>
+<li>The event is duplicated three times.</li>
+<li>The item identity is valid.</li>
+</ul>
+<p>Expected behavior:</p>
+<ul>
+<li>All webhook requests are bounded and verified according to policy.</li>
+<li>One effective targeted synchronization job is queued.</li>
+<li>Catalog change is verified through provider fetch.</li>
+<li>Duplicate receipts are recorded or deduplicated.</li>
+<li>No direct Catalog mutation occurs from webhook payload alone.</li>
+</ul>
+<h2 id="reference-provider-replacement-example">Reference Provider Replacement Example<a class="headerlink" href="#reference-provider-replacement-example" title="Permanent link">¶</a></h2>
+<p>Assume:</p>
+<ul>
+<li>A configured Jellyfin URL now points to a newly installed server.</li>
+<li>The stable server identity differs.</li>
+<li>The credential is valid.</li>
+</ul>
+<p>Expected behavior:</p>
+<ul>
+<li>Connection probe reports provider identity mismatch.</li>
+<li>Automatic synchronization is blocked.</li>
+<li>Existing Source Bindings remain attached to the prior Media Source identity.</li>
+<li>Operator chooses replacement, new source, or corrected URL.</li>
+<li>The decision is audited.</li>
+</ul>
+<h2 id="version-1-required-behaviors">Version 1 Required Behaviors<a class="headerlink" href="#version-1-required-behaviors" title="Permanent link">¶</a></h2>
+<p>The version 1 integrations subsystem must:</p>
+<ol>
+<li>Provide Plex, Jellyfin, and Emby adapters.</li>
+<li>Use ChannelForge-owned Media Source IDs.</li>
+<li>Qualify provider external IDs by Media Source.</li>
+<li>Store credentials through secret references.</li>
+<li>Validate source addresses.</li>
+<li>Probe connection and authentication.</li>
+<li>Discover provider identity.</li>
+<li>Discover capabilities.</li>
+<li>Discover libraries.</li>
+<li>Support explicit library inclusion.</li>
+<li>Emit source-neutral import records.</li>
+<li>Normalize hierarchy.</li>
+<li>Normalize Playback Variants.</li>
+<li>Resolve artwork access.</li>
+<li>Resolve runtime playback access.</li>
+<li>Support full synchronization.</li>
+<li>Support incremental synchronization where feasible.</li>
+<li>Treat webhooks as synchronization hints.</li>
+<li>Support cancellation.</li>
+<li>Classify provider errors.</li>
+<li>Apply bounded retry.</li>
+<li>Respect rate limiting.</li>
+<li>Track health separately from catalog state.</li>
+<li>Detect provider identity replacement.</li>
+<li>Support Path Mappings.</li>
+<li>Redact secrets and signed URLs.</li>
+<li>Version adapter behavior.</li>
+<li>Use contract fixtures.</li>
+<li>Isolate provider differences inside adapters.</li>
+<li>Remain operable in one Docker container with SQLite.</li>
+</ol>
+<h2 id="integration-invariants">Integration Invariants<a class="headerlink" href="#integration-invariants" title="Permanent link">¶</a></h2>
+<ol>
+<li>The domain does not depend on provider response types.</li>
+<li>Every provider identifier is qualified by Media Source.</li>
+<li>Credentials remain inside the integration secret boundary.</li>
+<li>Runtime playback URLs are not canonical identity.</li>
+<li>Provider payloads are untrusted input.</li>
+<li>Synchronization is idempotent for identical provider state.</li>
+<li>Webhooks do not directly mutate canonical Catalog state.</li>
+<li>Full reconciliation remains authoritative for absence.</li>
+<li>One source failure does not modify another source.</li>
+<li>Source disable does not delete Catalog Items.</li>
+<li>Provider identity mismatch requires explicit handling.</li>
+<li>Adapter output is source-neutral.</li>
+<li>Unsupported provider types cannot be activated.</li>
+<li>Unknown adapter versions cannot silently change normalized semantics.</li>
+<li>External calls are bounded by timeout and cancellation.</li>
+<li>Redirects cannot leak credentials.</li>
+<li>Logs and diagnostics redact secrets.</li>
+<li>Path Mappings cannot escape configured roots.</li>
+<li>Provider-side transcoding is policy-controlled.</li>
+<li>Provider health is distinct from Catalog availability.</li>
+<li>Capability snapshots are timestamped and versioned.</li>
+<li>Synchronization checkpoints are provider-specific but normalized in job state.</li>
+<li>Cursor expiration triggers reconciliation rather than destructive reset.</li>
+<li>Partial synchronization cannot mark unseen items deleted.</li>
+<li>Library inclusion is explicit.</li>
+<li>New provider libraries do not silently enter programming scope unless policy
+    permits it.</li>
+<li>Runtime playback resolution has priority over background synchronization.</li>
+<li>Adapter fixture behavior is deterministic.</li>
+<li>Integration operations are auditable.</li>
+<li>Version 1 remains compatible with the modular monolith and SQLite.</li>
+</ol>
+<h2 id="deferred-integration-decisions">Deferred Integration Decisions<a class="headerlink" href="#deferred-integration-decisions" title="Permanent link">¶</a></h2>
+<p>The following decisions remain open:</p>
+<ul>
+<li>Exact credential storage implementation</li>
+<li>Exact Plex credential acquisition workflow</li>
+<li>Exact Jellyfin credential setup workflow</li>
+<li>Exact Emby credential setup workflow</li>
+<li>Exact provider-version support matrix</li>
+<li>Exact provider-side transcode defaults</li>
+<li>Exact local path preference defaults</li>
+<li>Exact webhook support per provider</li>
+<li>Exact incremental cursor strategy per provider</li>
+<li>Exact full synchronization cadence</li>
+<li>Exact health-check cadence</li>
+<li>Exact retry and backoff defaults</li>
+<li>Exact per-source concurrency defaults</li>
+<li>Exact library auto-inclusion policy</li>
+<li>Exact raw payload retention policy</li>
+<li>Exact TLS custom trust workflow</li>
+<li>Exact insecure-TLS warning and confirmation workflow</li>
+<li>Exact SSRF address policy for local deployments</li>
+<li>Exact provider identity replacement workflow</li>
+<li>Exact capability expiration policy</li>
+<li>Exact adapter plugin packaging model</li>
+<li>Exact live compatibility test infrastructure</li>
+<li>Exact metadata-provider adapters</li>
+<li>Exact notification integration set</li>
+<li>Exact schedule import adapters</li>
+<li>Exact legacy Tunarr source migration rules</li>
+</ul>
+<!-- DO NOT FORMAT -->
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://discord.gg/nYkb7MhPfD" target="_blank" rel="noopener" title="Join the Tunarr Discord" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M492.5 69.8c-.2-.3-.4-.6-.8-.7-38.1-17.5-78.4-30-119.7-37.1-.4-.1-.8 0-1.1.1s-.6.4-.8.8c-5.5 9.9-10.5 20.2-14.9 30.6-44.6-6.8-89.9-6.8-134.4 0-4.5-10.5-9.5-20.7-15.1-30.6-.2-.3-.5-.6-.8-.8s-.7-.2-1.1-.2C162.5 39 122.2 51.5 84.1 69c-.3.1-.6.4-.8.7C7.1 183.5-13.8 294.6-3.6 404.2c0 .3.1.5.2.8s.3.4.5.6c44.4 32.9 94 58 146.8 74.2.4.1.8.1 1.1 0s.7-.4.9-.7c11.3-15.4 21.4-31.8 30-48.8.1-.2.2-.5.2-.8s0-.5-.1-.8-.2-.5-.4-.6-.4-.3-.7-.4c-15.8-6.1-31.2-13.4-45.9-21.9-.3-.2-.5-.4-.7-.6s-.3-.6-.3-.9 0-.6.2-.9.3-.5.6-.7c3.1-2.3 6.2-4.7 9.1-7.1.3-.2.6-.4.9-.4s.7 0 1 .1c96.2 43.9 200.4 43.9 295.5 0 .3-.1.7-.2 1-.2s.7.2.9.4c2.9 2.4 6 4.9 9.1 7.2.2.2.4.4.6.7s.2.6.2.9-.1.6-.3.9-.4.5-.6.6c-14.7 8.6-30 15.9-45.9 21.8-.2.1-.5.2-.7.4s-.3.4-.4.7-.1.5-.1.8.1.5.2.8c8.8 17 18.8 33.3 30 48.8.2.3.6.6.9.7s.8.1 1.1 0c52.9-16.2 102.6-41.3 147.1-74.2.2-.2.4-.4.5-.6s.2-.5.2-.8c12.3-126.8-20.5-236.9-86.9-334.5zm-302 267.7c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.4 59.2-52.8 59.2m195.4 0c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.2 59.2-52.8 59.2"></path></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://github.com/sponsors/chrisbenincasa" target="_blank" rel="noopener" title="Sponsor Tunarr on GitHub" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="m241 87.1 15 20.7 15-20.7C296 52.5 336.2 32 378.9 32 452.4 32 512 91.6 512 165.1v2.6c0 112.2-139.9 242.5-212.9 298.2-12.4 9.4-27.6 14.1-43.1 14.1s-30.8-4.6-43.1-14.1C139.9 410.2 0 279.9 0 167.7v-2.6C0 91.6 59.6 32 133.1 32 175.8 32 216 52.5 241 87.1"></path></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tracking", "navigation.path", "navigation.sections", "navigation.indexes", "navigation.footer", "content.code.copy", "content.code.select", "content.tooltips", "content.action.edit", "content.action.view"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  
+<script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(()=>{ lightbox.reload(); });
+</script></body></html>

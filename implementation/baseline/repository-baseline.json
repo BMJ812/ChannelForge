@@ -1,0 +1,52 @@
+{
+    "schemaVersion":  1,
+    "repository":  "BMJ812/ChannelForge",
+    "milestone":  "01",
+    "milestoneStatus":  "In Progress",
+    "roadmapVersion":  "0.1",
+    "architectureVersion":  "0.1",
+    "sourceCommit":  "195a4d04aca082af04362152f56283c139e9eaad",
+    "sourceCommitDate":  "2026-07-26T22:18:58-07:00",
+    "captureBranch":  "docs/m01-repository-toolchain-inventory",
+    "captureFramework":  {
+                             "command":  "node scripts/implementation-baseline/capture.mjs all --compact",
+                             "schemaVersion":  1
+                         },
+    "rootPackage":  {
+                        "name":  "tunarr",
+                        "version":  "1.2.0-dev.1",
+                        "license":  "Zlib",
+                        "type":  "module",
+                        "nodeEngine":  "22",
+                        "packageManager":  "pnpm@10.28.0"
+                    },
+    "toolchain":  {
+                      "node":  "v22.20.0",
+                      "pnpm":  "10.28.0",
+                      "git":  "git version 2.53.0.windows.2",
+                      "powershell":  "5.1.26100.8894",
+                      "platform":  "win32",
+                      "architecture":  "x64",
+                      "os":  "Microsoft Windows 10.0.26200",
+                      "typescript":  "5.9.3",
+                      "turbo":  "^2.5.3",
+                      "vitest":  "^4.1.5",
+                      "pnpmLockfile":  "9.0"
+                  },
+    "counts":  {
+                   "workspacePackages":  4,
+                   "packageManifests":  5,
+                   "trackedFiles":  1825,
+                   "declaredDependencies":  253,
+                   "uniqueDependencyNames":  197,
+                   "workspaceDependencyEdges":  5,
+                   "turboTasks":  9
+               },
+    "invariants":  [
+                       "Inventory source access is read-only.",
+                       "Output ordering is deterministic.",
+                       "No absolute repository path is emitted.",
+                       "No package identities are renamed.",
+                       "No runtime behavior is changed."
+                   ]
+}

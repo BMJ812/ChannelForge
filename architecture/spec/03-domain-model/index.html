@@ -1,0 +1,6495 @@
+<!DOCTYPE html><html lang="en" class="no-js"><head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://tunarr.com/architecture/spec/03-domain-model/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>ChannelForge Domain Model - Tunarr</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  <link href="../../../assets/stylesheets/glightbox.min.css" rel="stylesheet"><script src="../../../assets/javascripts/glightbox.min.js"></script><style id="glightbox-style">
+            html.glightbox-open { overflow: initial; height: 100%; }
+            .gslide-title { margin-top: 0px; user-select: text; }
+            .gslide-desc { color: #666; user-select: text; }
+            .gslide-image img { background: white; }
+            .gscrollbar-fixer { padding-right: 15px; }
+            .gdesc-inner { font-size: 0.75rem; }
+            body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
+            body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
+            body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
+        </style></head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#channelforge-domain-model" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Tunarr" class="md-header__button md-logo" aria-label="Tunarr" data-md-component="logo">
+      
+  <img src="../../../assets/tunarr.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Tunarr
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              ChannelForge Domain Model
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo" aria-label="Switch to light mode" type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"></path></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="indigo" aria-label="Switch to dark mode" type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="indigo" aria-label="Switch to system preference" type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required="">
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix="">
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__social">
+        
+          <a href="https://discord.gg/nYkb7MhPfD" title="Join the Tunarr Discord" class="md-header__button md-icon" target="_blank" rel="noopener">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M492.5 69.8c-.2-.3-.4-.6-.8-.7-38.1-17.5-78.4-30-119.7-37.1-.4-.1-.8 0-1.1.1s-.6.4-.8.8c-5.5 9.9-10.5 20.2-14.9 30.6-44.6-6.8-89.9-6.8-134.4 0-4.5-10.5-9.5-20.7-15.1-30.6-.2-.3-.5-.6-.8-.8s-.7-.2-1.1-.2C162.5 39 122.2 51.5 84.1 69c-.3.1-.6.4-.8.7C7.1 183.5-13.8 294.6-3.6 404.2c0 .3.1.5.2.8s.3.4.5.6c44.4 32.9 94 58 146.8 74.2.4.1.8.1 1.1 0s.7-.4.9-.7c11.3-15.4 21.4-31.8 30-48.8.1-.2.2-.5.2-.8s0-.5-.1-.8-.2-.5-.4-.6-.4-.3-.7-.4c-15.8-6.1-31.2-13.4-45.9-21.9-.3-.2-.5-.4-.7-.6s-.3-.6-.3-.9 0-.6.2-.9.3-.5.6-.7c3.1-2.3 6.2-4.7 9.1-7.1.3-.2.6-.4.9-.4s.7 0 1 .1c96.2 43.9 200.4 43.9 295.5 0 .3-.1.7-.2 1-.2s.7.2.9.4c2.9 2.4 6 4.9 9.1 7.2.2.2.4.4.6.7s.2.6.2.9-.1.6-.3.9-.4.5-.6.6c-14.7 8.6-30 15.9-45.9 21.8-.2.1-.5.2-.7.4s-.3.4-.4.7-.1.5-.1.8.1.5.2.8c8.8 17 18.8 33.3 30 48.8.2.3.6.6.9.7s.8.1 1.1 0c52.9-16.2 102.6-41.3 147.1-74.2.2-.2.4-.4.5-.6s.2-.5.2-.8c12.3-126.8-20.5-236.9-86.9-334.5zm-302 267.7c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.4 59.2-52.8 59.2m195.4 0c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.2 59.2-52.8 59.2"></path></svg>
+          </a>
+        
+          <a href="https://github.com/sponsors/chrisbenincasa" title="Sponsor Tunarr on GitHub" class="md-header__button md-icon" target="_blank" rel="noopener">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="m241 87.1 15 20.7 15-20.7C296 52.5 336.2 32 378.9 32 452.4 32 512 91.6 512 165.1v2.6c0 112.2-139.9 242.5-212.9 298.2-12.4 9.4-27.6 14.1-43.1 14.1s-30.8-4.6-43.1-14.1C139.9 410.2 0 279.9 0 167.7v-2.6C0 91.6 59.6 32 133.1 32 175.8 32 216 52.5 241 87.1"></path></svg>
+          </a>
+        
+      </div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/chrisbenincasa/tunarr" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    chrisbenincasa/tunarr
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Tunarr" class="md-nav__button md-logo" aria-label="Tunarr" data-md-component="logo">
+      
+  <img src="../../../assets/tunarr.png" alt="logo">
+
+    </a>
+    Tunarr
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/chrisbenincasa/tunarr" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    chrisbenincasa/tunarr
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix="">
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api-docs.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Docs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3">
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Getting Started
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Install
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/run/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Run
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4">
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Migration
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Migration
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/migration/migrate-to-1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Migrate to 1.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4">
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configure
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Configure
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_1">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/media_sources/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Media Sources
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_1" id="__nav_4_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Media Sources
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/plex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plex
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/jellyfin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Jellyfin
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/emby/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Emby
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_1_5">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/media_sources/local/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_1_5" id="__nav_4_1_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_4_1_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_1_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Local
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/local/movies/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Movies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/local/shows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shows
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/local/other_videos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Other Video
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/local/music/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Music
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/local/music_videos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Music Videos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/ffmpeg/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FFmpeg
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    FFmpeg
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/ffmpeg/transcode_config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transcode Configs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../misc/search/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Search
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Search
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/channels/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Channels
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_4" id="__nav_4_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Channels
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/channels/properties/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Properties
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/channels/flex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flex
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/channels/epg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EPG
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/channels/transcoding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transcoding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/channels/watermarks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Watermarks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/channels/programming/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Programming
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/library/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Library
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Library
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/library/filler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filler
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/library/custom-shows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Custom Shows
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/library/smart-collections/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Smart Collections
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/scheduling/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scheduling
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_6" id="__nav_4_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Scheduling
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/concepts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concepts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/random-slots/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Slot Editor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/time-slots/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Time Slots
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/cyclic-shuffle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cyclic Shuffle
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/block-shuffle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Block Shuffle
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/mid-roll-breaks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mid-Roll Breaks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/replicate/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Replicate
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/consolidate/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Consolidate
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_7">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/clients/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Clients
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_7" id="__nav_4_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Clients
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/clients/plex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plex
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/clients/jellyfin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Jellyfin
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_8">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/system/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    System
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/system/backup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/system/logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5">
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Misc.
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Misc.
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../misc/faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../misc/common-issues/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common Issues
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../misc/troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stream Troubleshooter
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6">
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Development
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../dev/contributing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+      
+        <li class="md-nav__item">
+  <a href="#purpose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Purpose
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modeling-level" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Modeling Level
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modeling-conventions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Modeling Conventions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Modeling Conventions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#entity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#value-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Value Object
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aggregate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Aggregate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#snapshot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Snapshot
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#revision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Revision
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#universal-identity-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Universal Identity Rules
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Universal Identity Rules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#channelforge-ids" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ChannelForge IDs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#external-ids" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        External IDs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#human-readable-keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Human-Readable Keys
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#universal-time-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Universal Time Rules
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#universal-lifecycle-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Universal Lifecycle Rules
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#domain-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Domain Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aggregate-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Aggregate Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#instance-and-access-domain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Instance and Access Domain
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Instance and Access Domain">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#instance-aggregate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Instance Aggregate
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Instance Aggregate">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#instance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Instance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instance-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Instance Settings
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instance-invariants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Instance Invariants
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#user-aggregate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        User Aggregate
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="User Aggregate">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#user" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        User
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#role-assignment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Role Assignment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#api-credential" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        API Credential
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#user-invariants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        User Invariants
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#media-source-domain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Media Source Domain
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Media Source Domain">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#media-source-aggregate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Media Source Aggregate
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Media Source Aggregate">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#media-source" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Media Source
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#source-capability-snapshot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Source Capability Snapshot
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#library-binding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Library Binding
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#media-source-states" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Media Source States
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#media-source-invariants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Media Source Invariants
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#media-catalog-domain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Media Catalog Domain
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Media Catalog Domain">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#catalog-item-aggregate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Catalog Item Aggregate
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Catalog Item Aggregate">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#catalog-item" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Catalog Item
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#catalog-hierarchy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Catalog Hierarchy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#source-binding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Source Binding
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#playback-variant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Playback Variant
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#metadata-value-and-provenance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Metadata Value and Provenance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#catalog-availability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Catalog Availability
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#catalog-item-invariants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Catalog Item Invariants
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#catalog-conflict" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Catalog Conflict
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#network-domain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Network Domain
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Network Domain">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#network-aggregate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Network Aggregate
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Network Aggregate">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#network" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Network
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#network-profile-revision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Network Profile Revision
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#editorial-profile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Editorial Profile
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#audience-profile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Audience Profile
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#network-relationships" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Network Relationships
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#network-invariants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Network Invariants
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#channel-domain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Channel Domain
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Channel Domain">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#channel-aggregate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Channel Aggregate
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Channel Aggregate">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#channel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Channel
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#channel-number" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Channel Number
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#output-identity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Output Identity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#channel-output-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Channel Output Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#channel-invariants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Channel Invariants
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#branding-and-presentation-domain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Branding and Presentation Domain
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Branding and Presentation Domain">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#branding-profile-aggregate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Branding Profile Aggregate
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Branding Profile Aggregate">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#branding-profile-revision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Branding Profile Revision
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#presentation-asset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Presentation Asset
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#asset-assignment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Asset Assignment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#branding-invariants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Branding Invariants
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#programming-configuration-domain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Programming Configuration Domain
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Programming Configuration Domain">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#programming-configuration-revision-aggregate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Programming Configuration Revision Aggregate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#daypart" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Daypart
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#programming-block" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Programming Block
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rule-set" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rule Set
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#programming-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Programming Rule
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#catalog-selector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Catalog Selector
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#constraint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Constraint
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#preference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Preference
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#placement-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Placement Policy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#programming-configuration-invariants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Programming Configuration Invariants
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#schedule-planning-domain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Schedule Planning Domain
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Schedule Planning Domain">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#schedule-plan-aggregate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Schedule Plan Aggregate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#schedule-entry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Schedule Entry
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rule-evidence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rule Evidence
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#catalog-eligibility-snapshot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Catalog Eligibility Snapshot
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#schedule-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Schedule Validation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#schedule-approval" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Schedule Approval
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#schedule-plan-invariants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Schedule Plan Invariants
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#schedule-publication-domain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Schedule Publication Domain
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Schedule Publication Domain">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#schedule-publication-aggregate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Schedule Publication Aggregate
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Schedule Publication Aggregate">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#schedule-publication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Schedule Publication
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#published-artifact" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Published Artifact
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#schedule-publication-invariants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Schedule Publication Invariants
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#playout-runtime-domain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Playout Runtime Domain
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Playout Runtime Domain">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#playout-session-aggregate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Playout Session Aggregate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#playout-decision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Playout Decision
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#airing-record" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Airing Record
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recovery-event" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recovery Event
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#playout-invariants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Playout Invariants
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#template-domain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Template Domain
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Template Domain">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#template-aggregate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Template Aggregate
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Template Aggregate">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#template" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Template
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#template-version" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Template Version
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#applied-template-snapshot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Applied Template Snapshot
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#template-invariants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Template Invariants
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#programming-pack-domain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Programming Pack Domain
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Programming Pack Domain">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#programming-pack-aggregate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Programming Pack Aggregate
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Programming Pack Aggregate">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pack-manifest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pack Manifest
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pack-import-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pack Import Session
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#programming-pack-invariants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Programming Pack Invariants
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#operations-domain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Operations Domain
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Operations Domain">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#background-job-aggregate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Background Job Aggregate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#job-attempt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job Attempt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#job-invariants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job Invariants
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#health-and-recommendation-domain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Health and Recommendation Domain
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Health and Recommendation Domain">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#health-snapshot-aggregate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Health Snapshot Aggregate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#health-finding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Health Finding
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recommendation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recommendation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#health-invariants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Health Invariants
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compatibility-and-migration-domain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compatibility and Migration Domain
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Compatibility and Migration Domain">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#migration-run-aggregate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Migration Run Aggregate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#legacy-identifier-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Legacy Identifier Mapping
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compatibility-record" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compatibility Record
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#migration-invariants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Migration Invariants
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#revision-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Revision Model
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Revision Model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#revision-ownership" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Revision Ownership
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#revision-states" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Revision States
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#revision-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Revision Rules
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#audit-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Audit Model
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Audit Model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#audit-record" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Audit Record
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#domain-events" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Domain Events
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cross-aggregate-reference-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cross-Aggregate Reference Rules
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#transaction-boundaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Transaction Boundaries
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#concurrency-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Concurrency Rules
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#archival-and-deletion-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Archival and Deletion Rules
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Archival and Deletion Rules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#archive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Archive
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delete" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Delete
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#referential-preservation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Referential Preservation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#derived-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Derived Data
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sensitive-data-classification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sensitive Data Classification
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Sensitive Data Classification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#secrets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Secrets
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#restricted-operational-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Restricted Operational Data
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ordinary-configuration-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ordinary Configuration Data
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#minimum-version-1-aggregate-set" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Minimum Version 1 Aggregate Set
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#required-end-to-end-relationships" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Required End-to-End Relationships
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core-domain-invariants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Core Domain Invariants
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deferred-domain-decisions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deferred Domain Decisions
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/chrisbenincasa/tunarr/edit/dev/docs/architecture/spec/03-domain-model.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"></path></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/chrisbenincasa/tunarr/raw/dev/docs/architecture/spec/03-domain-model.md" title="View source of this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"></path></svg>
+    </a>
+  
+
+
+<h1 id="channelforge-domain-model">ChannelForge Domain Model<a class="headerlink" href="#channelforge-domain-model" title="Permanent link">¶</a></h1>
+<ul>
+<li><strong>Specification version:</strong> 0.1</li>
+<li><strong>Status:</strong> Draft</li>
+<li><strong>Last updated:</strong> 2026-07-27</li>
+</ul>
+<h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">¶</a></h2>
+<p>This document defines the conceptual domain model for ChannelForge.</p>
+<p>It establishes:</p>
+<ul>
+<li>Aggregate boundaries</li>
+<li>Entity ownership</li>
+<li>Canonical identifiers</li>
+<li>Revision behavior</li>
+<li>Lifecycle states</li>
+<li>Cross-domain references</li>
+<li>Core invariants</li>
+<li>The separation between editorial planning and runtime playout</li>
+</ul>
+<p>This is not a physical database schema. Table names, indexes, migration syntax,
+and storage-specific constraints are defined in the persistence specification.</p>
+<h2 id="modeling-level">Modeling Level<a class="headerlink" href="#modeling-level" title="Permanent link">¶</a></h2>
+<p>The model in this document is implementation-oriented but storage-neutral.</p>
+<p>It is intended to guide:</p>
+<ul>
+<li>TypeScript domain types</li>
+<li>Application services</li>
+<li>Repository interfaces</li>
+<li>API resources</li>
+<li>Database design</li>
+<li>Scheduling-engine inputs and outputs</li>
+<li>Migration from inherited Tunarr records</li>
+</ul>
+<p>A later implementation may combine closely related records into fewer SQLite
+tables or split them for performance. Such changes must preserve the aggregate
+boundaries and invariants defined here.</p>
+<h2 id="modeling-conventions">Modeling Conventions<a class="headerlink" href="#modeling-conventions" title="Permanent link">¶</a></h2>
+<h3 id="entity">Entity<a class="headerlink" href="#entity" title="Permanent link">¶</a></h3>
+<p>An entity has a stable ChannelForge-owned identity and a lifecycle.</p>
+<p>Examples include:</p>
+<ul>
+<li>Network</li>
+<li>Channel</li>
+<li>Catalog Item</li>
+<li>Schedule Plan</li>
+<li>Schedule Entry</li>
+<li>User</li>
+<li>Background Job</li>
+</ul>
+<h3 id="value-object">Value Object<a class="headerlink" href="#value-object" title="Permanent link">¶</a></h3>
+<p>A value object is identified by its content rather than an independent identity.</p>
+<p>Examples include:</p>
+<ul>
+<li>Time range</li>
+<li>Channel number</li>
+<li>Rule weight</li>
+<li>Metadata value with provenance</li>
+<li>Playback decision</li>
+<li>Schedule horizon</li>
+<li>Color and typography settings</li>
+</ul>
+<p>Value objects should be immutable where practical.</p>
+<h3 id="aggregate">Aggregate<a class="headerlink" href="#aggregate" title="Permanent link">¶</a></h3>
+<p>An aggregate is a consistency boundary.</p>
+<p>An aggregate root:</p>
+<ul>
+<li>Owns changes to the entities and value objects inside the aggregate</li>
+<li>Enforces aggregate-level invariants</li>
+<li>Is loaded and saved through a repository boundary</li>
+<li>Is referenced by other aggregates through identifiers rather than mutable
+  object graphs</li>
+</ul>
+<p>A single user action may coordinate multiple aggregates through an application
+service, but it must not bypass the rules of those aggregates.</p>
+<h3 id="snapshot">Snapshot<a class="headerlink" href="#snapshot" title="Permanent link">¶</a></h3>
+<p>A snapshot is an immutable capture of data used to make a decision reproducible.</p>
+<p>Examples include:</p>
+<ul>
+<li>Programming configuration snapshot</li>
+<li>Catalog eligibility snapshot</li>
+<li>Template application snapshot</li>
+<li>Approved schedule plan</li>
+<li>Health-calculation input snapshot</li>
+</ul>
+<h3 id="revision">Revision<a class="headerlink" href="#revision" title="Permanent link">¶</a></h3>
+<p>A revision is an immutable version of mutable configuration.</p>
+<p>Revisions allow ChannelForge to answer:</p>
+<ul>
+<li>Which configuration generated this schedule?</li>
+<li>Which network profile was active when this guide was published?</li>
+<li>Which rules were used when this recommendation was calculated?</li>
+<li>Has the user changed configuration since a draft was generated?</li>
+</ul>
+<h2 id="universal-identity-rules">Universal Identity Rules<a class="headerlink" href="#universal-identity-rules" title="Permanent link">¶</a></h2>
+<h3 id="channelforge-ids">ChannelForge IDs<a class="headerlink" href="#channelforge-ids" title="Permanent link">¶</a></h3>
+<p>Every persistent entity owned by ChannelForge must have a ChannelForge-generated
+identifier.</p>
+<p>ChannelForge IDs must:</p>
+<ul>
+<li>Remain stable for the entity's lifetime</li>
+<li>Be independent of database row numbers</li>
+<li>Be independent of Plex, Jellyfin, or Emby identifiers</li>
+<li>Be safe to expose in API paths where authorization permits</li>
+<li>Be unique within the ChannelForge instance</li>
+<li>Survive export and import where identity preservation is explicitly supported</li>
+</ul>
+<p>UUIDs or another collision-resistant opaque format are preferred.</p>
+<p>The exact identifier format is an implementation decision, but domain code must
+not assume identifiers are sequential integers.</p>
+<h3 id="external-ids">External IDs<a class="headerlink" href="#external-ids" title="Permanent link">¶</a></h3>
+<p>Identifiers from media sources and metadata providers are stored as source
+bindings or provenance references.</p>
+<p>An external ID must always be qualified by:</p>
+<ul>
+<li>Provider or source type</li>
+<li>Configured source instance</li>
+<li>External entity type where necessary</li>
+<li>External identifier value</li>
+</ul>
+<p>The same external identifier string may legally occur in more than one source
+instance.</p>
+<h3 id="human-readable-keys">Human-Readable Keys<a class="headerlink" href="#human-readable-keys" title="Permanent link">¶</a></h3>
+<p>Names, slugs, channel numbers, and call signs are not primary identifiers.</p>
+<p>They may be mutable and may have uniqueness rules within a defined scope.</p>
+<p>Examples:</p>
+<ul>
+<li>A channel number may be unique within an instance's active channel lineup.</li>
+<li>A network slug may be unique among non-archived networks.</li>
+<li>A template name may repeat across different publishers or imports.</li>
+</ul>
+<h2 id="universal-time-rules">Universal Time Rules<a class="headerlink" href="#universal-time-rules" title="Permanent link">¶</a></h2>
+<p>All persisted instants must use UTC.</p>
+<p>A network or channel may define an IANA time-zone identifier for editorial
+interpretation.</p>
+<p>The time zone is required when evaluating:</p>
+<ul>
+<li>Dayparts</li>
+<li>Calendar dates</li>
+<li>Weekdays</li>
+<li>Seasonal programming</li>
+<li>Holiday rules</li>
+<li>Schedule horizons presented to operators</li>
+</ul>
+<p>Durations must be stored or calculated with sufficient precision to prevent
+cumulative schedule drift.</p>
+<p>Local wall-clock times must not be persisted without their time-zone context.</p>
+<p>Daylight-saving transitions must be handled explicitly by the scheduling
+specification.</p>
+<h2 id="universal-lifecycle-rules">Universal Lifecycle Rules<a class="headerlink" href="#universal-lifecycle-rules" title="Permanent link">¶</a></h2>
+<p>Persistent records should use one of these lifecycle strategies:</p>
+<ol>
+<li><strong>Immutable:</strong> Created once and never edited.</li>
+<li><strong>Revisioned:</strong> Changes create a new immutable revision.</li>
+<li><strong>Mutable with audit fields:</strong> Operational state changes in place.</li>
+<li><strong>Archived:</strong> Removed from ordinary active use without destroying history.</li>
+<li><strong>Ephemeral:</strong> Runtime-only state that may be reconstructed.</li>
+</ol>
+<p>Hard deletion is reserved for:</p>
+<ul>
+<li>Never-activated drafts where history is not required</li>
+<li>Temporary artifacts</li>
+<li>User-requested removal where retention policy permits it</li>
+<li>Records whose parent aggregate has never been referenced</li>
+<li>Explicit administrative cleanup</li>
+</ul>
+<p>Historical schedule, playout, and migration records must not disappear merely
+because current configuration is archived.</p>
+<h2 id="domain-overview">Domain Overview<a class="headerlink" href="#domain-overview" title="Permanent link">¶</a></h2>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>flowchart TB
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    Instance["Instance and Access"]
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    Catalog["Media Catalog"]
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    Network["Network"]
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    Channel["Channel"]
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    Programming["Programming Configuration"]
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    Schedule["Schedule Planning"]
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    Branding["Branding and Presentation"]
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    Playout["Playout Runtime"]
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    Outputs["Output Publication"]
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    Templates["Templates and Packs"]
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    Jobs["Operations and Jobs"]
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    Health["Health and Recommendations"]
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>    Migration["Compatibility and Migration"]
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>    Instance --&gt; Network
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>    Instance --&gt; Catalog
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    Instance --&gt; Jobs
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>    Network --&gt; Channel
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>    Network --&gt; Programming
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>    Network --&gt; Branding
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>    Network --&gt; Health
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>    Catalog --&gt; Programming
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>    Catalog --&gt; Schedule
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>    Catalog --&gt; Playout
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    Channel --&gt; Schedule
+</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>    Channel --&gt; Playout
+</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>    Channel --&gt; Outputs
+</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>
+</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>    Programming --&gt; Schedule
+</span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>    Schedule --&gt; Playout
+</span><span id="__span-0-35"><a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>    Schedule --&gt; Outputs
+</span><span id="__span-0-36"><a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>    Branding --&gt; Playout
+</span><span id="__span-0-37"><a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>    Branding --&gt; Outputs
+</span><span id="__span-0-38"><a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>
+</span><span id="__span-0-39"><a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>    Templates --&gt; Network
+</span><span id="__span-0-40"><a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>    Templates --&gt; Programming
+</span><span id="__span-0-41"><a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>    Templates --&gt; Branding
+</span><span id="__span-0-42"><a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>
+</span><span id="__span-0-43"><a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>    Jobs --&gt; Catalog
+</span><span id="__span-0-44"><a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>    Jobs --&gt; Schedule
+</span><span id="__span-0-45"><a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>    Jobs --&gt; Outputs
+</span><span id="__span-0-46"><a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>    Jobs --&gt; Health
+</span><span id="__span-0-47"><a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>
+</span><span id="__span-0-48"><a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>    Health --&gt; Programming
+</span><span id="__span-0-49"><a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>    Migration --&gt; Catalog
+</span><span id="__span-0-50"><a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>    Migration --&gt; Network
+</span><span id="__span-0-51"><a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>    Migration --&gt; Channel
+</span><span id="__span-0-52"><a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>    Migration --&gt; Schedule
+</span></code></pre></div>
+<h2 id="aggregate-summary">Aggregate Summary<a class="headerlink" href="#aggregate-summary" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Aggregate root</th>
+<th>Owns</th>
+<th>Primary purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Instance</td>
+<td>Instance settings and access policy references</td>
+<td>Defines system-wide behavior</td>
+</tr>
+<tr>
+<td>User</td>
+<td>User identity and role assignments</td>
+<td>Controls management access</td>
+</tr>
+<tr>
+<td>Media Source</td>
+<td>Source configuration and secret references</td>
+<td>Connects to Plex, Jellyfin, or Emby</td>
+</tr>
+<tr>
+<td>Catalog Item</td>
+<td>Normalized metadata, source bindings, playback variants</td>
+<td>Represents programmable media</td>
+</tr>
+<tr>
+<td>Network</td>
+<td>Editorial identity and network-level settings</td>
+<td>Models a television network</td>
+</tr>
+<tr>
+<td>Channel</td>
+<td>Broadcast identity and output-facing configuration</td>
+<td>Represents a tuneable channel</td>
+</tr>
+<tr>
+<td>Programming Configuration Revision</td>
+<td>Dayparts, blocks, rules, and policy settings</td>
+<td>Defines how schedules are generated</td>
+</tr>
+<tr>
+<td>Schedule Plan</td>
+<td>Immutable schedule entries and generation evidence</td>
+<td>Represents a generated lineup</td>
+</tr>
+<tr>
+<td>Schedule Publication</td>
+<td>Approved-plan and guide publication state</td>
+<td>Controls what downstream systems consume</td>
+</tr>
+<tr>
+<td>Branding Profile</td>
+<td>Network and channel presentation configuration</td>
+<td>Defines visual and on-air identity</td>
+</tr>
+<tr>
+<td>Template</td>
+<td>Reusable versioned configuration</td>
+<td>Provides reusable network patterns</td>
+</tr>
+<tr>
+<td>Programming Pack</td>
+<td>Portable bundle and manifest</td>
+<td>Moves templates and assets between instances</td>
+</tr>
+<tr>
+<td>Playout Session</td>
+<td>Active stream lifecycle and recovery events</td>
+<td>Executes approved schedule state</td>
+</tr>
+<tr>
+<td>Background Job</td>
+<td>Job state and attempts</td>
+<td>Tracks asynchronous operations</td>
+</tr>
+<tr>
+<td>Health Snapshot</td>
+<td>Metrics and recommendation evidence</td>
+<td>Evaluates network quality</td>
+</tr>
+<tr>
+<td>Migration Run</td>
+<td>Imported identifiers and conversion results</td>
+<td>Tracks inherited data migration</td>
+</tr>
+</tbody>
+</table>
+<h2 id="instance-and-access-domain">Instance and Access Domain<a class="headerlink" href="#instance-and-access-domain" title="Permanent link">¶</a></h2>
+<h3 id="instance-aggregate">Instance Aggregate<a class="headerlink" href="#instance-aggregate" title="Permanent link">¶</a></h3>
+<p>The Instance aggregate represents one ChannelForge installation.</p>
+<h4 id="instance">Instance<a class="headerlink" href="#instance" title="Permanent link">¶</a></h4>
+<p>Required conceptual fields:</p>
+<ul>
+<li><code>instanceId</code></li>
+<li>Display name</li>
+<li>Default time zone</li>
+<li>Initial setup state</li>
+<li>Application version</li>
+<li>Schema version</li>
+<li>Feature flags</li>
+<li>Default locale</li>
+<li>Default schedule horizon</li>
+<li>Default output settings reference</li>
+<li>Created timestamp</li>
+<li>Updated timestamp</li>
+</ul>
+<p>The Instance aggregate does not contain plaintext integration credentials.</p>
+<h4 id="instance-settings">Instance Settings<a class="headerlink" href="#instance-settings" title="Permanent link">¶</a></h4>
+<p>Instance settings may include:</p>
+<ul>
+<li>Public base URL</li>
+<li>Trusted proxy policy</li>
+<li>Default stream behavior</li>
+<li>Default transcoding behavior</li>
+<li>Guide-generation defaults</li>
+<li>Retention policies</li>
+<li>Backup policy</li>
+<li>Logging level</li>
+<li>Experimental-feature flags</li>
+</ul>
+<p>Settings that materially affect generated schedules or playout must be copied
+into the relevant immutable snapshot or revision.</p>
+<h4 id="instance-invariants">Instance Invariants<a class="headerlink" href="#instance-invariants" title="Permanent link">¶</a></h4>
+<ol>
+<li>Exactly one active Instance aggregate exists per deployment.</li>
+<li>The instance must have a valid default IANA time zone.</li>
+<li>Setup cannot be marked complete without an administrative identity.</li>
+<li>Secret values must be stored through a secret-storage boundary.</li>
+<li>A schema downgrade must not occur implicitly.</li>
+<li>Global defaults must not retroactively modify immutable plans.</li>
+</ol>
+<h3 id="user-aggregate">User Aggregate<a class="headerlink" href="#user-aggregate" title="Permanent link">¶</a></h3>
+<h4 id="user">User<a class="headerlink" href="#user" title="Permanent link">¶</a></h4>
+<p>Required conceptual fields:</p>
+<ul>
+<li><code>userId</code></li>
+<li>Login identity</li>
+<li>Display name</li>
+<li>Status</li>
+<li>Authentication-method reference</li>
+<li>Created timestamp</li>
+<li>Last successful authentication timestamp</li>
+<li>Archived timestamp, when applicable</li>
+</ul>
+<p>Suggested user states:</p>
+<ul>
+<li><code>INVITED</code></li>
+<li><code>ACTIVE</code></li>
+<li><code>SUSPENDED</code></li>
+<li><code>ARCHIVED</code></li>
+</ul>
+<h4 id="role-assignment">Role Assignment<a class="headerlink" href="#role-assignment" title="Permanent link">¶</a></h4>
+<p>A role assignment associates a user with one or more permissions or named roles.</p>
+<p>Initial roles:</p>
+<ul>
+<li>Administrator</li>
+<li>Operator</li>
+<li>Viewer</li>
+<li>API Client</li>
+</ul>
+<p>The security specification may implement roles as fixed role names, permission
+sets, or both.</p>
+<h4 id="api-credential">API Credential<a class="headerlink" href="#api-credential" title="Permanent link">¶</a></h4>
+<p>An API credential is owned by a user or service identity.</p>
+<p>It includes:</p>
+<ul>
+<li>Credential ID</li>
+<li>Owner identity</li>
+<li>Credential label</li>
+<li>Hashed secret or secret reference</li>
+<li>Allowed scopes</li>
+<li>Created timestamp</li>
+<li>Expiration timestamp</li>
+<li>Last-used timestamp</li>
+<li>Revocation timestamp</li>
+</ul>
+<p>The raw credential value is returned only at creation time.</p>
+<h4 id="user-invariants">User Invariants<a class="headerlink" href="#user-invariants" title="Permanent link">¶</a></h4>
+<ol>
+<li>At least one active administrator must remain after setup.</li>
+<li>A suspended or archived user cannot create new authenticated sessions.</li>
+<li>Credential scopes cannot exceed the owner's allowed permissions.</li>
+<li>Revoked credentials cannot be reactivated by changing an expiration date.</li>
+<li>User archival must preserve audit references.</li>
+</ol>
+<h2 id="media-source-domain">Media Source Domain<a class="headerlink" href="#media-source-domain" title="Permanent link">¶</a></h2>
+<h3 id="media-source-aggregate">Media Source Aggregate<a class="headerlink" href="#media-source-aggregate" title="Permanent link">¶</a></h3>
+<p>A Media Source represents one configured Plex, Jellyfin, or Emby installation.</p>
+<h4 id="media-source">Media Source<a class="headerlink" href="#media-source" title="Permanent link">¶</a></h4>
+<p>Required conceptual fields:</p>
+<ul>
+<li><code>mediaSourceId</code></li>
+<li>Source type</li>
+<li>Display name</li>
+<li>Base URL</li>
+<li>Secret reference</li>
+<li>Connection status</li>
+<li>Enabled state</li>
+<li>Capability snapshot</li>
+<li>Last successful synchronization timestamp</li>
+<li>Last connection error</li>
+<li>Created timestamp</li>
+<li>Updated timestamp</li>
+<li>Archived timestamp</li>
+</ul>
+<p>Suggested source types:</p>
+<ul>
+<li><code>PLEX</code></li>
+<li><code>JELLYFIN</code></li>
+<li><code>EMBY</code></li>
+</ul>
+<p>Local-file support may be added later through the same adapter boundary.</p>
+<h4 id="source-capability-snapshot">Source Capability Snapshot<a class="headerlink" href="#source-capability-snapshot" title="Permanent link">¶</a></h4>
+<p>Capabilities may include:</p>
+<ul>
+<li>Supported library kinds</li>
+<li>Direct-stream support</li>
+<li>Transcode support</li>
+<li>Image endpoints</li>
+<li>Item version identifiers</li>
+<li>Search features</li>
+<li>Pagination behavior</li>
+<li>Server version</li>
+<li>Adapter version</li>
+</ul>
+<p>Capabilities are observations, not permanent assumptions.</p>
+<h4 id="library-binding">Library Binding<a class="headerlink" href="#library-binding" title="Permanent link">¶</a></h4>
+<p>A library binding identifies which external libraries are eligible for import.</p>
+<p>It includes:</p>
+<ul>
+<li>External library identifier</li>
+<li>Library kind</li>
+<li>Include or exclude state</li>
+<li>Synchronization policy</li>
+<li>Optional import filters</li>
+</ul>
+<h4 id="media-source-states">Media Source States<a class="headerlink" href="#media-source-states" title="Permanent link">¶</a></h4>
+<p>Suggested states:</p>
+<ul>
+<li><code>UNVERIFIED</code></li>
+<li><code>AVAILABLE</code></li>
+<li><code>DEGRADED</code></li>
+<li><code>UNAVAILABLE</code></li>
+<li><code>AUTHENTICATION_FAILED</code></li>
+<li><code>DISABLED</code></li>
+<li><code>ARCHIVED</code></li>
+</ul>
+<h4 id="media-source-invariants">Media Source Invariants<a class="headerlink" href="#media-source-invariants" title="Permanent link">¶</a></h4>
+<ol>
+<li>A source has exactly one source type.</li>
+<li>External IDs are interpreted only in the context of their source instance.</li>
+<li>A disabled source is not synchronized or selected for new playout.</li>
+<li>Archiving a source does not delete historical source bindings.</li>
+<li>Connection testing must not write catalog changes.</li>
+<li>Synchronization must tolerate partial external responses.</li>
+<li>Secret material must not appear in logs, API payloads, exports, or pack
+   manifests.</li>
+</ol>
+<h2 id="media-catalog-domain">Media Catalog Domain<a class="headerlink" href="#media-catalog-domain" title="Permanent link">¶</a></h2>
+<h3 id="catalog-item-aggregate">Catalog Item Aggregate<a class="headerlink" href="#catalog-item-aggregate" title="Permanent link">¶</a></h3>
+<p>A Catalog Item is ChannelForge's normalized representation of programmable media.</p>
+<p>It is the primary aggregate root of the media catalog.</p>
+<h4 id="catalog-item">Catalog Item<a class="headerlink" href="#catalog-item" title="Permanent link">¶</a></h4>
+<p>Required conceptual fields:</p>
+<ul>
+<li><code>catalogItemId</code></li>
+<li>Media kind</li>
+<li>Canonical title</li>
+<li>Sort title</li>
+<li>Original title, when known</li>
+<li>Summary</li>
+<li>Release date or year</li>
+<li>Duration</li>
+<li>Content rating</li>
+<li>Genres</li>
+<li>Tags</li>
+<li>Series hierarchy references</li>
+<li>Normalized artwork references</li>
+<li>Availability state</li>
+<li>Created timestamp</li>
+<li>Updated timestamp</li>
+<li>Archived timestamp</li>
+</ul>
+<p>Suggested media kinds:</p>
+<ul>
+<li><code>MOVIE</code></li>
+<li><code>SERIES</code></li>
+<li><code>SEASON</code></li>
+<li><code>EPISODE</code></li>
+<li><code>SPECIAL</code></li>
+<li><code>MUSIC_VIDEO</code></li>
+<li><code>TRAILER</code></li>
+<li><code>BUMPER</code></li>
+<li><code>IDENT</code></li>
+<li><code>ADVERTISEMENT</code></li>
+<li><code>FILLER</code></li>
+<li><code>OTHER</code></li>
+</ul>
+<p>The exact supported kinds may be narrower in version 1.</p>
+<h4 id="catalog-hierarchy">Catalog Hierarchy<a class="headerlink" href="#catalog-hierarchy" title="Permanent link">¶</a></h4>
+<p>Series content uses ChannelForge-owned hierarchy references:</p>
+<ul>
+<li>Series owns or references seasons.</li>
+<li>Season references one series.</li>
+<li>Episode references one series and may reference one season.</li>
+<li>Specials may belong to a series without a conventional season.</li>
+<li>Movies do not require a parent hierarchy.</li>
+</ul>
+<p>Hierarchy is normalized independently of any one media-source structure.</p>
+<h4 id="source-binding">Source Binding<a class="headerlink" href="#source-binding" title="Permanent link">¶</a></h4>
+<p>A Source Binding connects a Catalog Item to one item on one Media Source.</p>
+<p>Required conceptual fields:</p>
+<ul>
+<li><code>sourceBindingId</code></li>
+<li><code>catalogItemId</code></li>
+<li><code>mediaSourceId</code></li>
+<li>External item identifier</li>
+<li>External item type</li>
+<li>External parent identifiers</li>
+<li>External version or update token</li>
+<li>Source path or key</li>
+<li>Availability state</li>
+<li>First-seen timestamp</li>
+<li>Last-seen timestamp</li>
+<li>Last-synchronized timestamp</li>
+<li>Missing-since timestamp</li>
+<li>Source metadata snapshot reference</li>
+</ul>
+<p>A Catalog Item may have more than one Source Binding.</p>
+<p>This supports:</p>
+<ul>
+<li>The same title on multiple media servers</li>
+<li>Multiple encodes</li>
+<li>Migration between sources</li>
+<li>Failover</li>
+<li>Source-specific availability tracking</li>
+</ul>
+<h4 id="playback-variant">Playback Variant<a class="headerlink" href="#playback-variant" title="Permanent link">¶</a></h4>
+<p>A Playback Variant represents one playable realization of a Catalog Item.</p>
+<p>Required conceptual fields:</p>
+<ul>
+<li><code>playbackVariantId</code></li>
+<li>Owning Source Binding</li>
+<li>Container</li>
+<li>Video codec</li>
+<li>Audio codec or codecs</li>
+<li>Subtitle characteristics</li>
+<li>Width</li>
+<li>Height</li>
+<li>Frame rate</li>
+<li>Bit rate</li>
+<li>Duration</li>
+<li>HDR characteristics</li>
+<li>Interlace state</li>
+<li>Audio channels</li>
+<li>Direct-play eligibility observations</li>
+<li>Updated timestamp</li>
+</ul>
+<p>A Playback Variant does not expose a permanent stream URL. Stream URLs are
+resolved at playout time.</p>
+<h4 id="metadata-value-and-provenance">Metadata Value and Provenance<a class="headerlink" href="#metadata-value-and-provenance" title="Permanent link">¶</a></h4>
+<p>Normalized metadata must preserve provenance.</p>
+<p>A metadata value conceptually contains:</p>
+<ul>
+<li>Field name</li>
+<li>Value</li>
+<li>Source type</li>
+<li>Source reference</li>
+<li>Confidence or precedence</li>
+<li>Observed timestamp</li>
+<li>User-override state</li>
+</ul>
+<p>Precedence should normally be:</p>
+<ol>
+<li>Explicit user override</li>
+<li>ChannelForge-owned normalized decision</li>
+<li>Preferred configured metadata provider</li>
+<li>Media-source metadata</li>
+<li>Derived metadata</li>
+<li>Fallback or unknown value</li>
+</ol>
+<p>Changing provider priority must not erase user overrides.</p>
+<h4 id="catalog-availability">Catalog Availability<a class="headerlink" href="#catalog-availability" title="Permanent link">¶</a></h4>
+<p>Suggested Catalog Item availability states:</p>
+<ul>
+<li><code>AVAILABLE</code></li>
+<li><code>PARTIALLY_AVAILABLE</code></li>
+<li><code>UNAVAILABLE</code></li>
+<li><code>ARCHIVED</code></li>
+</ul>
+<p>A Catalog Item is available when at least one eligible Source Binding can provide
+a usable Playback Variant under current policy.</p>
+<h4 id="catalog-item-invariants">Catalog Item Invariants<a class="headerlink" href="#catalog-item-invariants" title="Permanent link">¶</a></h4>
+<ol>
+<li>Every Catalog Item has a ChannelForge-owned identifier.</li>
+<li>A Source Binding belongs to exactly one Catalog Item and one Media Source.</li>
+<li>A source instance and external item ID pair cannot bind to multiple active
+   Catalog Items without an explicit conflict record.</li>
+<li>A Playback Variant belongs to exactly one Source Binding.</li>
+<li>Permanent source URLs are not treated as stable catalog identity.</li>
+<li>Synchronization does not erase user metadata overrides.</li>
+<li>Missing source items are marked before historical records are removed.</li>
+<li>Schedule history may continue to reference unavailable Catalog Items.</li>
+<li>A Catalog Item must not become playable solely because metadata exists.</li>
+<li>Media duration used for scheduling must have recorded provenance.</li>
+</ol>
+<h3 id="catalog-conflict">Catalog Conflict<a class="headerlink" href="#catalog-conflict" title="Permanent link">¶</a></h3>
+<p>A Catalog Conflict records ambiguity requiring resolution.</p>
+<p>Examples:</p>
+<ul>
+<li>One external item matches multiple Catalog Items.</li>
+<li>Two imported items appear to represent the same title.</li>
+<li>Duration differs materially between sources.</li>
+<li>Series hierarchy is inconsistent.</li>
+<li>A source reuses an external identifier for different content.</li>
+</ul>
+<p>A conflict includes:</p>
+<ul>
+<li>Conflict ID</li>
+<li>Conflict type</li>
+<li>Related entity IDs</li>
+<li>Evidence</li>
+<li>Detection timestamp</li>
+<li>Resolution state</li>
+<li>Resolution decision</li>
+<li>Resolving user</li>
+<li>Resolution timestamp</li>
+</ul>
+<p>Conflicts must not be silently resolved by destructive merging.</p>
+<h2 id="network-domain">Network Domain<a class="headerlink" href="#network-domain" title="Permanent link">¶</a></h2>
+<h3 id="network-aggregate">Network Aggregate<a class="headerlink" href="#network-aggregate" title="Permanent link">¶</a></h3>
+<p>A Network represents the editorial identity of a virtual television network.</p>
+<p>A Network is not itself a tuneable output endpoint. One or more Channels may
+broadcast programming under the Network.</p>
+<h4 id="network">Network<a class="headerlink" href="#network" title="Permanent link">¶</a></h4>
+<p>Required conceptual fields:</p>
+<ul>
+<li><code>networkId</code></li>
+<li>Name</li>
+<li>Slug</li>
+<li>Status</li>
+<li>Primary time zone</li>
+<li>Network profile revision reference</li>
+<li>Programming configuration revision reference</li>
+<li>Branding profile revision reference</li>
+<li>Default catalog policy reference</li>
+<li>Created timestamp</li>
+<li>Updated timestamp</li>
+<li>Archived timestamp</li>
+</ul>
+<p>Suggested network states:</p>
+<ul>
+<li><code>DRAFT</code></li>
+<li><code>ACTIVE</code></li>
+<li><code>PAUSED</code></li>
+<li><code>ARCHIVED</code></li>
+</ul>
+<h4 id="network-profile-revision">Network Profile Revision<a class="headerlink" href="#network-profile-revision" title="Permanent link">¶</a></h4>
+<p>The Network Profile describes the network's identity.</p>
+<p>It may include:</p>
+<ul>
+<li>Display name</li>
+<li>Short name</li>
+<li>Description</li>
+<li>Call sign or brand code</li>
+<li>Editorial mission</li>
+<li>Target audience</li>
+<li>Content boundaries</li>
+<li>Default language</li>
+<li>Default content-rating policy</li>
+<li>Default scheduling characteristics</li>
+<li>Default guide-description policy</li>
+</ul>
+<p>A Network Profile Revision is immutable after activation.</p>
+<h4 id="editorial-profile">Editorial Profile<a class="headerlink" href="#editorial-profile" title="Permanent link">¶</a></h4>
+<p>The Editorial Profile describes what belongs on the network.</p>
+<p>It may include:</p>
+<ul>
+<li>Preferred genres</li>
+<li>Excluded genres</li>
+<li>Preferred eras</li>
+<li>Excluded eras</li>
+<li>Allowed media kinds</li>
+<li>Desired novelty</li>
+<li>Desired familiarity</li>
+<li>Franchise behavior</li>
+<li>Series-completion behavior</li>
+<li>Movie-to-episode balance</li>
+<li>Seasonal behavior</li>
+<li>Content-rating limits</li>
+<li>Original-programming labels</li>
+<li>Network-specific tags</li>
+</ul>
+<p>Editorial Profile values guide programming. They do not directly start playout.</p>
+<h4 id="audience-profile">Audience Profile<a class="headerlink" href="#audience-profile" title="Permanent link">¶</a></h4>
+<p>The Audience Profile represents intended viewers rather than authenticated
+ChannelForge users.</p>
+<p>It may include:</p>
+<ul>
+<li>General audience description</li>
+<li>Age-band constraints</li>
+<li>Household suitability</li>
+<li>Language expectations</li>
+<li>Desired pacing</li>
+<li>Desired repeat tolerance</li>
+<li>Daypart-specific suitability</li>
+</ul>
+<p>Audience Profile data must not become behavioral tracking of actual viewers
+without a separate accepted privacy design.</p>
+<h4 id="network-relationships">Network Relationships<a class="headerlink" href="#network-relationships" title="Permanent link">¶</a></h4>
+<p>A Network:</p>
+<ul>
+<li>Has one active Network Profile Revision</li>
+<li>Has one active Programming Configuration Revision</li>
+<li>Has zero or one active Branding Profile Revision</li>
+<li>Owns one or more Channels when active</li>
+<li>Has many historical Schedule Plans through its Channels</li>
+<li>Has many Health Snapshots</li>
+<li>May originate from a Template Snapshot</li>
+<li>May reference shared presentation assets</li>
+</ul>
+<h4 id="network-invariants">Network Invariants<a class="headerlink" href="#network-invariants" title="Permanent link">¶</a></h4>
+<ol>
+<li>An active Network has at least one non-archived Channel.</li>
+<li>An active Network has a valid time zone.</li>
+<li>Network identity changes create or activate a new profile revision.</li>
+<li>Archiving a Network does not delete its Channels, schedules, or playout
+   history.</li>
+<li>A Network cannot directly contain source-specific media IDs in programming
+   rules.</li>
+<li>Recommendations cannot modify a Network without an explicit accepted command.</li>
+<li>A Template update cannot silently mutate an existing Network.</li>
+<li>Network slugs are unique within the active instance scope.</li>
+</ol>
+<h2 id="channel-domain">Channel Domain<a class="headerlink" href="#channel-domain" title="Permanent link">¶</a></h2>
+<h3 id="channel-aggregate">Channel Aggregate<a class="headerlink" href="#channel-aggregate" title="Permanent link">¶</a></h3>
+<p>A Channel represents a tuneable broadcast output.</p>
+<p>A Channel belongs to exactly one Network in version 1.</p>
+<h4 id="channel">Channel<a class="headerlink" href="#channel" title="Permanent link">¶</a></h4>
+<p>Required conceptual fields:</p>
+<ul>
+<li><code>channelId</code></li>
+<li><code>networkId</code></li>
+<li>Display name</li>
+<li>Short name</li>
+<li>Channel number</li>
+<li>Call sign</li>
+<li>Status</li>
+<li>Time zone override, when needed</li>
+<li>Active schedule publication reference</li>
+<li>Output configuration reference</li>
+<li>Branding override reference</li>
+<li>Created timestamp</li>
+<li>Updated timestamp</li>
+<li>Archived timestamp</li>
+</ul>
+<p>Suggested channel states:</p>
+<ul>
+<li><code>DRAFT</code></li>
+<li><code>ACTIVE</code></li>
+<li><code>PAUSED</code></li>
+<li><code>MAINTENANCE</code></li>
+<li><code>ARCHIVED</code></li>
+</ul>
+<h4 id="channel-number">Channel Number<a class="headerlink" href="#channel-number" title="Permanent link">¶</a></h4>
+<p>A Channel Number is a value object.</p>
+<p>It may contain:</p>
+<ul>
+<li>Major number</li>
+<li>Optional minor number</li>
+<li>Canonical display string</li>
+<li>Sort representation</li>
+</ul>
+<p>Examples:</p>
+<ul>
+<li><code>7</code></li>
+<li><code>7.1</code></li>
+<li><code>102</code></li>
+<li><code>500.25</code></li>
+</ul>
+<p>Version 1 may limit accepted formats according to client compatibility.</p>
+<h4 id="output-identity">Output Identity<a class="headerlink" href="#output-identity" title="Permanent link">¶</a></h4>
+<p>Output identity includes values used by M3U, XMLTV, and HDHomeRun-compatible
+adapters.</p>
+<p>It includes:</p>
+<ul>
+<li>Canonical ChannelForge channel ID</li>
+<li>Guide channel ID</li>
+<li>Tuner lineup identifier</li>
+<li>Display number</li>
+<li>Display name</li>
+<li>Optional logo reference</li>
+</ul>
+<p>Every output format must derive from the same Output Identity.</p>
+<h4 id="channel-output-configuration">Channel Output Configuration<a class="headerlink" href="#channel-output-configuration" title="Permanent link">¶</a></h4>
+<p>This configuration may include:</p>
+<ul>
+<li>Stream mode</li>
+<li>Transcode profile reference</li>
+<li>Fallback behavior</li>
+<li>Maximum concurrent sessions</li>
+<li>Guide publication state</li>
+<li>Tuner publication state</li>
+<li>Stream access policy</li>
+<li>Startup buffering policy</li>
+</ul>
+<p>Output configuration changes do not rewrite approved schedule entries.</p>
+<h4 id="channel-invariants">Channel Invariants<a class="headerlink" href="#channel-invariants" title="Permanent link">¶</a></h4>
+<ol>
+<li>A Channel belongs to exactly one Network.</li>
+<li>An active Channel belongs to an active or paused Network.</li>
+<li>Active channel numbers are unique within the configured output scope.</li>
+<li>Every published Channel has one canonical Output Identity.</li>
+<li>Output adapters must not invent independent channel identifiers.</li>
+<li>A Channel cannot reference an unapproved Schedule Plan as active output.</li>
+<li>Pausing playout does not delete the active approved schedule.</li>
+<li>Archiving a Channel preserves schedule and guide history.</li>
+<li>Network-level configuration applies unless an explicit channel override
+   exists.</li>
+<li>Channel overrides must not mutate the underlying Network revision.</li>
+</ol>
+<h2 id="branding-and-presentation-domain">Branding and Presentation Domain<a class="headerlink" href="#branding-and-presentation-domain" title="Permanent link">¶</a></h2>
+<h3 id="branding-profile-aggregate">Branding Profile Aggregate<a class="headerlink" href="#branding-profile-aggregate" title="Permanent link">¶</a></h3>
+<p>A Branding Profile defines persistent visual and on-air identity.</p>
+<p>It may be attached to a Network and overridden by a Channel.</p>
+<h4 id="branding-profile-revision">Branding Profile Revision<a class="headerlink" href="#branding-profile-revision" title="Permanent link">¶</a></h4>
+<p>Required conceptual fields:</p>
+<ul>
+<li><code>brandingProfileRevisionId</code></li>
+<li>Owner type</li>
+<li>Owner ID</li>
+<li>Version number</li>
+<li>Logo asset reference</li>
+<li>Wordmark asset reference</li>
+<li>Color palette</li>
+<li>Typography settings</li>
+<li>Guide-image policy</li>
+<li>On-screen graphic policy</li>
+<li>Watermark policy</li>
+<li>Ident policy</li>
+<li>Bumper policy</li>
+<li>Created timestamp</li>
+<li>Created by</li>
+<li>Activation timestamp</li>
+</ul>
+<p>Branding revisions are immutable after activation.</p>
+<h4 id="presentation-asset">Presentation Asset<a class="headerlink" href="#presentation-asset" title="Permanent link">¶</a></h4>
+<p>A Presentation Asset is a managed asset used during guide generation or playout.</p>
+<p>Suggested asset kinds:</p>
+<ul>
+<li>Network logo</li>
+<li>Channel logo</li>
+<li>Wordmark</li>
+<li>Watermark</li>
+<li>Ident</li>
+<li>Bumper</li>
+<li>Interstitial</li>
+<li>Promo</li>
+<li>Rating card</li>
+<li>Technical-difficulty card</li>
+<li>Slate</li>
+<li>Filler clip</li>
+<li>Guide image</li>
+</ul>
+<p>Required conceptual fields:</p>
+<ul>
+<li><code>presentationAssetId</code></li>
+<li>Asset kind</li>
+<li>Managed storage reference</li>
+<li>MIME type</li>
+<li>File size</li>
+<li>Media duration, where applicable</li>
+<li>Dimensions, where applicable</li>
+<li>Checksum</li>
+<li>Validation state</li>
+<li>Provenance</li>
+<li>Created timestamp</li>
+<li>Archived timestamp</li>
+</ul>
+<h4 id="asset-assignment">Asset Assignment<a class="headerlink" href="#asset-assignment" title="Permanent link">¶</a></h4>
+<p>An Asset Assignment determines where and when an asset is eligible.</p>
+<p>It may include:</p>
+<ul>
+<li>Owner Network or Channel</li>
+<li>Asset reference</li>
+<li>Placement role</li>
+<li>Weight</li>
+<li>Valid date range</li>
+<li>Eligible dayparts</li>
+<li>Cooldown</li>
+<li>Priority</li>
+<li>Enabled state</li>
+</ul>
+<h4 id="branding-invariants">Branding Invariants<a class="headerlink" href="#branding-invariants" title="Permanent link">¶</a></h4>
+<ol>
+<li>Branding configuration never embeds arbitrary host filesystem paths in public
+   API responses.</li>
+<li>Uploaded assets are validated before activation.</li>
+<li>An activated branding revision is immutable.</li>
+<li>Deleting an unused asset must not break historical schedule or playout
+   records.</li>
+<li>Channel overrides are explicit and do not mutate the Network profile.</li>
+<li>Presentation assets used in playout have verified media duration.</li>
+<li>Exported packs exclude secret or host-specific paths.</li>
+</ol>
+<h2 id="programming-configuration-domain">Programming Configuration Domain<a class="headerlink" href="#programming-configuration-domain" title="Permanent link">¶</a></h2>
+<h3 id="programming-configuration-revision-aggregate">Programming Configuration Revision Aggregate<a class="headerlink" href="#programming-configuration-revision-aggregate" title="Permanent link">¶</a></h3>
+<p>A Programming Configuration Revision is the complete editorial input used to
+generate schedules for a Network or Channel.</p>
+<p>It is immutable after activation or use in a Schedule Plan.</p>
+<p>Required conceptual fields:</p>
+<ul>
+<li><code>programmingConfigurationRevisionId</code></li>
+<li>Owner Network ID</li>
+<li>Optional Channel ID</li>
+<li>Version number</li>
+<li>Status</li>
+<li>Effective time range</li>
+<li>Dayparts</li>
+<li>Programming blocks</li>
+<li>Rule sets</li>
+<li>Global repetition policy</li>
+<li>Global timing policy</li>
+<li>Filler policy</li>
+<li>Randomization policy</li>
+<li>Created timestamp</li>
+<li>Created by</li>
+<li>Activated timestamp</li>
+<li>Superseded timestamp</li>
+</ul>
+<p>Suggested states:</p>
+<ul>
+<li><code>DRAFT</code></li>
+<li><code>ACTIVE</code></li>
+<li><code>SUPERSEDED</code></li>
+<li><code>ARCHIVED</code></li>
+</ul>
+<h3 id="daypart">Daypart<a class="headerlink" href="#daypart" title="Permanent link">¶</a></h3>
+<p>A Daypart is a named recurring local-time interval.</p>
+<p>Required conceptual fields:</p>
+<ul>
+<li><code>daypartId</code></li>
+<li>Name</li>
+<li>Days of week</li>
+<li>Start local time</li>
+<li>End local time</li>
+<li>Priority</li>
+<li>Time-zone interpretation</li>
+<li>Optional date-range restriction</li>
+</ul>
+<p>Examples:</p>
+<ul>
+<li>Weekday Morning</li>
+<li>Prime Time</li>
+<li>Late Night</li>
+<li>Saturday Cartoons</li>
+</ul>
+<p>Overlapping dayparts require deterministic precedence.</p>
+<h3 id="programming-block">Programming Block<a class="headerlink" href="#programming-block" title="Permanent link">¶</a></h3>
+<p>A Programming Block defines a scheduling segment and its intent.</p>
+<p>Required conceptual fields:</p>
+<ul>
+<li><code>programmingBlockId</code></li>
+<li>Name</li>
+<li>Eligible dayparts or explicit time windows</li>
+<li>Duration or boundary behavior</li>
+<li>Selector references</li>
+<li>Rule-set references</li>
+<li>Placement policy</li>
+<li>Repeat policy overrides</li>
+<li>Presentation policy</li>
+<li>Priority</li>
+<li>Enabled state</li>
+</ul>
+<p>A block may describe:</p>
+<ul>
+<li>A recurring genre block</li>
+<li>A movie night</li>
+<li>A series marathon</li>
+<li>A weekday strip</li>
+<li>A seasonal event</li>
+<li>A filler window</li>
+<li>A special presentation</li>
+</ul>
+<h3 id="rule-set">Rule Set<a class="headerlink" href="#rule-set" title="Permanent link">¶</a></h3>
+<p>A Rule Set groups rules for reuse and precedence.</p>
+<p>Required conceptual fields:</p>
+<ul>
+<li><code>ruleSetId</code></li>
+<li>Name</li>
+<li>Scope</li>
+<li>Priority</li>
+<li>Evaluation mode</li>
+<li>Rules</li>
+<li>Enabled state</li>
+</ul>
+<p>Suggested scopes:</p>
+<ul>
+<li>Network</li>
+<li>Channel</li>
+<li>Daypart</li>
+<li>Block</li>
+<li>Selector</li>
+<li>Schedule horizon</li>
+</ul>
+<h3 id="programming-rule">Programming Rule<a class="headerlink" href="#programming-rule" title="Permanent link">¶</a></h3>
+<p>A Programming Rule describes one constraint, preference, or placement behavior.</p>
+<p>Required conceptual fields:</p>
+<ul>
+<li><code>ruleId</code></li>
+<li>Rule type</li>
+<li>Classification</li>
+<li>Parameters</li>
+<li>Priority</li>
+<li>Weight, for soft constraints</li>
+<li>Enabled state</li>
+<li>Explanation template</li>
+</ul>
+<p>Rule classifications:</p>
+<ul>
+<li>Hard constraint</li>
+<li>Soft constraint</li>
+<li>Placement rule</li>
+<li>Spacing rule</li>
+<li>Sequence rule</li>
+<li>Quota rule</li>
+<li>Timing rule</li>
+<li>Presentation rule</li>
+</ul>
+<h3 id="catalog-selector">Catalog Selector<a class="headerlink" href="#catalog-selector" title="Permanent link">¶</a></h3>
+<p>A Catalog Selector identifies eligible Catalog Items through normalized
+criteria.</p>
+<p>Selector criteria may include:</p>
+<ul>
+<li>Media kind</li>
+<li>Genre</li>
+<li>Tag</li>
+<li>Series</li>
+<li>Franchise</li>
+<li>Release year</li>
+<li>Runtime range</li>
+<li>Content rating</li>
+<li>Source availability</li>
+<li>Language</li>
+<li>Custom collection</li>
+<li>User-maintained inclusion list</li>
+<li>User-maintained exclusion list</li>
+</ul>
+<p>Selectors reference ChannelForge Catalog Item fields, not raw source queries.</p>
+<h3 id="constraint">Constraint<a class="headerlink" href="#constraint" title="Permanent link">¶</a></h3>
+<p>A hard constraint determines eligibility.</p>
+<p>Examples:</p>
+<ul>
+<li>Content rating must not exceed a limit.</li>
+<li>Item must be currently playable.</li>
+<li>Episode must belong to an allowed series.</li>
+<li>Item must fit within an unbreakable time window.</li>
+<li>Item must not have aired inside a minimum exclusion interval.</li>
+</ul>
+<p>Failure to satisfy a hard constraint makes a candidate ineligible.</p>
+<h3 id="preference">Preference<a class="headerlink" href="#preference" title="Permanent link">¶</a></h3>
+<p>A soft constraint contributes to a score rather than absolute eligibility.</p>
+<p>Examples:</p>
+<ul>
+<li>Prefer items not aired recently.</li>
+<li>Prefer a target genre balance.</li>
+<li>Prefer chronological series progression.</li>
+<li>Prefer titles with unused promotional assets.</li>
+<li>Prefer a target runtime distribution.</li>
+</ul>
+<p>Weights are meaningful only inside a documented scoring model.</p>
+<h3 id="placement-policy">Placement Policy<a class="headerlink" href="#placement-policy" title="Permanent link">¶</a></h3>
+<p>A Placement Policy controls how selected items occupy time.</p>
+<p>Examples:</p>
+<ul>
+<li>Start exactly at a block boundary.</li>
+<li>Fill until the next boundary.</li>
+<li>Allow overrun.</li>
+<li>Trim filler only.</li>
+<li>Insert bumpers between programs.</li>
+<li>Preserve episode order.</li>
+<li>Alternate media kinds.</li>
+<li>Place one movie followed by shorts.</li>
+</ul>
+<h3 id="programming-configuration-invariants">Programming Configuration Invariants<a class="headerlink" href="#programming-configuration-invariants" title="Permanent link">¶</a></h3>
+<ol>
+<li>An activated revision is immutable.</li>
+<li>A Schedule Plan records the exact revision used.</li>
+<li>Rules reference normalized catalog concepts.</li>
+<li>Hard and soft constraints are distinguishable in stored configuration.</li>
+<li>Rule precedence is deterministic.</li>
+<li>Overlapping Dayparts have deterministic resolution.</li>
+<li>Invalid rules cannot be activated.</li>
+<li>A disabled rule has no effect but remains available for audit and editing.</li>
+<li>Editing a draft does not alter an active revision.</li>
+<li>Channel overrides are applied as a documented overlay rather than mutating
+    the Network revision.</li>
+<li>Randomized behavior records its seed and algorithm version.</li>
+<li>A rule must be able to produce a human-readable explanation.</li>
+</ol>
+<h2 id="schedule-planning-domain">Schedule Planning Domain<a class="headerlink" href="#schedule-planning-domain" title="Permanent link">¶</a></h2>
+<h3 id="schedule-plan-aggregate">Schedule Plan Aggregate<a class="headerlink" href="#schedule-plan-aggregate" title="Permanent link">¶</a></h3>
+<p>A Schedule Plan is an immutable generated result for one Channel and planning
+horizon.</p>
+<p>Required conceptual fields:</p>
+<ul>
+<li><code>schedulePlanId</code></li>
+<li><code>networkId</code></li>
+<li><code>channelId</code></li>
+<li>Planning start instant</li>
+<li>Planning end instant</li>
+<li>Channel time zone</li>
+<li>Status</li>
+<li>Programming configuration revision ID</li>
+<li>Network profile revision ID</li>
+<li>Branding profile revision ID, when relevant</li>
+<li>Catalog snapshot reference or eligibility fingerprint</li>
+<li>Generator version</li>
+<li>Random seed</li>
+<li>Generation request ID</li>
+<li>Created timestamp</li>
+<li>Created by or triggering job</li>
+<li>Validation result</li>
+<li>Failure record, when applicable</li>
+</ul>
+<p>Suggested plan states:</p>
+<ul>
+<li><code>GENERATING</code></li>
+<li><code>GENERATED</code></li>
+<li><code>VALIDATED</code></li>
+<li><code>REJECTED</code></li>
+<li><code>APPROVED</code></li>
+<li><code>SUPERSEDED</code></li>
+<li><code>FAILED</code></li>
+</ul>
+<p>A failed generation may use a separate Generation Attempt record rather than a
+persisted failed Schedule Plan. The implementation must preserve equivalent
+diagnostic evidence.</p>
+<h3 id="schedule-entry">Schedule Entry<a class="headerlink" href="#schedule-entry" title="Permanent link">¶</a></h3>
+<p>A Schedule Entry represents one planned interval.</p>
+<p>Required conceptual fields:</p>
+<ul>
+<li><code>scheduleEntryId</code></li>
+<li><code>schedulePlanId</code></li>
+<li>Sequence number</li>
+<li>Start instant</li>
+<li>End instant</li>
+<li>Duration</li>
+<li>Entry kind</li>
+<li>Catalog Item ID, where applicable</li>
+<li>Preferred Playback Variant or Source Binding hint, when policy permits</li>
+<li>Programming Block ID</li>
+<li>Rule evidence</li>
+<li>Presentation instructions</li>
+<li>Continuity metadata</li>
+<li>Guide metadata snapshot</li>
+<li>Fallback classification</li>
+</ul>
+<p>Suggested entry kinds:</p>
+<ul>
+<li><code>PROGRAM</code></li>
+<li><code>BUMPER</code></li>
+<li><code>IDENT</code></li>
+<li><code>PROMO</code></li>
+<li><code>ADVERTISEMENT</code></li>
+<li><code>FILLER</code></li>
+<li><code>SLATE</code></li>
+<li><code>OFF_AIR</code></li>
+</ul>
+<p>A Schedule Entry references a Catalog Item when media-backed. It does not own the
+Catalog Item.</p>
+<h3 id="rule-evidence">Rule Evidence<a class="headerlink" href="#rule-evidence" title="Permanent link">¶</a></h3>
+<p>Rule Evidence explains why an entry was placed.</p>
+<p>It may include:</p>
+<ul>
+<li>Candidate score</li>
+<li>Satisfied hard constraints</li>
+<li>Applied preferences</li>
+<li>Placement rule</li>
+<li>Relevant airing-history window</li>
+<li>Selector membership</li>
+<li>Tie-breaking information</li>
+<li>Random-seed contribution</li>
+<li>Rejected alternatives summary</li>
+</ul>
+<p>Full candidate matrices may be retained only for diagnostics because they may be
+large.</p>
+<h3 id="catalog-eligibility-snapshot">Catalog Eligibility Snapshot<a class="headerlink" href="#catalog-eligibility-snapshot" title="Permanent link">¶</a></h3>
+<p>Reproducibility requires a record of the catalog state considered during
+generation.</p>
+<p>Version 1 may implement this as one of:</p>
+<ul>
+<li>Immutable list of eligible Catalog Item IDs and relevant versions</li>
+<li>Content-addressed snapshot</li>
+<li>Query fingerprint plus item revision map</li>
+<li>Generation input archive with bounded retention</li>
+</ul>
+<p>The chosen method must allow ChannelForge to determine whether a later catalog
+change makes a plan stale.</p>
+<h3 id="schedule-validation">Schedule Validation<a class="headerlink" href="#schedule-validation" title="Permanent link">¶</a></h3>
+<p>Validation checks may include:</p>
+<ul>
+<li>Complete horizon coverage</li>
+<li>No unintended gaps</li>
+<li>No unintended overlaps</li>
+<li>Positive entry durations</li>
+<li>Valid Catalog Item references</li>
+<li>Required media availability</li>
+<li>Rule compliance</li>
+<li>Daypart compliance</li>
+<li>Guide-data completeness</li>
+<li>Output compatibility</li>
+<li>Boundary behavior</li>
+<li>Presentation-asset availability</li>
+</ul>
+<p>Validation does not imply approval.</p>
+<h3 id="schedule-approval">Schedule Approval<a class="headerlink" href="#schedule-approval" title="Permanent link">¶</a></h3>
+<p>Approval is an explicit application command.</p>
+<p>Approval records:</p>
+<ul>
+<li>Plan ID</li>
+<li>Approving user or policy</li>
+<li>Approval timestamp</li>
+<li>Approval mode</li>
+<li>Validation result</li>
+<li>Optional note</li>
+<li>Replaced publication reference</li>
+</ul>
+<p>Automatic approval is permitted only when configured and must still produce an
+approval record.</p>
+<h3 id="schedule-plan-invariants">Schedule Plan Invariants<a class="headerlink" href="#schedule-plan-invariants" title="Permanent link">¶</a></h3>
+<ol>
+<li>A Schedule Plan belongs to exactly one Channel.</li>
+<li>The plan has a bounded, non-empty horizon.</li>
+<li>Schedule Entry times are expressed as UTC instants.</li>
+<li>Entries are ordered deterministically.</li>
+<li>Entries do not overlap unless a documented overlay model explicitly permits
+   it.</li>
+<li>Required coverage gaps are represented explicitly.</li>
+<li>Approved plans are immutable.</li>
+<li>Approval requires successful validation.</li>
+<li>A failed generation does not replace the active approved plan.</li>
+<li>The plan records generator version and random seed.</li>
+<li>The plan records the programming revision used.</li>
+<li>Catalog changes do not mutate existing entries.</li>
+<li>Guide text used by an approved plan is reproducible.</li>
+<li>Playout recovery does not rewrite Schedule Entries.</li>
+<li>Superseding a plan preserves its history.</li>
+</ol>
+<h2 id="schedule-publication-domain">Schedule Publication Domain<a class="headerlink" href="#schedule-publication-domain" title="Permanent link">¶</a></h2>
+<h3 id="schedule-publication-aggregate">Schedule Publication Aggregate<a class="headerlink" href="#schedule-publication-aggregate" title="Permanent link">¶</a></h3>
+<p>Schedule Publication controls which approved plan downstream systems consume.</p>
+<p>It separates immutable planning from mutable operational selection.</p>
+<h4 id="schedule-publication">Schedule Publication<a class="headerlink" href="#schedule-publication" title="Permanent link">¶</a></h4>
+<p>Required conceptual fields:</p>
+<ul>
+<li><code>schedulePublicationId</code></li>
+<li><code>channelId</code></li>
+<li>Approved Schedule Plan ID</li>
+<li>Publication state</li>
+<li>Effective start instant</li>
+<li>Effective end instant</li>
+<li>Published timestamp</li>
+<li>Published by</li>
+<li>Guide artifact reference</li>
+<li>Playlist artifact reference</li>
+<li>Publication revision</li>
+<li>Superseded publication ID</li>
+<li>Last successful regeneration timestamp</li>
+<li>Last publication error</li>
+</ul>
+<p>Suggested states:</p>
+<ul>
+<li><code>PENDING</code></li>
+<li><code>ACTIVE</code></li>
+<li><code>SUPERSEDED</code></li>
+<li><code>WITHDRAWN</code></li>
+<li><code>FAILED</code></li>
+</ul>
+<h4 id="published-artifact">Published Artifact<a class="headerlink" href="#published-artifact" title="Permanent link">¶</a></h4>
+<p>A Published Artifact represents a generated consumable file or response
+snapshot.</p>
+<p>Suggested kinds:</p>
+<ul>
+<li>XMLTV</li>
+<li>M3U</li>
+<li>HDHomeRun lineup</li>
+<li>Guide JSON</li>
+<li>Static preview</li>
+</ul>
+<p>Required conceptual fields:</p>
+<ul>
+<li>Artifact ID</li>
+<li>Artifact kind</li>
+<li>Publication ID</li>
+<li>Content checksum</li>
+<li>Generated timestamp</li>
+<li>Validity interval</li>
+<li>Managed storage reference, when materialized</li>
+<li>Generation version</li>
+</ul>
+<h4 id="schedule-publication-invariants">Schedule Publication Invariants<a class="headerlink" href="#schedule-publication-invariants" title="Permanent link">¶</a></h4>
+<ol>
+<li>Only an approved Schedule Plan can be published.</li>
+<li>A Channel has at most one active publication for an instant.</li>
+<li>Publication changes do not mutate the referenced plan.</li>
+<li>A failed artifact generation does not delete the last valid artifact.</li>
+<li>All output artifacts use the Channel's canonical Output Identity.</li>
+<li>Publication history remains auditable.</li>
+<li>Withdrawing a publication requires explicit fallback behavior.</li>
+</ol>
+<h2 id="playout-runtime-domain">Playout Runtime Domain<a class="headerlink" href="#playout-runtime-domain" title="Permanent link">¶</a></h2>
+<h3 id="playout-session-aggregate">Playout Session Aggregate<a class="headerlink" href="#playout-session-aggregate" title="Permanent link">¶</a></h3>
+<p>A Playout Session represents active delivery of one Channel stream.</p>
+<p>It is operational state, not editorial schedule state.</p>
+<p>Required conceptual fields:</p>
+<ul>
+<li><code>playoutSessionId</code></li>
+<li><code>channelId</code></li>
+<li>Active publication ID</li>
+<li>Requested output profile</li>
+<li>Session state</li>
+<li>Start timestamp</li>
+<li>Last activity timestamp</li>
+<li>Viewer or client-session count</li>
+<li>Active Schedule Entry ID</li>
+<li>Active Playback Variant ID</li>
+<li>FFmpeg process reference</li>
+<li>Recovery state</li>
+<li>End timestamp</li>
+<li>End reason</li>
+</ul>
+<p>Suggested states:</p>
+<ul>
+<li><code>STARTING</code></li>
+<li><code>RUNNING</code></li>
+<li><code>RECOVERING</code></li>
+<li><code>STOPPING</code></li>
+<li><code>STOPPED</code></li>
+<li><code>FAILED</code></li>
+</ul>
+<h3 id="playout-decision">Playout Decision<a class="headerlink" href="#playout-decision" title="Permanent link">¶</a></h3>
+<p>A Playout Decision records how a Schedule Entry was resolved at runtime.</p>
+<p>It includes:</p>
+<ul>
+<li>Schedule Entry ID</li>
+<li>Catalog Item ID</li>
+<li>Selected Source Binding</li>
+<li>Selected Playback Variant</li>
+<li>Resolution timestamp</li>
+<li>Direct play, remux, or transcode decision</li>
+<li>Applied output profile</li>
+<li>Fallback reason, when applicable</li>
+</ul>
+<p>A Playout Decision may differ from a preferred source hint stored on the
+Schedule Entry because current availability can change.</p>
+<h3 id="airing-record">Airing Record<a class="headerlink" href="#airing-record" title="Permanent link">¶</a></h3>
+<p>An Airing Record captures what actually occurred.</p>
+<p>Required conceptual fields:</p>
+<ul>
+<li><code>airingRecordId</code></li>
+<li>Channel ID</li>
+<li>Schedule Publication ID</li>
+<li>Schedule Entry ID</li>
+<li>Catalog Item ID, when applicable</li>
+<li>Planned start and end</li>
+<li>Actual start and end</li>
+<li>Outcome</li>
+<li>Selected Playback Variant</li>
+<li>Recovery actions</li>
+<li>Interruption duration</li>
+<li>Created timestamp</li>
+</ul>
+<p>Suggested outcomes:</p>
+<ul>
+<li><code>COMPLETED</code></li>
+<li><code>PARTIAL</code></li>
+<li><code>SKIPPED</code></li>
+<li><code>FAILED</code></li>
+<li><code>FALLBACK_PLAYED</code></li>
+<li><code>OFF_AIR</code></li>
+</ul>
+<p>Airing Records provide history for repetition rules and health calculations.</p>
+<h3 id="recovery-event">Recovery Event<a class="headerlink" href="#recovery-event" title="Permanent link">¶</a></h3>
+<p>A Recovery Event records one operational response to failure.</p>
+<p>Examples:</p>
+<ul>
+<li>Retry source</li>
+<li>Select alternate variant</li>
+<li>Select alternate source</li>
+<li>Insert filler</li>
+<li>Display error slate</li>
+<li>Advance to next entry</li>
+<li>Restart FFmpeg</li>
+<li>Terminate abandoned session</li>
+</ul>
+<p>It includes:</p>
+<ul>
+<li>Event ID</li>
+<li>Playout Session ID</li>
+<li>Schedule Entry ID</li>
+<li>Failure classification</li>
+<li>Action</li>
+<li>Result</li>
+<li>Timestamp</li>
+<li>Diagnostic reference</li>
+</ul>
+<h3 id="playout-invariants">Playout Invariants<a class="headerlink" href="#playout-invariants" title="Permanent link">¶</a></h3>
+<ol>
+<li>Playout reads an active Schedule Publication.</li>
+<li>Playout does not change Programming Configuration.</li>
+<li>Playout does not mutate approved Schedule Entries.</li>
+<li>Runtime source selection is recorded.</li>
+<li>FFmpeg process identity is not a domain identity.</li>
+<li>Failed media resolution invokes configured recovery behavior.</li>
+<li>Recovery actions are separate from editorial schedule history.</li>
+<li>Airing Records distinguish planned time from actual time.</li>
+<li>A stopped session cannot retain an active FFmpeg process.</li>
+<li>Client disconnects do not necessarily stop a shared Channel stream.</li>
+<li>Secret-bearing source URLs are not persisted in ordinary diagnostics.</li>
+<li>Restart recovery must prevent duplicate unmanaged FFmpeg processes.</li>
+</ol>
+<h2 id="template-domain">Template Domain<a class="headerlink" href="#template-domain" title="Permanent link">¶</a></h2>
+<h3 id="template-aggregate">Template Aggregate<a class="headerlink" href="#template-aggregate" title="Permanent link">¶</a></h3>
+<p>A Template is a reusable, versioned definition for creating or updating
+ChannelForge configuration.</p>
+<p>Suggested template kinds:</p>
+<ul>
+<li>Network template</li>
+<li>Programming template</li>
+<li>Branding template</li>
+<li>Daypart template</li>
+<li>Rule-set template</li>
+<li>Channel template</li>
+</ul>
+<h4 id="template">Template<a class="headerlink" href="#template" title="Permanent link">¶</a></h4>
+<p>Required conceptual fields:</p>
+<ul>
+<li><code>templateId</code></li>
+<li>Name</li>
+<li>Publisher identity</li>
+<li>Description</li>
+<li>Template kind</li>
+<li>Compatibility range</li>
+<li>Current version reference</li>
+<li>Provenance</li>
+<li>Trust state</li>
+<li>Created timestamp</li>
+<li>Archived timestamp</li>
+</ul>
+<h4 id="template-version">Template Version<a class="headerlink" href="#template-version" title="Permanent link">¶</a></h4>
+<p>A Template Version is immutable.</p>
+<p>It includes:</p>
+<ul>
+<li>Template version ID</li>
+<li>Semantic version</li>
+<li>Schema version</li>
+<li>Configuration payload</li>
+<li>Required capabilities</li>
+<li>Optional asset references</li>
+<li>Changelog</li>
+<li>Content checksum</li>
+<li>Created timestamp</li>
+</ul>
+<h4 id="applied-template-snapshot">Applied Template Snapshot<a class="headerlink" href="#applied-template-snapshot" title="Permanent link">¶</a></h4>
+<p>When a Template is applied, ChannelForge creates an Applied Template Snapshot.</p>
+<p>It records:</p>
+<ul>
+<li>Template ID and version</li>
+<li>Imported content checksum</li>
+<li>Application timestamp</li>
+<li>Applying user</li>
+<li>Target entity</li>
+<li>Resolved parameters</li>
+<li>Created entity and revision IDs</li>
+<li>User modifications made during application</li>
+</ul>
+<p>Existing Networks operate from ChannelForge-owned revisions, not live links to
+mutable Template definitions.</p>
+<h3 id="template-invariants">Template Invariants<a class="headerlink" href="#template-invariants" title="Permanent link">¶</a></h3>
+<ol>
+<li>Template versions are immutable.</li>
+<li>Applying a Template creates or updates ChannelForge-owned configuration
+   through explicit commands.</li>
+<li>Updating a Template does not silently mutate existing Networks.</li>
+<li>Template application is validated before activation.</li>
+<li>Template content cannot include secrets.</li>
+<li>Template references to local assets are resolved into managed storage.</li>
+<li>Applied snapshots preserve provenance.</li>
+<li>Template compatibility is checked before application.</li>
+</ol>
+<h2 id="programming-pack-domain">Programming Pack Domain<a class="headerlink" href="#programming-pack-domain" title="Permanent link">¶</a></h2>
+<h3 id="programming-pack-aggregate">Programming Pack Aggregate<a class="headerlink" href="#programming-pack-aggregate" title="Permanent link">¶</a></h3>
+<p>A Programming Pack is a portable bundle containing one or more templates,
+metadata, and approved assets.</p>
+<h4 id="pack-manifest">Pack Manifest<a class="headerlink" href="#pack-manifest" title="Permanent link">¶</a></h4>
+<p>Required conceptual fields:</p>
+<ul>
+<li>Pack identifier</li>
+<li>Pack name</li>
+<li>Publisher</li>
+<li>Pack version</li>
+<li>Manifest schema version</li>
+<li>Minimum and maximum ChannelForge compatibility</li>
+<li>Included template descriptors</li>
+<li>Included asset descriptors</li>
+<li>Checksums</li>
+<li>Requested capabilities</li>
+<li>License information</li>
+<li>Attribution information</li>
+<li>Optional signature information</li>
+</ul>
+<h4 id="pack-import-session">Pack Import Session<a class="headerlink" href="#pack-import-session" title="Permanent link">¶</a></h4>
+<p>A Pack Import Session tracks staged validation.</p>
+<p>Suggested states:</p>
+<ul>
+<li><code>UPLOADED</code></li>
+<li><code>INSPECTING</code></li>
+<li><code>INVALID</code></li>
+<li><code>READY_FOR_REVIEW</code></li>
+<li><code>APPROVED</code></li>
+<li><code>IMPORTED</code></li>
+<li><code>REJECTED</code></li>
+<li><code>FAILED</code></li>
+</ul>
+<p>It includes:</p>
+<ul>
+<li>Import session ID</li>
+<li>Uploaded artifact reference</li>
+<li>Manifest snapshot</li>
+<li>Validation findings</li>
+<li>Proposed changes</li>
+<li>User decisions</li>
+<li>Import result</li>
+<li>Cleanup state</li>
+</ul>
+<h4 id="programming-pack-invariants">Programming Pack Invariants<a class="headerlink" href="#programming-pack-invariants" title="Permanent link">¶</a></h4>
+<ol>
+<li>Packs are untrusted input.</li>
+<li>Archive paths are normalized and constrained.</li>
+<li>Checksums are validated before activation.</li>
+<li>A Pack cannot obtain process execution merely through import.</li>
+<li>A Pack cannot receive arbitrary database, network, filesystem, or secret
+   access.</li>
+<li>Import is staged before application.</li>
+<li>Existing configuration changes require explicit confirmation.</li>
+<li>Imported assets move into ChannelForge-managed storage.</li>
+<li>License and attribution data are preserved.</li>
+<li>Import failure leaves active Networks unchanged.</li>
+</ol>
+<h2 id="operations-domain">Operations Domain<a class="headerlink" href="#operations-domain" title="Permanent link">¶</a></h2>
+<h3 id="background-job-aggregate">Background Job Aggregate<a class="headerlink" href="#background-job-aggregate" title="Permanent link">¶</a></h3>
+<p>A Background Job represents asynchronous work requested by a user, schedule, or
+system event.</p>
+<p>Required conceptual fields:</p>
+<ul>
+<li><code>backgroundJobId</code></li>
+<li>Job type</li>
+<li>Requested by</li>
+<li>Related entity references</li>
+<li>Priority</li>
+<li>State</li>
+<li>Idempotency key, where applicable</li>
+<li>Created timestamp</li>
+<li>Scheduled timestamp</li>
+<li>Started timestamp</li>
+<li>Completed timestamp</li>
+<li>Progress</li>
+<li>Result summary</li>
+<li>Error classification</li>
+<li>Cancellation state</li>
+</ul>
+<p>Suggested states:</p>
+<ul>
+<li><code>QUEUED</code></li>
+<li><code>RUNNING</code></li>
+<li><code>SUCCEEDED</code></li>
+<li><code>FAILED</code></li>
+<li><code>CANCEL_REQUESTED</code></li>
+<li><code>CANCELLED</code></li>
+<li><code>ABANDONED</code></li>
+</ul>
+<p>Suggested job types:</p>
+<ul>
+<li>Media-source synchronization</li>
+<li>Metadata enrichment</li>
+<li>Schedule generation</li>
+<li>Schedule validation</li>
+<li>Guide publication</li>
+<li>Playlist publication</li>
+<li>Health calculation</li>
+<li>Backup</li>
+<li>Cleanup</li>
+<li>Pack import</li>
+<li>Migration</li>
+</ul>
+<h3 id="job-attempt">Job Attempt<a class="headerlink" href="#job-attempt" title="Permanent link">¶</a></h3>
+<p>A Job Attempt records one execution of a Background Job.</p>
+<p>It includes:</p>
+<ul>
+<li>Attempt ID</li>
+<li>Attempt number</li>
+<li>Worker identity</li>
+<li>Start timestamp</li>
+<li>Heartbeat timestamp</li>
+<li>End timestamp</li>
+<li>Outcome</li>
+<li>Error details</li>
+<li>Retry decision</li>
+<li>Diagnostic reference</li>
+</ul>
+<h3 id="job-invariants">Job Invariants<a class="headerlink" href="#job-invariants" title="Permanent link">¶</a></h3>
+<ol>
+<li>A Job has one current state.</li>
+<li>State transitions are monotonic except for documented retry behavior.</li>
+<li>A process restart can identify abandoned running attempts.</li>
+<li>Retrying creates a new Job Attempt.</li>
+<li>Idempotent jobs do not duplicate committed effects.</li>
+<li>Cancellation does not imply rollback of already committed work.</li>
+<li>Errors are classified without exposing secrets.</li>
+<li>Job progress is advisory and cannot exceed completed work.</li>
+<li>Successful completion records the resulting entity or artifact references.</li>
+<li>Schedule-generation failure cannot change the active publication.</li>
+</ol>
+<h2 id="health-and-recommendation-domain">Health and Recommendation Domain<a class="headerlink" href="#health-and-recommendation-domain" title="Permanent link">¶</a></h2>
+<h3 id="health-snapshot-aggregate">Health Snapshot Aggregate<a class="headerlink" href="#health-snapshot-aggregate" title="Permanent link">¶</a></h3>
+<p>A Health Snapshot is an immutable evaluation of one Network or Channel at a
+point in time.</p>
+<p>Required conceptual fields:</p>
+<ul>
+<li><code>healthSnapshotId</code></li>
+<li>Target type</li>
+<li>Target ID</li>
+<li>Evaluation timestamp</li>
+<li>Evaluation horizon</li>
+<li>Input revision references</li>
+<li>Metric values</li>
+<li>Findings</li>
+<li>Overall classification</li>
+<li>Evaluator version</li>
+</ul>
+<p>Potential metrics include:</p>
+<ul>
+<li>Schedule coverage</li>
+<li>Catalog depth</li>
+<li>Unique program count</li>
+<li>Repeat frequency</li>
+<li>Genre balance</li>
+<li>Daypart compliance</li>
+<li>Unavailable media exposure</li>
+<li>Filler percentage</li>
+<li>Guide completeness</li>
+<li>Playout failure rate</li>
+<li>Source concentration</li>
+<li>Runtime variance</li>
+<li>Stale schedule risk</li>
+</ul>
+<h3 id="health-finding">Health Finding<a class="headerlink" href="#health-finding" title="Permanent link">¶</a></h3>
+<p>A Health Finding contains:</p>
+<ul>
+<li>Finding ID</li>
+<li>Metric or rule</li>
+<li>Severity</li>
+<li>Summary</li>
+<li>Evidence</li>
+<li>Affected time range</li>
+<li>Related entity IDs</li>
+<li>Remediation category</li>
+</ul>
+<p>Suggested severities:</p>
+<ul>
+<li><code>INFO</code></li>
+<li><code>NOTICE</code></li>
+<li><code>WARNING</code></li>
+<li><code>CRITICAL</code></li>
+</ul>
+<h3 id="recommendation">Recommendation<a class="headerlink" href="#recommendation" title="Permanent link">¶</a></h3>
+<p>A Recommendation is an explainable proposed action derived from evidence.</p>
+<p>Required conceptual fields:</p>
+<ul>
+<li><code>recommendationId</code></li>
+<li>Health Snapshot ID</li>
+<li>Target entity</li>
+<li>Recommendation type</li>
+<li>Summary</li>
+<li>Explanation</li>
+<li>Evidence references</li>
+<li>Proposed changes</li>
+<li>Confidence</li>
+<li>State</li>
+<li>Created timestamp</li>
+<li>Reviewed timestamp</li>
+<li>Reviewing user</li>
+<li>Decision note</li>
+</ul>
+<p>Suggested states:</p>
+<ul>
+<li><code>OPEN</code></li>
+<li><code>ACCEPTED</code></li>
+<li><code>DISMISSED</code></li>
+<li><code>APPLIED</code></li>
+<li><code>EXPIRED</code></li>
+<li><code>SUPERSEDED</code></li>
+</ul>
+<p>Accepting a Recommendation authorizes an application command. It does not mean
+the Recommendation directly edits data.</p>
+<h3 id="health-invariants">Health Invariants<a class="headerlink" href="#health-invariants" title="Permanent link">¶</a></h3>
+<ol>
+<li>Health Snapshots are immutable.</li>
+<li>Metrics record their evaluator version.</li>
+<li>Recommendations cite evidence.</li>
+<li>Recommendations do not silently modify active configuration.</li>
+<li>Applying a Recommendation creates ordinary revisions and audit records.</li>
+<li>Dismissal does not erase the original finding.</li>
+<li>Stale recommendations are marked when referenced revisions change.</li>
+<li>Health calculations distinguish planned schedules from actual Airing Records.</li>
+<li>Missing metrics are not represented as zero unless zero is semantically valid.</li>
+<li>Severity is derived through documented thresholds.</li>
+</ol>
+<h2 id="compatibility-and-migration-domain">Compatibility and Migration Domain<a class="headerlink" href="#compatibility-and-migration-domain" title="Permanent link">¶</a></h2>
+<h3 id="migration-run-aggregate">Migration Run Aggregate<a class="headerlink" href="#migration-run-aggregate" title="Permanent link">¶</a></h3>
+<p>A Migration Run tracks conversion from inherited Tunarr state or an older
+ChannelForge schema.</p>
+<p>Required conceptual fields:</p>
+<ul>
+<li><code>migrationRunId</code></li>
+<li>Migration type</li>
+<li>Source version</li>
+<li>Target version</li>
+<li>State</li>
+<li>Started timestamp</li>
+<li>Completed timestamp</li>
+<li>Input backup reference</li>
+<li>Converted entity counts</li>
+<li>Warning count</li>
+<li>Error count</li>
+<li>Verification result</li>
+<li>Rollback information</li>
+</ul>
+<p>Suggested states:</p>
+<ul>
+<li><code>PLANNED</code></li>
+<li><code>BACKING_UP</code></li>
+<li><code>CONVERTING</code></li>
+<li><code>VERIFYING</code></li>
+<li><code>SUCCEEDED</code></li>
+<li><code>SUCCEEDED_WITH_WARNINGS</code></li>
+<li><code>FAILED</code></li>
+<li><code>ROLLED_BACK</code></li>
+</ul>
+<h3 id="legacy-identifier-mapping">Legacy Identifier Mapping<a class="headerlink" href="#legacy-identifier-mapping" title="Permanent link">¶</a></h3>
+<p>A Legacy Identifier Mapping associates an inherited identifier with a
+ChannelForge entity.</p>
+<p>It includes:</p>
+<ul>
+<li>Mapping ID</li>
+<li>Legacy system</li>
+<li>Legacy entity type</li>
+<li>Legacy identifier</li>
+<li>ChannelForge entity type</li>
+<li>ChannelForge identifier</li>
+<li>Migration Run ID</li>
+<li>Created timestamp</li>
+</ul>
+<p>Mappings are migration aids and must not become canonical application identity.</p>
+<h3 id="compatibility-record">Compatibility Record<a class="headerlink" href="#compatibility-record" title="Permanent link">¶</a></h3>
+<p>A Compatibility Record documents a retained inherited behavior.</p>
+<p>It may include:</p>
+<ul>
+<li>Compatibility record ID</li>
+<li>Feature or route</li>
+<li>Inherited behavior</li>
+<li>ChannelForge target behavior</li>
+<li>Current status</li>
+<li>Removal condition</li>
+<li>Related ADR</li>
+<li>Introduced version</li>
+<li>Removed version</li>
+</ul>
+<h3 id="migration-invariants">Migration Invariants<a class="headerlink" href="#migration-invariants" title="Permanent link">¶</a></h3>
+<ol>
+<li>Migration begins with a recoverable backup.</li>
+<li>Legacy identifiers do not replace ChannelForge identifiers.</li>
+<li>A failed migration does not leave an apparently successful schema version.</li>
+<li>Migration warnings remain inspectable.</li>
+<li>Verification occurs before old state is discarded.</li>
+<li>Re-running an idempotent migration does not duplicate entities.</li>
+<li>Compatibility behavior is explicitly tracked.</li>
+<li>Historical schedule relationships are preserved where source data permits.</li>
+<li>Secrets are migrated through the secret-storage boundary.</li>
+<li>Migration logs redact credential values.</li>
+</ol>
+<h2 id="revision-model">Revision Model<a class="headerlink" href="#revision-model" title="Permanent link">¶</a></h2>
+<h3 id="revision-ownership">Revision Ownership<a class="headerlink" href="#revision-ownership" title="Permanent link">¶</a></h3>
+<p>Revisioned configuration includes:</p>
+<ul>
+<li>Network Profile</li>
+<li>Programming Configuration</li>
+<li>Branding Profile</li>
+<li>Channel output settings when changes affect reproducibility</li>
+<li>Instance defaults when copied into generated results</li>
+</ul>
+<p>Each revision has:</p>
+<ul>
+<li>Revision ID</li>
+<li>Owner entity ID</li>
+<li>Version number</li>
+<li>Parent revision ID, when applicable</li>
+<li>Created timestamp</li>
+<li>Created by</li>
+<li>Change summary</li>
+<li>Content checksum</li>
+<li>State</li>
+<li>Activation timestamp</li>
+<li>Superseded timestamp</li>
+</ul>
+<h3 id="revision-states">Revision States<a class="headerlink" href="#revision-states" title="Permanent link">¶</a></h3>
+<p>Suggested states:</p>
+<ul>
+<li><code>DRAFT</code></li>
+<li><code>ACTIVE</code></li>
+<li><code>SUPERSEDED</code></li>
+<li><code>ARCHIVED</code></li>
+</ul>
+<h3 id="revision-rules">Revision Rules<a class="headerlink" href="#revision-rules" title="Permanent link">¶</a></h3>
+<ol>
+<li>Active revisions are immutable.</li>
+<li>Editing begins from a copy into a Draft revision.</li>
+<li>Activating a Draft does not alter the previous revision.</li>
+<li>A Schedule Plan references revisions by immutable ID.</li>
+<li>Deleting a Draft is allowed only when nothing references it.</li>
+<li>Superseded revisions remain available for history and reproducibility.</li>
+<li>Checksums are calculated from canonicalized revision content.</li>
+<li>Concurrent edits use optimistic concurrency or an equivalent conflict check.</li>
+</ol>
+<h2 id="audit-model">Audit Model<a class="headerlink" href="#audit-model" title="Permanent link">¶</a></h2>
+<h3 id="audit-record">Audit Record<a class="headerlink" href="#audit-record" title="Permanent link">¶</a></h3>
+<p>Security-sensitive and configuration-changing commands produce an Audit Record.</p>
+<p>It includes:</p>
+<ul>
+<li>Audit record ID</li>
+<li>Actor identity</li>
+<li>Command type</li>
+<li>Target entity</li>
+<li>Timestamp</li>
+<li>Request correlation ID</li>
+<li>Before revision or state reference</li>
+<li>After revision or state reference</li>
+<li>Outcome</li>
+<li>Optional user note</li>
+<li>Redacted metadata</li>
+</ul>
+<p>Audit records should cover:</p>
+<ul>
+<li>User and role changes</li>
+<li>Media-source changes</li>
+<li>Secret replacement</li>
+<li>Network activation or archival</li>
+<li>Channel publication changes</li>
+<li>Schedule approval</li>
+<li>Recommendation application</li>
+<li>Template or Pack import</li>
+<li>Migration execution</li>
+<li>Backup and restore</li>
+<li>Security-setting changes</li>
+</ul>
+<p>Audit records do not store plaintext secrets.</p>
+<h2 id="domain-events">Domain Events<a class="headerlink" href="#domain-events" title="Permanent link">¶</a></h2>
+<p>Domain Events describe committed facts that other modules may react to.</p>
+<p>Potential events include:</p>
+<ul>
+<li><code>MediaSourceConfigured</code></li>
+<li><code>MediaSourceSynchronizationCompleted</code></li>
+<li><code>CatalogItemAvailabilityChanged</code></li>
+<li><code>NetworkActivated</code></li>
+<li><code>ProgrammingConfigurationActivated</code></li>
+<li><code>SchedulePlanGenerated</code></li>
+<li><code>SchedulePlanApproved</code></li>
+<li><code>SchedulePublicationActivated</code></li>
+<li><code>GuideArtifactPublished</code></li>
+<li><code>PlayoutSessionStarted</code></li>
+<li><code>AiringCompleted</code></li>
+<li><code>HealthSnapshotCalculated</code></li>
+<li><code>RecommendationAccepted</code></li>
+<li><code>PackImported</code></li>
+<li><code>MigrationCompleted</code></li>
+</ul>
+<p>Version 1 may dispatch events in process.</p>
+<p>Domain Event design must still support:</p>
+<ul>
+<li>Stable event names</li>
+<li>Event versioning</li>
+<li>Correlation IDs</li>
+<li>Causation IDs</li>
+<li>Idempotent handlers</li>
+<li>Transactional consistency appropriate to SQLite</li>
+</ul>
+<p>Events are not a substitute for the source-of-truth aggregates.</p>
+<h2 id="cross-aggregate-reference-rules">Cross-Aggregate Reference Rules<a class="headerlink" href="#cross-aggregate-reference-rules" title="Permanent link">¶</a></h2>
+<ol>
+<li>Aggregates reference other aggregates through IDs.</li>
+<li>Domain services may load multiple aggregates through repositories.</li>
+<li>Schedule Entries reference Catalog Items but do not embed mutable Catalog
+   Item objects.</li>
+<li>Channels reference active publication IDs rather than embedding entire plans.</li>
+<li>Networks reference active revision IDs.</li>
+<li>Jobs reference their targets without owning them.</li>
+<li>Health Snapshots reference immutable input revisions.</li>
+<li>Templates create snapshots rather than live mutable links.</li>
+<li>Migration mappings are consulted only by compatibility and migration layers.</li>
+<li>External source identifiers never serve as cross-aggregate primary keys.</li>
+</ol>
+<h2 id="transaction-boundaries">Transaction Boundaries<a class="headerlink" href="#transaction-boundaries" title="Permanent link">¶</a></h2>
+<p>A transaction should normally contain one application command and its directly
+required aggregate changes.</p>
+<p>Examples of valid transaction boundaries:</p>
+<ul>
+<li>Create a Network and its initial Draft revisions.</li>
+<li>Activate a Programming Configuration Revision.</li>
+<li>Approve a Schedule Plan and create its approval record.</li>
+<li>Activate a Schedule Publication pointer.</li>
+<li>Commit a synchronized batch of Catalog Items and Source Bindings.</li>
+<li>Accept a Recommendation and create the resulting Draft revision.</li>
+<li>Complete a Pack import and create imported Template records.</li>
+</ul>
+<p>Long-running work must not hold a SQLite write transaction while:</p>
+<ul>
+<li>Calling media servers</li>
+<li>Running FFmpeg</li>
+<li>Downloading metadata</li>
+<li>Generating large schedules</li>
+<li>Extracting archives</li>
+<li>Waiting for user review</li>
+</ul>
+<p>Long-running workflows use staged records and short commit transactions.</p>
+<h2 id="concurrency-rules">Concurrency Rules<a class="headerlink" href="#concurrency-rules" title="Permanent link">¶</a></h2>
+<p>Version 1 runs as a modular monolith but must defend against overlapping
+requests and jobs.</p>
+<p>Required protections include:</p>
+<ul>
+<li>Optimistic revision checks for configuration editing</li>
+<li>Idempotency for retried commands</li>
+<li>Per-source synchronization exclusion or coordination</li>
+<li>Per-channel publication coordination</li>
+<li>Per-channel playout-session coordination</li>
+<li>Job heartbeat and abandonment detection</li>
+<li>Atomic active-revision pointer changes</li>
+<li>Atomic active-publication pointer changes</li>
+<li>Database busy handling appropriate to SQLite</li>
+</ul>
+<p>A global process lock must not be the only correctness mechanism.</p>
+<h2 id="archival-and-deletion-rules">Archival and Deletion Rules<a class="headerlink" href="#archival-and-deletion-rules" title="Permanent link">¶</a></h2>
+<h3 id="archive">Archive<a class="headerlink" href="#archive" title="Permanent link">¶</a></h3>
+<p>Archiving removes an entity from ordinary active use while preserving history.</p>
+<p>Archive is the default removal operation for:</p>
+<ul>
+<li>Networks</li>
+<li>Channels</li>
+<li>Media Sources</li>
+<li>Users</li>
+<li>Templates</li>
+<li>Presentation Assets with historical references</li>
+<li>Catalog Items with schedule or airing history</li>
+</ul>
+<h3 id="delete">Delete<a class="headerlink" href="#delete" title="Permanent link">¶</a></h3>
+<p>Deletion may be allowed for:</p>
+<ul>
+<li>Unused Draft revisions</li>
+<li>Failed temporary uploads</li>
+<li>Unapplied Pack Import Sessions after retention</li>
+<li>Unreferenced managed assets</li>
+<li>Test data</li>
+<li>Expired generated artifacts after retention</li>
+<li>Catalog conflicts resolved as duplicates, after safe merge rules</li>
+</ul>
+<h3 id="referential-preservation">Referential Preservation<a class="headerlink" href="#referential-preservation" title="Permanent link">¶</a></h3>
+<p>An archived or deleted parent must not create broken historical references.</p>
+<p>Where full retention is unnecessary, ChannelForge may preserve a tombstone with:</p>
+<ul>
+<li>Entity ID</li>
+<li>Entity type</li>
+<li>Display label</li>
+<li>Deleted timestamp</li>
+<li>Deletion reason</li>
+</ul>
+<h2 id="derived-data">Derived Data<a class="headerlink" href="#derived-data" title="Permanent link">¶</a></h2>
+<p>Derived data may be recalculated from authoritative records.</p>
+<p>Examples:</p>
+<ul>
+<li>Search indexes</li>
+<li>Cached guide responses</li>
+<li>Channel-health summaries</li>
+<li>Catalog statistics</li>
+<li>Schedule preview summaries</li>
+<li>Output artifact caches</li>
+<li>Dashboard counts</li>
+</ul>
+<p>Derived data must be identifiable as derived and must not become the only copy of
+authoritative state.</p>
+<h2 id="sensitive-data-classification">Sensitive Data Classification<a class="headerlink" href="#sensitive-data-classification" title="Permanent link">¶</a></h2>
+<h3 id="secrets">Secrets<a class="headerlink" href="#secrets" title="Permanent link">¶</a></h3>
+<p>Examples:</p>
+<ul>
+<li>Plex tokens</li>
+<li>Jellyfin API keys</li>
+<li>Emby API keys</li>
+<li>API credential secrets</li>
+<li>Session signing keys</li>
+<li>Encryption keys</li>
+</ul>
+<p>Secrets are stored through the secret-storage boundary.</p>
+<h3 id="restricted-operational-data">Restricted Operational Data<a class="headerlink" href="#restricted-operational-data" title="Permanent link">¶</a></h3>
+<p>Examples:</p>
+<ul>
+<li>Internal source URLs</li>
+<li>Host paths</li>
+<li>FFmpeg command diagnostics</li>
+<li>User authentication metadata</li>
+<li>Private network topology details</li>
+</ul>
+<p>Restricted operational data requires administrative permission or redaction.</p>
+<h3 id="ordinary-configuration-data">Ordinary Configuration Data<a class="headerlink" href="#ordinary-configuration-data" title="Permanent link">¶</a></h3>
+<p>Examples:</p>
+<ul>
+<li>Network names</li>
+<li>Channel numbers</li>
+<li>Dayparts</li>
+<li>Programming rules</li>
+<li>Branding selections</li>
+<li>Schedule entries</li>
+</ul>
+<p>Ordinary configuration may still require authentication depending on instance
+policy.</p>
+<h2 id="minimum-version-1-aggregate-set">Minimum Version 1 Aggregate Set<a class="headerlink" href="#minimum-version-1-aggregate-set" title="Permanent link">¶</a></h2>
+<p>The first production-capable ChannelForge release requires these aggregate roots:</p>
+<ul>
+<li>Instance</li>
+<li>User</li>
+<li>Media Source</li>
+<li>Catalog Item</li>
+<li>Network</li>
+<li>Channel</li>
+<li>Programming Configuration Revision</li>
+<li>Schedule Plan</li>
+<li>Schedule Publication</li>
+<li>Branding Profile Revision</li>
+<li>Presentation Asset</li>
+<li>Playout Session</li>
+<li>Background Job</li>
+<li>Health Snapshot</li>
+<li>Recommendation</li>
+<li>Migration Run</li>
+</ul>
+<p>Templates and Programming Packs may be implemented after the core scheduling and
+playout path, but their boundaries must not be collapsed into Network records.</p>
+<h2 id="required-end-to-end-relationships">Required End-to-End Relationships<a class="headerlink" href="#required-end-to-end-relationships" title="Permanent link">¶</a></h2>
+<p>The minimum successful programming path is:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>Media Source
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  -&gt; Source Binding
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  -&gt; Catalog Item
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  -&gt; Programming Configuration Revision
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>  -&gt; Schedule Plan
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>  -&gt; Schedule Entry
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>  -&gt; Schedule Approval
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>  -&gt; Schedule Publication
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>  -&gt; Playout Decision
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>  -&gt; Airing Record
+</span></code></pre></div>
+<p>The minimum network identity path is:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Network
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>  -&gt; Network Profile Revision
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>  -&gt; Channel
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>  -&gt; Output Identity
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>  -&gt; Published Guide and Stream
+</span></code></pre></div>
+<p>The minimum operational path is:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Background Job
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>  -&gt; Job Attempt
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>  -&gt; Resulting Aggregate or Published Artifact
+</span></code></pre></div>
+<h2 id="core-domain-invariants">Core Domain Invariants<a class="headerlink" href="#core-domain-invariants" title="Permanent link">¶</a></h2>
+<ol>
+<li>ChannelForge owns the canonical identity of every domain entity.</li>
+<li>External media IDs are always qualified source bindings.</li>
+<li>A Network and a Channel are distinct entities.</li>
+<li>A Channel belongs to one Network in version 1.</li>
+<li>Programming configuration is revisioned.</li>
+<li>Activated revisions are immutable.</li>
+<li>Schedule generation is deterministic for recorded inputs, seed, and generator
+   version.</li>
+<li>A Schedule Plan is separate from active Schedule Publication.</li>
+<li>Only approved plans may be published.</li>
+<li>Failed generation cannot replace active output.</li>
+<li>Approved Schedule Plans are immutable.</li>
+<li>Playout consumes schedule state but does not rewrite editorial policy.</li>
+<li>Runtime recovery does not mutate Schedule Entries.</li>
+<li>Actual Airing Records remain distinct from planned entries.</li>
+<li>Catalog synchronization preserves user overrides and historical references.</li>
+<li>Output adapters share one canonical Channel identity.</li>
+<li>Imported community content is validated before activation.</li>
+<li>Template updates do not silently alter existing Networks.</li>
+<li>Recommendations require explicit acceptance before changes are applied.</li>
+<li>Secrets never appear in ordinary exported configuration.</li>
+<li>Long-running external work does not hold open database transactions.</li>
+<li>Historical references survive archival.</li>
+<li>Migration mappings never become canonical identity.</li>
+<li>Derived caches are replaceable.</li>
+<li>Every material configuration or publication change is attributable to an
+    actor or system policy.</li>
+</ol>
+<h2 id="deferred-domain-decisions">Deferred Domain Decisions<a class="headerlink" href="#deferred-domain-decisions" title="Permanent link">¶</a></h2>
+<p>The following decisions remain open:</p>
+<ul>
+<li>Whether a Channel may belong to multiple Networks in a future release</li>
+<li>Whether Catalog Item deduplication is automatic, assisted, or manual by default</li>
+<li>Exact Catalog Item hierarchy implementation</li>
+<li>Exact rule-type registry</li>
+<li>Exact scoring representation for soft constraints</li>
+<li>Exact schedule-plan catalog snapshot format</li>
+<li>Whether guide metadata is fully embedded per entry or content-addressed</li>
+<li>Whether Playout Sessions are persisted continuously or summarized at end</li>
+<li>Exact retention period for Airing Records</li>
+<li>Exact secret-storage implementation</li>
+<li>Exact role and permission model</li>
+<li>Exact authentication entities</li>
+<li>Exact community publisher identity model</li>
+<li>Exact Pack signature and trust model</li>
+<li>Exact tombstone requirements</li>
+<li>Exact event persistence model</li>
+<li>PostgreSQL-specific concurrency behavior after version 1</li>
+<li>Multi-node ownership and lease entities</li>
+</ul>
+<!-- DO NOT FORMAT -->
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://discord.gg/nYkb7MhPfD" target="_blank" rel="noopener" title="Join the Tunarr Discord" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M492.5 69.8c-.2-.3-.4-.6-.8-.7-38.1-17.5-78.4-30-119.7-37.1-.4-.1-.8 0-1.1.1s-.6.4-.8.8c-5.5 9.9-10.5 20.2-14.9 30.6-44.6-6.8-89.9-6.8-134.4 0-4.5-10.5-9.5-20.7-15.1-30.6-.2-.3-.5-.6-.8-.8s-.7-.2-1.1-.2C162.5 39 122.2 51.5 84.1 69c-.3.1-.6.4-.8.7C7.1 183.5-13.8 294.6-3.6 404.2c0 .3.1.5.2.8s.3.4.5.6c44.4 32.9 94 58 146.8 74.2.4.1.8.1 1.1 0s.7-.4.9-.7c11.3-15.4 21.4-31.8 30-48.8.1-.2.2-.5.2-.8s0-.5-.1-.8-.2-.5-.4-.6-.4-.3-.7-.4c-15.8-6.1-31.2-13.4-45.9-21.9-.3-.2-.5-.4-.7-.6s-.3-.6-.3-.9 0-.6.2-.9.3-.5.6-.7c3.1-2.3 6.2-4.7 9.1-7.1.3-.2.6-.4.9-.4s.7 0 1 .1c96.2 43.9 200.4 43.9 295.5 0 .3-.1.7-.2 1-.2s.7.2.9.4c2.9 2.4 6 4.9 9.1 7.2.2.2.4.4.6.7s.2.6.2.9-.1.6-.3.9-.4.5-.6.6c-14.7 8.6-30 15.9-45.9 21.8-.2.1-.5.2-.7.4s-.3.4-.4.7-.1.5-.1.8.1.5.2.8c8.8 17 18.8 33.3 30 48.8.2.3.6.6.9.7s.8.1 1.1 0c52.9-16.2 102.6-41.3 147.1-74.2.2-.2.4-.4.5-.6s.2-.5.2-.8c12.3-126.8-20.5-236.9-86.9-334.5zm-302 267.7c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.4 59.2-52.8 59.2m195.4 0c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.2 59.2-52.8 59.2"></path></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://github.com/sponsors/chrisbenincasa" target="_blank" rel="noopener" title="Sponsor Tunarr on GitHub" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="m241 87.1 15 20.7 15-20.7C296 52.5 336.2 32 378.9 32 452.4 32 512 91.6 512 165.1v2.6c0 112.2-139.9 242.5-212.9 298.2-12.4 9.4-27.6 14.1-43.1 14.1s-30.8-4.6-43.1-14.1C139.9 410.2 0 279.9 0 167.7v-2.6C0 91.6 59.6 32 133.1 32 175.8 32 216 52.5 241 87.1"></path></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tracking", "navigation.path", "navigation.sections", "navigation.indexes", "navigation.footer", "content.code.copy", "content.code.select", "content.tooltips", "content.action.edit", "content.action.view"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  
+<script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(()=>{ lightbox.reload(); });
+</script></body></html>

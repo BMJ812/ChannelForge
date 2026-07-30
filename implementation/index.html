@@ -1,0 +1,4668 @@
+<!DOCTYPE html><html lang="en" class="no-js"><head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://tunarr.com/implementation/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>ChannelForge Implementation Roadmap - Tunarr</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  <link href="../assets/stylesheets/glightbox.min.css" rel="stylesheet"><script src="../assets/javascripts/glightbox.min.js"></script><style id="glightbox-style">
+            html.glightbox-open { overflow: initial; height: 100%; }
+            .gslide-title { margin-top: 0px; user-select: text; }
+            .gslide-desc { color: #666; user-select: text; }
+            .gslide-image img { background: white; }
+            .gscrollbar-fixer { padding-right: 15px; }
+            .gdesc-inner { font-size: 0.75rem; }
+            body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
+            body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
+            body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
+        </style></head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#channelforge-implementation-roadmap" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Tunarr" class="md-header__button md-logo" aria-label="Tunarr" data-md-component="logo">
+      
+  <img src="../assets/tunarr.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Tunarr
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              ChannelForge Implementation Roadmap
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo" aria-label="Switch to light mode" type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"></path></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="indigo" aria-label="Switch to dark mode" type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="indigo" aria-label="Switch to system preference" type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required="">
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix="">
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__social">
+        
+          <a href="https://discord.gg/nYkb7MhPfD" title="Join the Tunarr Discord" class="md-header__button md-icon" target="_blank" rel="noopener">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M492.5 69.8c-.2-.3-.4-.6-.8-.7-38.1-17.5-78.4-30-119.7-37.1-.4-.1-.8 0-1.1.1s-.6.4-.8.8c-5.5 9.9-10.5 20.2-14.9 30.6-44.6-6.8-89.9-6.8-134.4 0-4.5-10.5-9.5-20.7-15.1-30.6-.2-.3-.5-.6-.8-.8s-.7-.2-1.1-.2C162.5 39 122.2 51.5 84.1 69c-.3.1-.6.4-.8.7C7.1 183.5-13.8 294.6-3.6 404.2c0 .3.1.5.2.8s.3.4.5.6c44.4 32.9 94 58 146.8 74.2.4.1.8.1 1.1 0s.7-.4.9-.7c11.3-15.4 21.4-31.8 30-48.8.1-.2.2-.5.2-.8s0-.5-.1-.8-.2-.5-.4-.6-.4-.3-.7-.4c-15.8-6.1-31.2-13.4-45.9-21.9-.3-.2-.5-.4-.7-.6s-.3-.6-.3-.9 0-.6.2-.9.3-.5.6-.7c3.1-2.3 6.2-4.7 9.1-7.1.3-.2.6-.4.9-.4s.7 0 1 .1c96.2 43.9 200.4 43.9 295.5 0 .3-.1.7-.2 1-.2s.7.2.9.4c2.9 2.4 6 4.9 9.1 7.2.2.2.4.4.6.7s.2.6.2.9-.1.6-.3.9-.4.5-.6.6c-14.7 8.6-30 15.9-45.9 21.8-.2.1-.5.2-.7.4s-.3.4-.4.7-.1.5-.1.8.1.5.2.8c8.8 17 18.8 33.3 30 48.8.2.3.6.6.9.7s.8.1 1.1 0c52.9-16.2 102.6-41.3 147.1-74.2.2-.2.4-.4.5-.6s.2-.5.2-.8c12.3-126.8-20.5-236.9-86.9-334.5zm-302 267.7c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.4 59.2-52.8 59.2m195.4 0c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.2 59.2-52.8 59.2"></path></svg>
+          </a>
+        
+          <a href="https://github.com/sponsors/chrisbenincasa" title="Sponsor Tunarr on GitHub" class="md-header__button md-icon" target="_blank" rel="noopener">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="m241 87.1 15 20.7 15-20.7C296 52.5 336.2 32 378.9 32 452.4 32 512 91.6 512 165.1v2.6c0 112.2-139.9 242.5-212.9 298.2-12.4 9.4-27.6 14.1-43.1 14.1s-30.8-4.6-43.1-14.1C139.9 410.2 0 279.9 0 167.7v-2.6C0 91.6 59.6 32 133.1 32 175.8 32 216 52.5 241 87.1"></path></svg>
+          </a>
+        
+      </div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/chrisbenincasa/tunarr" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    chrisbenincasa/tunarr
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Tunarr" class="md-nav__button md-logo" aria-label="Tunarr" data-md-component="logo">
+      
+  <img src="../assets/tunarr.png" alt="logo">
+
+    </a>
+    Tunarr
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/chrisbenincasa/tunarr" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    chrisbenincasa/tunarr
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix="">
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-docs.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Docs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3">
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Getting Started
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Install
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/run/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Run
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4">
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Migration
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Migration
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/migration/migrate-to-1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Migrate to 1.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4">
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configure
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Configure
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_1">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../configure/media_sources/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Media Sources
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_1" id="__nav_4_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Media Sources
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure/media_sources/plex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plex
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure/media_sources/jellyfin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Jellyfin
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure/media_sources/emby/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Emby
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_1_5">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../configure/media_sources/local/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_1_5" id="__nav_4_1_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_4_1_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_1_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Local
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure/media_sources/local/movies/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Movies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure/media_sources/local/shows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shows
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure/media_sources/local/other_videos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Other Video
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure/media_sources/local/music/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Music
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure/media_sources/local/music_videos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Music Videos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../configure/ffmpeg/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FFmpeg
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    FFmpeg
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure/ffmpeg/transcode_config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transcode Configs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../misc/search/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Search
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Search
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../configure/channels/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Channels
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_4" id="__nav_4_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Channels
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure/channels/properties/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Properties
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure/channels/flex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flex
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure/channels/epg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EPG
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure/channels/transcoding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transcoding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure/channels/watermarks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Watermarks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure/channels/programming/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Programming
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../configure/library/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Library
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Library
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure/library/filler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filler
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure/library/custom-shows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Custom Shows
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure/library/smart-collections/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Smart Collections
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../configure/scheduling/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scheduling
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_6" id="__nav_4_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Scheduling
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure/scheduling/concepts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concepts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure/scheduling/random-slots/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Slot Editor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure/scheduling/time-slots/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Time Slots
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure/scheduling/cyclic-shuffle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cyclic Shuffle
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure/scheduling/block-shuffle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Block Shuffle
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure/scheduling/mid-roll-breaks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mid-Roll Breaks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure/scheduling/replicate/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Replicate
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure/scheduling/consolidate/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Consolidate
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_7">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../configure/clients/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Clients
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_7" id="__nav_4_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Clients
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure/clients/plex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plex
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure/clients/jellyfin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Jellyfin
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_8">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../configure/system/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    System
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure/system/backup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure/system/logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5">
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Misc.
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Misc.
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../misc/faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../misc/common-issues/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common Issues
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../misc/troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stream Troubleshooter
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6">
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Development
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev/contributing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+      
+        <li class="md-nav__item">
+  <a href="#purpose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Purpose
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#roadmap-mission" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Roadmap Mission
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#current-repository-baseline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current Repository Baseline
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scope
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#non-goals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Non-Goals
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementation-philosophy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Implementation Philosophy
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Implementation Philosophy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#incremental-replacement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Incremental Replacement
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stable-main-branch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stable Main Branch
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#one-authority-per-concept" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        One Authority Per Concept
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compatibility-before-cutover" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compatibility Before Cutover
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tests-before-replacement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tests Before Replacement
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#architecture-before-convenience" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Architecture Before Convenience
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#explicit-deferred-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Explicit Deferred Work
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#branch-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Branch Strategy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pull-request-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pull-Request Strategy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pull-request-size" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pull-Request Size
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#commit-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Commit Strategy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#merge-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Merge Strategy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#versioning-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Versioning Strategy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#milestone-documents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Milestone Documents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cross-cutting-amendment-interstitial-programming-and-external-video-feeds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cross-Cutting Amendment: Interstitial Programming and External Video Feeds
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#milestone-sequence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Milestone Sequence
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dependency-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependency Rule
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#milestone-01-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Milestone 01 Summary
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Milestone 01 Summary">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#baseline-and-change-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Baseline and Change Control
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#milestone-02-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Milestone 02 Summary
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Milestone 02 Summary">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#module-boundaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Module Boundaries
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#milestone-03-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Milestone 03 Summary
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Milestone 03 Summary">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#identity-persistence-and-migrations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Identity, Persistence, and Migrations
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#milestone-04-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Milestone 04 Summary
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Milestone 04 Summary">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#legacy-compatibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Legacy Compatibility
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#milestone-05-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Milestone 05 Summary
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Milestone 05 Summary">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#media-sources-and-catalog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Media Sources and Catalog
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#milestone-06-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Milestone 06 Summary
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Milestone 06 Summary">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#networks-and-channels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Networks and Channels
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#milestone-07-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Milestone 07 Summary
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Milestone 07 Summary">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#deterministic-scheduling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deterministic Scheduling
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#milestone-08-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Milestone 08 Summary
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Milestone 08 Summary">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#publication-playout-and-output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Publication, Playout, and Output
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#milestone-09-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Milestone 09 Summary
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Milestone 09 Summary">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#api-ui-security-and-plugins" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        API, UI, Security, and Plugins
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#milestone-10-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Milestone 10 Summary
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Milestone 10 Summary">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#deployment-validation-and-release" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deployment, Validation, and Release
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cross-cutting-workstreams" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cross-Cutting Workstreams
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Cross-Cutting Workstreams">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documentation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#security" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Security
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#migration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Migration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#observability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Observability
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deployment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#attribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attribution
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#architecture-traceability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Architecture Traceability
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#milestone-document-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Milestone Document Template
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#work-item-classification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Work Item Classification
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#risk-classification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Risk Classification
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#critical-change-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Critical Change Requirements
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#entry-gate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entry Gate
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#completion-gate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Completion Gate
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementation-gate-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Implementation Gate Types
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Implementation Gate Types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gate-a-build" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gate A: Build
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gate-b-unit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gate B: Unit
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gate-c-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gate C: Integration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gate-d-runtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gate D: Runtime
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gate-e-migration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gate E: Migration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gate-f-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gate F: Deployment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gate-g-release" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gate G: Release
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#definition-of-ready-for-an-implementation-pull-request" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Definition of Ready for an Implementation Pull Request
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#definition-of-done-for-an-implementation-pull-request" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Definition of Done for an Implementation Pull Request
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#change-control-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Change-Control Rules
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Change-Control Rules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#no-big-bang-rename" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        No Big-Bang Rename
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#no-big-bang-persistence-rewrite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        No Big-Bang Persistence Rewrite
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#no-unmeasured-compatibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        No Unmeasured Compatibility
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#no-silent-semantic-change" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        No Silent Semantic Change
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#no-direct-legacy-access-from-new-modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        No Direct Legacy Access From New Modules
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#no-provider-calls-inside-write-transactions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        No Provider Calls Inside Write Transactions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#no-runtime-scheduling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        No Runtime Scheduling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#no-secret-in-output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        No Secret in Output
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dependency-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependency Management
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#branding-transition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Branding Transition
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-migration-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data Migration Policy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#legacy-removal-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Legacy Removal Policy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing Policy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#platform-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Platform Policy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#documentation-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documentation Policy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#decision-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decision Policy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#roadmap-status-review" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Roadmap Status Review
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementation-program-completion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Implementation Program Completion
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#immediate-next-document" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Immediate Next Document
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/chrisbenincasa/tunarr/edit/dev/docs/implementation/README.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"></path></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/chrisbenincasa/tunarr/raw/dev/docs/implementation/README.md" title="View source of this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"></path></svg>
+    </a>
+  
+
+
+<h1 id="channelforge-implementation-roadmap">ChannelForge Implementation Roadmap<a class="headerlink" href="#channelforge-implementation-roadmap" title="Permanent link">¶</a></h1>
+<ul>
+<li><strong>Version:</strong> 0.1</li>
+<li><strong>Status:</strong> Draft</li>
+<li><strong>Project phase:</strong> Implementation planning</li>
+<li><strong>Last updated:</strong> 2026-07-27</li>
+</ul>
+<h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">¶</a></h2>
+<p>This roadmap translates the accepted ChannelForge architecture specification
+into an ordered implementation program.</p>
+<p>It defines:</p>
+<ul>
+<li>Implementation sequencing</li>
+<li>Milestone boundaries</li>
+<li>Dependency order</li>
+<li>Pull-request boundaries</li>
+<li>Compatibility requirements</li>
+<li>Verification gates</li>
+<li>Cutover expectations</li>
+<li>Release-readiness criteria</li>
+<li>Deferred work</li>
+</ul>
+<p>The governing product principle remains:</p>
+<blockquote>
+<p>Build television networks, not playlists.</p>
+</blockquote>
+<p>The roadmap is subordinate to:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>docs/architecture/spec/
+</span></code></pre></div>
+<p>When roadmap language conflicts with the architecture specification, the
+architecture specification remains authoritative until the discrepancy is
+resolved through an explicit documentation change or Architecture Decision
+Record.</p>
+<h2 id="roadmap-mission">Roadmap Mission<a class="headerlink" href="#roadmap-mission" title="Permanent link">¶</a></h2>
+<p>The implementation program must transform the inherited Tunarr runtime into
+ChannelForge without a big-bang rewrite.</p>
+<p>The program must:</p>
+<ul>
+<li>Preserve a working runtime throughout the transition</li>
+<li>Introduce ChannelForge-owned domain boundaries incrementally</li>
+<li>Keep legacy data readable until controlled cutover</li>
+<li>Prevent new code from depending on legacy database shapes</li>
+<li>Establish stable ChannelForge identifiers</li>
+<li>Preserve SQLite for version 1</li>
+<li>Separate scheduling from playout</li>
+<li>Build deterministic scheduling before replacing runtime scheduling behavior</li>
+<li>Preserve Plex, Jellyfin, and Emby integration</li>
+<li>Preserve XMLTV, IPTV, and HDHomeRun-compatible output</li>
+<li>Maintain Docker and Unraid operability</li>
+<li>Keep migration reversible until rollback windows close</li>
+<li>Require tests at each boundary</li>
+<li>Avoid mixing unrelated architectural changes in one pull request</li>
+<li>Preserve Tunarr attribution and license obligations</li>
+</ul>
+<h2 id="current-repository-baseline">Current Repository Baseline<a class="headerlink" href="#current-repository-baseline" title="Permanent link">¶</a></h2>
+<p>ChannelForge currently inherits the Tunarr monorepo and runtime foundation.</p>
+<p>The current workspace contains:</p>
+<ul>
+<li><code>server</code></li>
+<li><code>web</code></li>
+<li><code>types</code></li>
+<li><code>shared</code></li>
+</ul>
+<p>The repository uses:</p>
+<ul>
+<li>Node.js 22</li>
+<li>pnpm 10.28.0</li>
+<li>Turbo</li>
+<li>TypeScript</li>
+<li>Vitest</li>
+<li>Fastify</li>
+<li>SQLite through inherited persistence layers</li>
+<li>FFmpeg-based playout</li>
+<li>Existing Plex, Jellyfin, and Emby integrations</li>
+</ul>
+<p>The current package names, scripts, runtime terminology, public README, and many
+internal concepts remain Tunarr-derived.</p>
+<p>This roadmap treats that state as the implementation baseline, not as the final
+ChannelForge architecture.</p>
+<h2 id="scope">Scope<a class="headerlink" href="#scope" title="Permanent link">¶</a></h2>
+<p>This roadmap covers the work required to reach the first credible ChannelForge
+implementation baseline.</p>
+<p>That baseline includes:</p>
+<ul>
+<li>Explicit module boundaries</li>
+<li>Stable ChannelForge identity</li>
+<li>ChannelForge persistence scaffolding</li>
+<li>Controlled legacy compatibility</li>
+<li>Normalized Media Sources and Catalog</li>
+<li>Presentation Assets and Interstitial Pools</li>
+<li>External Video Feeds and Discovery Inbox</li>
+<li>Network and Channel domains</li>
+<li>Break Rules and deterministic interstitial scheduling</li>
+<li>Deterministic schedule planning</li>
+<li>Schedule publication</li>
+<li>Runtime playout integration</li>
+<li>XMLTV</li>
+<li>M3U or IPTV output</li>
+<li>HDHomeRun-compatible output</li>
+<li>API migration</li>
+<li>First-party UI migration</li>
+<li>Authentication and authorization</li>
+<li>Plugin boundary scaffolding</li>
+<li>Docker and Unraid validation</li>
+<li>Migration and rollback</li>
+<li>Release readiness</li>
+</ul>
+<h2 id="non-goals">Non-Goals<a class="headerlink" href="#non-goals" title="Permanent link">¶</a></h2>
+<p>This roadmap does not require version 1 to include:</p>
+<ul>
+<li>Plugin marketplace</li>
+<li>Paid marketplace</li>
+<li>Community programming-pack exchange</li>
+<li>Distributed microservices</li>
+<li>PostgreSQL</li>
+<li>Multi-node playout</li>
+<li>Cloud-hosted control plane</li>
+<li>Mobile application</li>
+<li>Public SaaS</li>
+<li>Recommendation machine learning</li>
+<li>Dynamic advertising marketplace</li>
+<li>Multi-tenant hosting</li>
+<li>Complete deletion of all inherited code</li>
+<li>Immediate removal of every compatibility route</li>
+<li>Immediate public release after the first implementation merge</li>
+</ul>
+<h2 id="implementation-philosophy">Implementation Philosophy<a class="headerlink" href="#implementation-philosophy" title="Permanent link">¶</a></h2>
+<h3 id="incremental-replacement">Incremental Replacement<a class="headerlink" href="#incremental-replacement" title="Permanent link">¶</a></h3>
+<p>Inherited behavior should be wrapped, measured, and replaced incrementally.</p>
+<h3 id="stable-main-branch">Stable Main Branch<a class="headerlink" href="#stable-main-branch" title="Permanent link">¶</a></h3>
+<p>Every merged pull request must leave <code>main</code> buildable and reviewable.</p>
+<h3 id="one-authority-per-concept">One Authority Per Concept<a class="headerlink" href="#one-authority-per-concept" title="Permanent link">¶</a></h3>
+<p>At any point in the migration, each concept must have one documented write
+authority.</p>
+<h3 id="compatibility-before-cutover">Compatibility Before Cutover<a class="headerlink" href="#compatibility-before-cutover" title="Permanent link">¶</a></h3>
+<p>New ChannelForge code may read through compatibility adapters before legacy
+writes are frozen.</p>
+<h3 id="tests-before-replacement">Tests Before Replacement<a class="headerlink" href="#tests-before-replacement" title="Permanent link">¶</a></h3>
+<p>A legacy subsystem must have characterization or contract coverage before its
+behavior is replaced.</p>
+<h3 id="architecture-before-convenience">Architecture Before Convenience<a class="headerlink" href="#architecture-before-convenience" title="Permanent link">¶</a></h3>
+<p>Existing code structure does not override the accepted architecture.</p>
+<h3 id="explicit-deferred-work">Explicit Deferred Work<a class="headerlink" href="#explicit-deferred-work" title="Permanent link">¶</a></h3>
+<p>A deferred feature must be recorded rather than quietly omitted.</p>
+<h2 id="branch-strategy">Branch Strategy<a class="headerlink" href="#branch-strategy" title="Permanent link">¶</a></h2>
+<p>Roadmap documentation is developed on:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>docs/implementation-roadmap-v0.1
+</span></code></pre></div>
+<p>Runtime implementation must use separate implementation branches.</p>
+<p>Examples:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>feat/module-boundaries
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>feat/channel-forge-identities
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>feat/media-source-domain
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>feat/catalog-normalization
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>feat/network-channel-domain
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>feat/deterministic-scheduler
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>feat/schedule-publication
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>feat/playout-integration
+</span></code></pre></div>
+<p>The roadmap branch must remain documentation-only.</p>
+<h2 id="pull-request-strategy">Pull-Request Strategy<a class="headerlink" href="#pull-request-strategy" title="Permanent link">¶</a></h2>
+<p>Implementation should proceed through narrow pull requests.</p>
+<p>A pull request should normally:</p>
+<ul>
+<li>Address one architectural boundary</li>
+<li>Introduce one coherent capability</li>
+<li>Include tests</li>
+<li>Avoid opportunistic rebranding</li>
+<li>Avoid unrelated dependency updates</li>
+<li>Avoid broad formatting churn</li>
+<li>Avoid changing both a legacy implementation and its replacement without
+  explicit compatibility tests</li>
+<li>Include migration or rollback notes when persistence changes</li>
+<li>State which roadmap gate it satisfies</li>
+<li>State which architecture documents govern the work</li>
+</ul>
+<h2 id="pull-request-size">Pull-Request Size<a class="headerlink" href="#pull-request-size" title="Permanent link">¶</a></h2>
+<p>There is no absolute line-count limit.</p>
+<p>A pull request is too large when reviewers cannot answer:</p>
+<ul>
+<li>What architectural boundary changed?</li>
+<li>Which source of truth changed?</li>
+<li>How is compatibility preserved?</li>
+<li>How is rollback performed?</li>
+<li>What tests prove the behavior?</li>
+<li>What remains deferred?</li>
+</ul>
+<p>Large generated migrations, fixtures, or schemas may be acceptable when their
+semantic scope is narrow.</p>
+<h2 id="commit-strategy">Commit Strategy<a class="headerlink" href="#commit-strategy" title="Permanent link">¶</a></h2>
+<p>Implementation commits should remain logically reviewable.</p>
+<p>Preferred commit sequence:</p>
+<ol>
+<li>Characterization tests</li>
+<li>New boundary or contract</li>
+<li>New implementation</li>
+<li>Compatibility adapter</li>
+<li>Migration or backfill</li>
+<li>Call-site transition</li>
+<li>Legacy-path freeze</li>
+<li>Cleanup</li>
+</ol>
+<p>Not every pull request needs all eight commit types.</p>
+<h2 id="merge-strategy">Merge Strategy<a class="headerlink" href="#merge-strategy" title="Permanent link">¶</a></h2>
+<p>Use normal merge commits for milestone pull requests when preserving internal
+commit sequence improves traceability.</p>
+<p>Squash may be used for small corrective pull requests.</p>
+<h2 id="versioning-strategy">Versioning Strategy<a class="headerlink" href="#versioning-strategy" title="Permanent link">¶</a></h2>
+<p>Roadmap version <code>0.1</code> describes the initial implementation path.</p>
+<p>Roadmap document status terms:</p>
+<ul>
+<li><strong>Planned:</strong> Milestone document has not been written.</li>
+<li><strong>Draft:</strong> Milestone document exists but remains open to change.</li>
+<li><strong>Accepted:</strong> Milestone is approved as an implementation target.</li>
+<li><strong>In Progress:</strong> Implementation work has begun.</li>
+<li><strong>Complete:</strong> Completion gates were met and verified.</li>
+<li><strong>Superseded:</strong> A later roadmap or ADR replaces it.</li>
+<li><strong>Deferred:</strong> Work remains valid but is intentionally moved out of the current
+  implementation program.</li>
+</ul>
+<h2 id="milestone-documents">Milestone Documents<a class="headerlink" href="#milestone-documents" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Document</th>
+<th>Status</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>01-baseline-and-change-control.md</code></td>
+<td>Complete</td>
+<td>Establishes repository baseline, characterization coverage, dependency inventory, and change-control rules</td>
+</tr>
+<tr>
+<td><code>02-module-boundaries.md</code></td>
+<td>In Progress</td>
+<td>Defines the modular-monolith package boundaries and dependency enforcement sequence</td>
+</tr>
+<tr>
+<td><code>03-identity-persistence-and-migrations.md</code></td>
+<td>Draft</td>
+<td>Introduces ChannelForge identifiers, persistence scaffolding, repositories, transactions, and migration metadata</td>
+</tr>
+<tr>
+<td><code>04-legacy-compatibility.md</code></td>
+<td>Draft</td>
+<td>Defines compatibility reads, temporary write translation, legacy route handling, and legacy dependency measurement</td>
+</tr>
+<tr>
+<td><code>05-media-sources-and-catalog.md</code></td>
+<td>Draft</td>
+<td>Implements Media Sources, provider adapters, normalized Catalog Items, Source Bindings, Playback Variants, and synchronization</td>
+</tr>
+<tr>
+<td><code>06-networks-and-channels.md</code></td>
+<td>Draft</td>
+<td>Implements Network, Channel, profile revisions, programming configuration revisions, and ownership rules</td>
+</tr>
+<tr>
+<td><code>07-deterministic-scheduling.md</code></td>
+<td>Draft</td>
+<td>Implements deterministic plan generation, rules, evidence, validation, approval, and regeneration</td>
+</tr>
+<tr>
+<td><code>08-publication-playout-and-output.md</code></td>
+<td>Draft</td>
+<td>Implements publication, active-plan pointers, playout decisions, FFmpeg integration, XMLTV, M3U, and HDHomeRun-compatible output</td>
+</tr>
+<tr>
+<td><code>09-api-ui-security-and-plugins.md</code></td>
+<td>Draft</td>
+<td>Migrates first-party API and UI, authorization, secrets, audit, and plugin capability boundaries</td>
+</tr>
+<tr>
+<td><code>10-deployment-validation-and-release.md</code></td>
+<td>Draft</td>
+<td>Completes Docker, Compose, Unraid, migration cutover, platform validation, release gates, and legacy retirement criteria</td>
+</tr>
+</tbody>
+</table>
+<h2 id="cross-cutting-amendment-interstitial-programming-and-external-video-feeds">Cross-Cutting Amendment: Interstitial Programming and External Video Feeds<a class="headerlink" href="#cross-cutting-amendment-interstitial-programming-and-external-video-feeds" title="Permanent link">¶</a></h2>
+<p>ADR 0002 and architecture specification 15 add two related capabilities:</p>
+<ol>
+<li>Interstitial Programming</li>
+<li>External Video Feeds</li>
+</ol>
+<p>The implementation remains distributed across existing milestones rather than
+creating a separate vertical milestone.</p>
+<table>
+<thead>
+<tr>
+<th>Milestone</th>
+<th>Responsibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01</td>
+<td>Inventory and characterize inherited filler, flex, commercial-like content, remote URLs, and web-video references</td>
+</tr>
+<tr>
+<td>05</td>
+<td>Implement Presentation Assets, External Feeds, Feed Items, synchronization, matching, Rights Status, and Playability Status</td>
+</tr>
+<tr>
+<td>06</td>
+<td>Implement Network- and Channel-scoped Interstitial Pools, Break Rules, and Feed assignment</td>
+</tr>
+<tr>
+<td>07</td>
+<td>Implement deterministic break insertion, duration packing, cooldowns, frequency caps, and selection evidence</td>
+</tr>
+<tr>
+<td>08</td>
+<td>Implement Presentation Asset publication, playout, guide behavior, runtime fallback, and Airing Records</td>
+</tr>
+<tr>
+<td>09</td>
+<td>Implement API, UI, authorization, Secret Service use, remote-feed security, audit, and plugin adapter boundaries</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Validate Docker, Unraid, migration, security, provider failure, determinism, backup, restore, and release documentation</td>
+</tr>
+</tbody>
+</table>
+<p>The default External Feed behavior is discovery-only through the Discovery
+Inbox.</p>
+<p>A discovered external item cannot enter linear planning or playout unless a
+separate supported and authorized playable source exists.</p>
+<p>Version 1 explicitly excludes:</p>
+<ul>
+<li>YouTube downloading</li>
+<li>YouTube stream extraction</li>
+<li>YouTube-to-FFmpeg restreaming</li>
+<li>BumpWorthy scraping or downloading</li>
+<li>Arbitrary webpage-to-media conversion</li>
+<li>Advertising marketplace and billing</li>
+<li>Per-viewer targeted advertising</li>
+</ul>
+<p>These boundaries are release gates, not optional implementation guidance.</p>
+<h2 id="milestone-sequence">Milestone Sequence<a class="headerlink" href="#milestone-sequence" title="Permanent link">¶</a></h2>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>flowchart TD
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    M1["01 Baseline and Change Control"]
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    M2["02 Module Boundaries"]
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    M3["03 Identity, Persistence, and Migrations"]
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    M4["04 Legacy Compatibility"]
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    M5["05 Media Sources and Catalog"]
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    M6["06 Networks and Channels"]
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    M7["07 Deterministic Scheduling"]
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>    M8["08 Publication, Playout, and Output"]
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>    M9["09 API, UI, Security, and Plugins"]
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>    M10["10 Deployment, Validation, and Release"]
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>    M1 --&gt; M2
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>    M2 --&gt; M3
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>    M3 --&gt; M4
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>    M4 --&gt; M5
+</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>    M5 --&gt; M6
+</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>    M6 --&gt; M7
+</span><span id="__span-3-19"><a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>    M7 --&gt; M8
+</span><span id="__span-3-20"><a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>    M8 --&gt; M9
+</span><span id="__span-3-21"><a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>    M9 --&gt; M10
+</span></code></pre></div>
+<h2 id="dependency-rule">Dependency Rule<a class="headerlink" href="#dependency-rule" title="Permanent link">¶</a></h2>
+<p>A milestone may begin exploratory work before the previous milestone is marked
+Complete.</p>
+<p>A milestone may not become the canonical implementation path until its required
+predecessor gates are satisfied.</p>
+<h2 id="milestone-01-summary">Milestone 01 Summary<a class="headerlink" href="#milestone-01-summary" title="Permanent link">¶</a></h2>
+<h3 id="baseline-and-change-control">Baseline and Change Control<a class="headerlink" href="#baseline-and-change-control" title="Permanent link">¶</a></h3>
+<p>This milestone establishes the verified starting point.</p>
+<p>It includes:</p>
+<ul>
+<li>Build baseline</li>
+<li>Test baseline</li>
+<li>Platform-specific failure inventory</li>
+<li>Dependency inventory</li>
+<li>Existing module inventory</li>
+<li>Existing database inventory</li>
+<li>Existing route inventory</li>
+<li>Existing provider adapter inventory</li>
+<li>Existing output inventory</li>
+<li>Characterization tests</li>
+<li>Repository contribution rules</li>
+<li>Architecture-reference rules</li>
+<li>Pull-request template requirements</li>
+<li>Change-risk classification</li>
+</ul>
+<p>It does not introduce ChannelForge runtime behavior.</p>
+<h2 id="milestone-02-summary">Milestone 02 Summary<a class="headerlink" href="#milestone-02-summary" title="Permanent link">¶</a></h2>
+<h3 id="module-boundaries">Module Boundaries<a class="headerlink" href="#module-boundaries" title="Permanent link">¶</a></h3>
+<p>This milestone creates enforceable modular-monolith boundaries.</p>
+<p>Candidate modules include:</p>
+<ul>
+<li>Identity and access</li>
+<li>Media Sources</li>
+<li>Catalog</li>
+<li>Networks</li>
+<li>Channels</li>
+<li>Programming</li>
+<li>Scheduling</li>
+<li>Publication</li>
+<li>Playout</li>
+<li>Output</li>
+<li>Plugins</li>
+<li>Operations</li>
+<li>Migration</li>
+</ul>
+<p>It includes:</p>
+<ul>
+<li>Package and directory policy</li>
+<li>Public module interfaces</li>
+<li>Dependency direction</li>
+<li>Import restrictions</li>
+<li>Legacy adapter boundary</li>
+<li>Architecture tests</li>
+<li>Shared-kernel limits</li>
+<li>Domain versus transport separation</li>
+<li>Domain versus persistence separation</li>
+</ul>
+<p>It must avoid moving the entire codebase at once.</p>
+<h2 id="milestone-03-summary">Milestone 03 Summary<a class="headerlink" href="#milestone-03-summary" title="Permanent link">¶</a></h2>
+<h3 id="identity-persistence-and-migrations">Identity, Persistence, and Migrations<a class="headerlink" href="#identity-persistence-and-migrations" title="Permanent link">¶</a></h3>
+<p>This milestone introduces ChannelForge-owned identity and persistence
+infrastructure.</p>
+<p>It includes:</p>
+<ul>
+<li>Stable identifiers</li>
+<li>Revision identifiers</li>
+<li>Migration metadata</li>
+<li>Repository interfaces</li>
+<li>Unit-of-work or transaction boundary</li>
+<li>Optimistic concurrency</li>
+<li>SQLite schema additions</li>
+<li>Schema version tracking</li>
+<li>Migration checkpoints</li>
+<li>Backup preconditions</li>
+<li>Initial mapping tables</li>
+<li>Audit foundations</li>
+</ul>
+<p>It must not yet remove inherited tables.</p>
+<h2 id="milestone-04-summary">Milestone 04 Summary<a class="headerlink" href="#milestone-04-summary" title="Permanent link">¶</a></h2>
+<h3 id="legacy-compatibility">Legacy Compatibility<a class="headerlink" href="#legacy-compatibility" title="Permanent link">¶</a></h3>
+<p>This milestone makes legacy dependency explicit.</p>
+<p>It includes:</p>
+<ul>
+<li>Legacy repositories</li>
+<li>Compatibility reads</li>
+<li>Legacy ID resolution</li>
+<li>Temporary write translation where unavoidable</li>
+<li>Legacy API categorization</li>
+<li>Deprecation metadata</li>
+<li>Compatibility metrics</li>
+<li>Write-authority matrix</li>
+<li>Legacy write-freeze mechanisms</li>
+<li>Reconciliation jobs</li>
+<li>Rollback points</li>
+</ul>
+<p>No new ChannelForge feature may depend directly on legacy row shapes after this
+milestone.</p>
+<h2 id="milestone-05-summary">Milestone 05 Summary<a class="headerlink" href="#milestone-05-summary" title="Permanent link">¶</a></h2>
+<h3 id="media-sources-and-catalog">Media Sources and Catalog<a class="headerlink" href="#media-sources-and-catalog" title="Permanent link">¶</a></h3>
+<p>This milestone creates the normalized provider-independent media foundation.</p>
+<p>It includes:</p>
+<ul>
+<li>Media Source aggregate</li>
+<li>Provider identity</li>
+<li>Provider credentials through Secret Service</li>
+<li>Plex adapter contract</li>
+<li>Jellyfin adapter contract</li>
+<li>Emby adapter contract</li>
+<li>Library selection</li>
+<li>Path mapping</li>
+<li>Catalog Item</li>
+<li>Source Binding</li>
+<li>Playback Variant</li>
+<li>Metadata provenance</li>
+<li>Synchronization jobs</li>
+<li>Full reconciliation</li>
+<li>Incremental synchronization</li>
+<li>Matching and deduplication</li>
+<li>Availability</li>
+<li>Catalog Snapshot</li>
+</ul>
+<p>This milestone must preserve current provider connectivity.</p>
+<h2 id="milestone-06-summary">Milestone 06 Summary<a class="headerlink" href="#milestone-06-summary" title="Permanent link">¶</a></h2>
+<h3 id="networks-and-channels">Networks and Channels<a class="headerlink" href="#networks-and-channels" title="Permanent link">¶</a></h3>
+<p>This milestone introduces ChannelForge's network-first domain.</p>
+<p>It includes:</p>
+<ul>
+<li>Network</li>
+<li>Network Profile Revision</li>
+<li>Channel</li>
+<li>Channel Profile Revision</li>
+<li>Channel number</li>
+<li>Channel identity</li>
+<li>Branding</li>
+<li>Time zone</li>
+<li>Programming Configuration Revision</li>
+<li>Lifecycle</li>
+<li>Archive and restore</li>
+<li>Default migrated Network</li>
+<li>Legacy Channel mappings</li>
+<li>Network and Channel API foundations</li>
+</ul>
+<p>This milestone must not rely on playlist terminology as the primary domain
+model.</p>
+<h2 id="milestone-07-summary">Milestone 07 Summary<a class="headerlink" href="#milestone-07-summary" title="Permanent link">¶</a></h2>
+<h3 id="deterministic-scheduling">Deterministic Scheduling<a class="headerlink" href="#deterministic-scheduling" title="Permanent link">¶</a></h3>
+<p>This milestone implements schedule planning independently from playout.</p>
+<p>It includes:</p>
+<ul>
+<li>Catalog Snapshot input</li>
+<li>Planning horizon</li>
+<li>Seeded random source</li>
+<li>Rule contracts</li>
+<li>Hard constraints</li>
+<li>Soft preferences</li>
+<li>Candidate selection</li>
+<li>Tie-breaking</li>
+<li>Episode ordering</li>
+<li>Repeat windows</li>
+<li>Dayparts</li>
+<li>Blocks</li>
+<li>Filler</li>
+<li>Alignment</li>
+<li>Schedule Plan</li>
+<li>Schedule Entry</li>
+<li>Evidence</li>
+<li>Validation</li>
+<li>Approval</li>
+<li>Regeneration</li>
+<li>Locked entries</li>
+<li>Carry-In</li>
+<li>Carry-Out</li>
+<li>Golden determinism tests</li>
+</ul>
+<p>The same inputs and seed must produce the same canonical plan.</p>
+<h2 id="milestone-08-summary">Milestone 08 Summary<a class="headerlink" href="#milestone-08-summary" title="Permanent link">¶</a></h2>
+<h3 id="publication-playout-and-output">Publication, Playout, and Output<a class="headerlink" href="#publication-playout-and-output" title="Permanent link">¶</a></h3>
+<p>This milestone connects approved plans to runtime output.</p>
+<p>It includes:</p>
+<ul>
+<li>Schedule Publication</li>
+<li>Active-plan pointer</li>
+<li>Publication validation</li>
+<li>Runtime entry lookup</li>
+<li>Runtime offset</li>
+<li>Source selection</li>
+<li>Playback Variant selection</li>
+<li>Stream-mode decision</li>
+<li>Shared sessions</li>
+<li>FFmpeg process supervision</li>
+<li>Recovery content</li>
+<li>XMLTV</li>
+<li>M3U</li>
+<li>HDHomeRun-compatible endpoints</li>
+<li>Artifact generation</li>
+<li>ETags</li>
+<li>Last-valid artifact retention</li>
+<li>Stream continuity</li>
+<li>Runtime health</li>
+</ul>
+<p>Playout must consume published plans rather than generate schedules.</p>
+<h2 id="milestone-09-summary">Milestone 09 Summary<a class="headerlink" href="#milestone-09-summary" title="Permanent link">¶</a></h2>
+<h3 id="api-ui-security-and-plugins">API, UI, Security, and Plugins<a class="headerlink" href="#api-ui-security-and-plugins" title="Permanent link">¶</a></h3>
+<p>This milestone moves first-party workflows to ChannelForge boundaries.</p>
+<p>It includes:</p>
+<ul>
+<li>REST API v1</li>
+<li>OpenAPI</li>
+<li>Error contracts</li>
+<li>Pagination</li>
+<li>ETags</li>
+<li>Idempotency</li>
+<li>Authentication</li>
+<li>Role authorization</li>
+<li>API-token scopes</li>
+<li>Secret Service</li>
+<li>Audit</li>
+<li>Security findings</li>
+<li>First-party UI migration</li>
+<li>Legacy route deprecation</li>
+<li>Plugin manifest</li>
+<li>Plugin permissions</li>
+<li>Contribution registration</li>
+<li>Plugin isolation scaffolding</li>
+</ul>
+<p>Marketplace implementation remains deferred.</p>
+<h2 id="milestone-10-summary">Milestone 10 Summary<a class="headerlink" href="#milestone-10-summary" title="Permanent link">¶</a></h2>
+<h3 id="deployment-validation-and-release">Deployment, Validation, and Release<a class="headerlink" href="#deployment-validation-and-release" title="Permanent link">¶</a></h3>
+<p>This milestone proves the full system and prepares controlled release.</p>
+<p>It includes:</p>
+<ul>
+<li>Docker image</li>
+<li>Docker Compose</li>
+<li>Unraid template</li>
+<li>PUID and PGID</li>
+<li>Non-root execution</li>
+<li>Hardware acceleration</li>
+<li>Health checks</li>
+<li>Graceful shutdown</li>
+<li>Backup and restore</li>
+<li>Migration rehearsal</li>
+<li>Rollback rehearsal</li>
+<li>Linux release suite</li>
+<li>Windows development validation</li>
+<li>amd64</li>
+<li>arm64 where supported</li>
+<li>Provider compatibility</li>
+<li>Client compatibility</li>
+<li>Performance baselines</li>
+<li>Soak testing</li>
+<li>Security scans</li>
+<li>Release report</li>
+<li>Legacy retirement decision</li>
+</ul>
+<p>Legacy deletion is a separate, explicitly approved act.</p>
+<h2 id="cross-cutting-workstreams">Cross-Cutting Workstreams<a class="headerlink" href="#cross-cutting-workstreams" title="Permanent link">¶</a></h2>
+<p>Some work spans multiple milestones.</p>
+<h3 id="documentation">Documentation<a class="headerlink" href="#documentation" title="Permanent link">¶</a></h3>
+<p>Each implementation change must update affected documentation.</p>
+<h3 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">¶</a></h3>
+<p>Tests grow with every new boundary.</p>
+<h3 id="security">Security<a class="headerlink" href="#security" title="Permanent link">¶</a></h3>
+<p>Authentication, authorization, redaction, and secret handling must be included
+when the corresponding capability appears.</p>
+<h3 id="migration">Migration<a class="headerlink" href="#migration" title="Permanent link">¶</a></h3>
+<p>Migration support begins before cutover and continues through release.</p>
+<h3 id="observability">Observability<a class="headerlink" href="#observability" title="Permanent link">¶</a></h3>
+<p>Logs, metrics, health, audit, and support data must be added with the subsystem
+they describe.</p>
+<h3 id="deployment">Deployment<a class="headerlink" href="#deployment" title="Permanent link">¶</a></h3>
+<p>Container compatibility must be preserved through all milestones.</p>
+<h3 id="attribution">Attribution<a class="headerlink" href="#attribution" title="Permanent link">¶</a></h3>
+<p>Tunarr license and attribution remain present through implementation and
+distribution.</p>
+<h2 id="architecture-traceability">Architecture Traceability<a class="headerlink" href="#architecture-traceability" title="Permanent link">¶</a></h2>
+<p>Every milestone document should identify governing architecture documents.</p>
+<p>Examples:</p>
+<table>
+<thead>
+<tr>
+<th>Roadmap concern</th>
+<th>Governing specification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Terminology</td>
+<td><code>docs/architecture/spec/01-terminology.md</code></td>
+</tr>
+<tr>
+<td>Runtime boundaries</td>
+<td><code>docs/architecture/spec/02-system-context.md</code></td>
+</tr>
+<tr>
+<td>Domain entities</td>
+<td><code>docs/architecture/spec/03-domain-model.md</code></td>
+</tr>
+<tr>
+<td>Schedule generation</td>
+<td><code>docs/architecture/spec/04-scheduling-model.md</code></td>
+</tr>
+<tr>
+<td>Catalog</td>
+<td><code>docs/architecture/spec/05-media-catalog.md</code></td>
+</tr>
+<tr>
+<td>Runtime output</td>
+<td><code>docs/architecture/spec/06-playout-and-output.md</code></td>
+</tr>
+<tr>
+<td>Providers</td>
+<td><code>docs/architecture/spec/07-integrations.md</code></td>
+</tr>
+<tr>
+<td>SQLite</td>
+<td><code>docs/architecture/spec/08-persistence.md</code></td>
+</tr>
+<tr>
+<td>REST API</td>
+<td><code>docs/architecture/spec/09-api.md</code></td>
+</tr>
+<tr>
+<td>Plugins</td>
+<td><code>docs/architecture/spec/10-plugins.md</code></td>
+</tr>
+<tr>
+<td>Security</td>
+<td><code>docs/architecture/spec/11-security.md</code></td>
+</tr>
+<tr>
+<td>Deployment</td>
+<td><code>docs/architecture/spec/12-deployment.md</code></td>
+</tr>
+<tr>
+<td>Testing</td>
+<td><code>docs/architecture/spec/13-testing.md</code></td>
+</tr>
+<tr>
+<td>Migration</td>
+<td><code>docs/architecture/spec/14-migration.md</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="milestone-document-template">Milestone Document Template<a class="headerlink" href="#milestone-document-template" title="Permanent link">¶</a></h2>
+<p>Every milestone document should contain:</p>
+<ol>
+<li>Purpose</li>
+<li>Governing specifications</li>
+<li>Current baseline</li>
+<li>Target state</li>
+<li>Non-goals</li>
+<li>Dependencies</li>
+<li>Workstreams</li>
+<li>Data changes</li>
+<li>API changes</li>
+<li>UI changes</li>
+<li>Compatibility behavior</li>
+<li>Security requirements</li>
+<li>Observability requirements</li>
+<li>Testing requirements</li>
+<li>Recommended pull-request sequence</li>
+<li>Entry gates</li>
+<li>Completion gates</li>
+<li>Rollback</li>
+<li>Risks</li>
+<li>Deferred decisions</li>
+</ol>
+<h2 id="work-item-classification">Work Item Classification<a class="headerlink" href="#work-item-classification" title="Permanent link">¶</a></h2>
+<p>Roadmap work items should be classified as:</p>
+<ul>
+<li><code>FOUNDATION</code></li>
+<li><code>DOMAIN</code></li>
+<li><code>PERSISTENCE</code></li>
+<li><code>MIGRATION</code></li>
+<li><code>COMPATIBILITY</code></li>
+<li><code>INTEGRATION</code></li>
+<li><code>SCHEDULING</code></li>
+<li><code>PLAYOUT</code></li>
+<li><code>OUTPUT</code></li>
+<li><code>API</code></li>
+<li><code>UI</code></li>
+<li><code>SECURITY</code></li>
+<li><code>PLUGIN</code></li>
+<li><code>DEPLOYMENT</code></li>
+<li><code>TESTING</code></li>
+<li><code>DOCUMENTATION</code></li>
+</ul>
+<h2 id="risk-classification">Risk Classification<a class="headerlink" href="#risk-classification" title="Permanent link">¶</a></h2>
+<p>Suggested risk levels:</p>
+<ul>
+<li><strong>Low:</strong> Isolated documentation, tests, or additive types</li>
+<li><strong>Moderate:</strong> Additive runtime boundary with no write-authority change</li>
+<li><strong>High:</strong> Persistence, identity, provider, scheduling, or playout behavior</li>
+<li><strong>Critical:</strong> Migration cutover, credential handling, active publication,
+  backup restore, or legacy deletion</li>
+</ul>
+<h2 id="critical-change-requirements">Critical Change Requirements<a class="headerlink" href="#critical-change-requirements" title="Permanent link">¶</a></h2>
+<p>A critical change requires:</p>
+<ul>
+<li>Explicit rollback</li>
+<li>Backup plan</li>
+<li>Characterization coverage</li>
+<li>Integration coverage</li>
+<li>Operator impact</li>
+<li>Release note</li>
+<li>Architecture traceability</li>
+<li>Verification evidence</li>
+</ul>
+<h2 id="entry-gate">Entry Gate<a class="headerlink" href="#entry-gate" title="Permanent link">¶</a></h2>
+<p>A milestone may be marked <code>In Progress</code> when:</p>
+<ul>
+<li>Its milestone document is Draft or Accepted</li>
+<li>Governing architecture documents exist</li>
+<li>Required predecessor interfaces exist</li>
+<li>Baseline tests are recorded</li>
+<li>Risks are identified</li>
+<li>No unresolved architecture contradiction blocks the work</li>
+<li>Initial pull-request sequence is defined</li>
+</ul>
+<h2 id="completion-gate">Completion Gate<a class="headerlink" href="#completion-gate" title="Permanent link">¶</a></h2>
+<p>A milestone may be marked <code>Complete</code> when:</p>
+<ul>
+<li>All required workstreams are complete</li>
+<li>Required tests pass</li>
+<li>Migration behavior is verified</li>
+<li>Compatibility behavior is documented</li>
+<li>Rollback is verified where applicable</li>
+<li>Documentation is updated</li>
+<li>No hidden direct legacy dependency remains in the completed boundary</li>
+<li>Deferred items are recorded</li>
+<li>Completion evidence is linked</li>
+</ul>
+<h2 id="implementation-gate-types">Implementation Gate Types<a class="headerlink" href="#implementation-gate-types" title="Permanent link">¶</a></h2>
+<h3 id="gate-a-build">Gate A: Build<a class="headerlink" href="#gate-a-build" title="Permanent link">¶</a></h3>
+<ul>
+<li>Workspace installs</li>
+<li>Type checking passes</li>
+<li>Build passes</li>
+</ul>
+<h3 id="gate-b-unit">Gate B: Unit<a class="headerlink" href="#gate-b-unit" title="Permanent link">¶</a></h3>
+<ul>
+<li>Domain tests pass</li>
+<li>Pure component tests pass</li>
+</ul>
+<h3 id="gate-c-integration">Gate C: Integration<a class="headerlink" href="#gate-c-integration" title="Permanent link">¶</a></h3>
+<ul>
+<li>SQLite integration passes</li>
+<li>Provider contracts pass</li>
+<li>API integration passes</li>
+</ul>
+<h3 id="gate-d-runtime">Gate D: Runtime<a class="headerlink" href="#gate-d-runtime" title="Permanent link">¶</a></h3>
+<ul>
+<li>Stream starts</li>
+<li>Plan lookup works</li>
+<li>Output artifacts validate</li>
+</ul>
+<h3 id="gate-e-migration">Gate E: Migration<a class="headerlink" href="#gate-e-migration" title="Permanent link">¶</a></h3>
+<ul>
+<li>Prior fixture migrates</li>
+<li>Restart resumes</li>
+<li>Rollback works</li>
+<li>No source data is lost</li>
+</ul>
+<h3 id="gate-f-deployment">Gate F: Deployment<a class="headerlink" href="#gate-f-deployment" title="Permanent link">¶</a></h3>
+<ul>
+<li>Docker starts</li>
+<li>Health becomes ready</li>
+<li>Restart preserves state</li>
+<li>Unraid configuration remains valid</li>
+</ul>
+<h3 id="gate-g-release">Gate G: Release<a class="headerlink" href="#gate-g-release" title="Permanent link">¶</a></h3>
+<ul>
+<li>Linux authoritative suite passes</li>
+<li>Security checks pass</li>
+<li>Backup and restore pass</li>
+<li>Compatibility report is current</li>
+<li>Release report is complete</li>
+</ul>
+<h2 id="definition-of-ready-for-an-implementation-pull-request">Definition of Ready for an Implementation Pull Request<a class="headerlink" href="#definition-of-ready-for-an-implementation-pull-request" title="Permanent link">¶</a></h2>
+<p>A pull request is ready to begin when:</p>
+<ul>
+<li>One roadmap work item is identified</li>
+<li>Governing architecture sections are identified</li>
+<li>Current behavior is understood</li>
+<li>Expected behavior is explicit</li>
+<li>Data ownership is explicit</li>
+<li>Compatibility impact is explicit</li>
+<li>Test plan is explicit</li>
+<li>Rollback or safe failure behavior is explicit</li>
+<li>Scope excludes unrelated cleanup</li>
+</ul>
+<h2 id="definition-of-done-for-an-implementation-pull-request">Definition of Done for an Implementation Pull Request<a class="headerlink" href="#definition-of-done-for-an-implementation-pull-request" title="Permanent link">¶</a></h2>
+<p>A pull request is done when:</p>
+<ul>
+<li>Code is reviewed</li>
+<li>Tests pass</li>
+<li>New public contracts are documented</li>
+<li>Migration is included where required</li>
+<li>No secrets are exposed</li>
+<li>Logs are structured</li>
+<li>Errors are stable</li>
+<li>Compatibility metrics exist where required</li>
+<li>Deferred cleanup is tracked</li>
+<li>Main remains buildable</li>
+<li>Relevant milestone status is updated</li>
+</ul>
+<h2 id="change-control-rules">Change-Control Rules<a class="headerlink" href="#change-control-rules" title="Permanent link">¶</a></h2>
+<h3 id="no-big-bang-rename">No Big-Bang Rename<a class="headerlink" href="#no-big-bang-rename" title="Permanent link">¶</a></h3>
+<p>Package, route, type, and directory renaming should be sequenced to avoid hiding
+behavioral changes inside naming churn.</p>
+<h3 id="no-big-bang-persistence-rewrite">No Big-Bang Persistence Rewrite<a class="headerlink" href="#no-big-bang-persistence-rewrite" title="Permanent link">¶</a></h3>
+<p>New tables and repositories should be additive until migration and rollback are
+verified.</p>
+<h3 id="no-unmeasured-compatibility">No Unmeasured Compatibility<a class="headerlink" href="#no-unmeasured-compatibility" title="Permanent link">¶</a></h3>
+<p>A legacy path must emit usage evidence before removal.</p>
+<h3 id="no-silent-semantic-change">No Silent Semantic Change<a class="headerlink" href="#no-silent-semantic-change" title="Permanent link">¶</a></h3>
+<p>Changes to scheduling, repeat behavior, guide identity, stream behavior, or
+provider matching require explicit tests and release notes.</p>
+<h3 id="no-direct-legacy-access-from-new-modules">No Direct Legacy Access From New Modules<a class="headerlink" href="#no-direct-legacy-access-from-new-modules" title="Permanent link">¶</a></h3>
+<p>New modules may use compatibility interfaces but should not query legacy tables
+directly.</p>
+<h3 id="no-provider-calls-inside-write-transactions">No Provider Calls Inside Write Transactions<a class="headerlink" href="#no-provider-calls-inside-write-transactions" title="Permanent link">¶</a></h3>
+<p>Provider network requests must remain outside SQLite write transactions.</p>
+<h3 id="no-runtime-scheduling">No Runtime Scheduling<a class="headerlink" href="#no-runtime-scheduling" title="Permanent link">¶</a></h3>
+<p>The playout subsystem must not mutate or regenerate the schedule while serving
+a stream.</p>
+<h3 id="no-secret-in-output">No Secret in Output<a class="headerlink" href="#no-secret-in-output" title="Permanent link">¶</a></h3>
+<p>Provider credentials, plugin secrets, API tokens, and master keys must never
+appear in XMLTV, M3U, logs, errors, or support bundles.</p>
+<h2 id="dependency-management">Dependency Management<a class="headerlink" href="#dependency-management" title="Permanent link">¶</a></h2>
+<p>Dependency upgrades should be separate from architecture migration unless the
+upgrade is required for the milestone.</p>
+<p>A required upgrade must state:</p>
+<ul>
+<li>Why it is required</li>
+<li>Compatibility risk</li>
+<li>Migration impact</li>
+<li>Rollback</li>
+<li>Test coverage</li>
+</ul>
+<h2 id="branding-transition">Branding Transition<a class="headerlink" href="#branding-transition" title="Permanent link">¶</a></h2>
+<p>Branding should change in controlled layers:</p>
+<ol>
+<li>Internal ChannelForge domain names</li>
+<li>New ChannelForge API names</li>
+<li>First-party UI</li>
+<li>Container and package metadata</li>
+<li>Public README and documentation</li>
+<li>Release artifacts</li>
+</ol>
+<p>Attribution to Tunarr remains.</p>
+<p>Branding changes must not break:</p>
+<ul>
+<li>Data paths</li>
+<li>Container mounts</li>
+<li>Existing environment variables</li>
+<li>API compatibility</li>
+<li>Client configuration</li>
+<li>Backup restore</li>
+</ul>
+<h2 id="data-migration-policy">Data Migration Policy<a class="headerlink" href="#data-migration-policy" title="Permanent link">¶</a></h2>
+<p>Persistence changes must be:</p>
+<ul>
+<li>Versioned</li>
+<li>Forward-tested</li>
+<li>Restart-safe</li>
+<li>Backed up</li>
+<li>Verified</li>
+<li>Observable</li>
+<li>Reversible where support policy requires</li>
+</ul>
+<h2 id="legacy-removal-policy">Legacy Removal Policy<a class="headerlink" href="#legacy-removal-policy" title="Permanent link">¶</a></h2>
+<p>A legacy path may be removed only when:</p>
+<ul>
+<li>Canonical replacement is complete</li>
+<li>First-party callers no longer use it</li>
+<li>Compatibility metrics show no supported use</li>
+<li>Migration fixtures pass</li>
+<li>Rollback window closed</li>
+<li>Release notes announce removal</li>
+<li>An explicit cleanup pull request is reviewed</li>
+</ul>
+<h2 id="testing-policy">Testing Policy<a class="headerlink" href="#testing-policy" title="Permanent link">¶</a></h2>
+<p>Implementation work follows the testing architecture.</p>
+<p>Required categories grow by milestone:</p>
+<ul>
+<li>Characterization</li>
+<li>Unit</li>
+<li>Domain</li>
+<li>Component</li>
+<li>Integration</li>
+<li>Contract</li>
+<li>Migration</li>
+<li>Runtime</li>
+<li>Platform</li>
+<li>Performance</li>
+<li>Security</li>
+<li>Soak</li>
+</ul>
+<h2 id="platform-policy">Platform Policy<a class="headerlink" href="#platform-policy" title="Permanent link">¶</a></h2>
+<p>Linux container behavior is authoritative for production.</p>
+<p>Windows remains a supported development environment.</p>
+<p>Windows-specific test differences must be classified rather than ignored.</p>
+<h2 id="documentation-policy">Documentation Policy<a class="headerlink" href="#documentation-policy" title="Permanent link">¶</a></h2>
+<p>Roadmap documents should describe implementation order, not replace the
+architecture specification.</p>
+<p>Implementation pull requests should update:</p>
+<ul>
+<li>Architecture documents when design changes</li>
+<li>Roadmap milestone status</li>
+<li>Operator documentation</li>
+<li>Migration notes</li>
+<li>API documentation</li>
+<li>Release notes where behavior changes</li>
+</ul>
+<h2 id="decision-policy">Decision Policy<a class="headerlink" href="#decision-policy" title="Permanent link">¶</a></h2>
+<p>A new ADR is required when implementation discovers a need to change:</p>
+<ul>
+<li>Persistence engine</li>
+<li>Domain ownership</li>
+<li>Scheduling determinism</li>
+<li>Schedule versus playout separation</li>
+<li>Plugin isolation model</li>
+<li>Deployment topology</li>
+<li>Public API versioning</li>
+<li>Migration authority</li>
+<li>Security trust boundary</li>
+</ul>
+<h2 id="roadmap-status-review">Roadmap Status Review<a class="headerlink" href="#roadmap-status-review" title="Permanent link">¶</a></h2>
+<p>The roadmap should be reviewed:</p>
+<ul>
+<li>Before each milestone begins</li>
+<li>After each milestone completes</li>
+<li>When a major architecture decision changes</li>
+<li>Before release-candidate preparation</li>
+</ul>
+<h2 id="implementation-program-completion">Implementation Program Completion<a class="headerlink" href="#implementation-program-completion" title="Permanent link">¶</a></h2>
+<p>The implementation roadmap is complete when:</p>
+<ul>
+<li>All milestone documents are Complete or explicitly Deferred</li>
+<li>ChannelForge domain boundaries are active</li>
+<li>Stable ChannelForge identities are canonical</li>
+<li>Media Sources and Catalog are canonical</li>
+<li>Networks and Channels are canonical</li>
+<li>Deterministic scheduling produces approved plans</li>
+<li>Playout consumes published plans</li>
+<li>XMLTV, M3U, and HDHomeRun-compatible output validate</li>
+<li>First-party API and UI use ChannelForge contracts</li>
+<li>Authentication, authorization, secrets, and audit are active</li>
+<li>Docker and Unraid deployment validate</li>
+<li>Migration and rollback are verified</li>
+<li>Release gates pass</li>
+<li>Remaining legacy code has documented ownership and retirement criteria</li>
+</ul>
+<h2 id="immediate-next-document">Immediate Next Document<a class="headerlink" href="#immediate-next-document" title="Permanent link">¶</a></h2>
+<p>The first milestone document is:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>docs/implementation/01-baseline-and-change-control.md
+</span></code></pre></div>
+<p>It will define the exact repository baseline, inherited subsystem inventory,
+characterization-test requirements, architecture enforcement, risk
+classification, and the first implementation pull-request sequence.</p>
+<!-- DO NOT FORMAT -->
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://discord.gg/nYkb7MhPfD" target="_blank" rel="noopener" title="Join the Tunarr Discord" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M492.5 69.8c-.2-.3-.4-.6-.8-.7-38.1-17.5-78.4-30-119.7-37.1-.4-.1-.8 0-1.1.1s-.6.4-.8.8c-5.5 9.9-10.5 20.2-14.9 30.6-44.6-6.8-89.9-6.8-134.4 0-4.5-10.5-9.5-20.7-15.1-30.6-.2-.3-.5-.6-.8-.8s-.7-.2-1.1-.2C162.5 39 122.2 51.5 84.1 69c-.3.1-.6.4-.8.7C7.1 183.5-13.8 294.6-3.6 404.2c0 .3.1.5.2.8s.3.4.5.6c44.4 32.9 94 58 146.8 74.2.4.1.8.1 1.1 0s.7-.4.9-.7c11.3-15.4 21.4-31.8 30-48.8.1-.2.2-.5.2-.8s0-.5-.1-.8-.2-.5-.4-.6-.4-.3-.7-.4c-15.8-6.1-31.2-13.4-45.9-21.9-.3-.2-.5-.4-.7-.6s-.3-.6-.3-.9 0-.6.2-.9.3-.5.6-.7c3.1-2.3 6.2-4.7 9.1-7.1.3-.2.6-.4.9-.4s.7 0 1 .1c96.2 43.9 200.4 43.9 295.5 0 .3-.1.7-.2 1-.2s.7.2.9.4c2.9 2.4 6 4.9 9.1 7.2.2.2.4.4.6.7s.2.6.2.9-.1.6-.3.9-.4.5-.6.6c-14.7 8.6-30 15.9-45.9 21.8-.2.1-.5.2-.7.4s-.3.4-.4.7-.1.5-.1.8.1.5.2.8c8.8 17 18.8 33.3 30 48.8.2.3.6.6.9.7s.8.1 1.1 0c52.9-16.2 102.6-41.3 147.1-74.2.2-.2.4-.4.5-.6s.2-.5.2-.8c12.3-126.8-20.5-236.9-86.9-334.5zm-302 267.7c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.4 59.2-52.8 59.2m195.4 0c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.2 59.2-52.8 59.2"></path></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://github.com/sponsors/chrisbenincasa" target="_blank" rel="noopener" title="Sponsor Tunarr on GitHub" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="m241 87.1 15 20.7 15-20.7C296 52.5 336.2 32 378.9 32 452.4 32 512 91.6 512 165.1v2.6c0 112.2-139.9 242.5-212.9 298.2-12.4 9.4-27.6 14.1-43.1 14.1s-30.8-4.6-43.1-14.1C139.9 410.2 0 279.9 0 167.7v-2.6C0 91.6 59.6 32 133.1 32 175.8 32 216 52.5 241 87.1"></path></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tracking", "navigation.path", "navigation.sections", "navigation.indexes", "navigation.footer", "content.code.copy", "content.code.select", "content.tooltips", "content.action.edit", "content.action.view"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  
+<script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(()=>{ lightbox.reload(); });
+</script></body></html>

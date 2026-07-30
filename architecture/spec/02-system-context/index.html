@@ -1,0 +1,3861 @@
+<!DOCTYPE html><html lang="en" class="no-js"><head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://tunarr.com/architecture/spec/02-system-context/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>ChannelForge System Context - Tunarr</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  <link href="../../../assets/stylesheets/glightbox.min.css" rel="stylesheet"><script src="../../../assets/javascripts/glightbox.min.js"></script><style id="glightbox-style">
+            html.glightbox-open { overflow: initial; height: 100%; }
+            .gslide-title { margin-top: 0px; user-select: text; }
+            .gslide-desc { color: #666; user-select: text; }
+            .gslide-image img { background: white; }
+            .gscrollbar-fixer { padding-right: 15px; }
+            .gdesc-inner { font-size: 0.75rem; }
+            body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
+            body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
+            body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
+        </style></head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#channelforge-system-context" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Tunarr" class="md-header__button md-logo" aria-label="Tunarr" data-md-component="logo">
+      
+  <img src="../../../assets/tunarr.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Tunarr
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              ChannelForge System Context
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo" aria-label="Switch to light mode" type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"></path></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="indigo" aria-label="Switch to dark mode" type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="indigo" aria-label="Switch to system preference" type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required="">
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix="">
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__social">
+        
+          <a href="https://discord.gg/nYkb7MhPfD" title="Join the Tunarr Discord" class="md-header__button md-icon" target="_blank" rel="noopener">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M492.5 69.8c-.2-.3-.4-.6-.8-.7-38.1-17.5-78.4-30-119.7-37.1-.4-.1-.8 0-1.1.1s-.6.4-.8.8c-5.5 9.9-10.5 20.2-14.9 30.6-44.6-6.8-89.9-6.8-134.4 0-4.5-10.5-9.5-20.7-15.1-30.6-.2-.3-.5-.6-.8-.8s-.7-.2-1.1-.2C162.5 39 122.2 51.5 84.1 69c-.3.1-.6.4-.8.7C7.1 183.5-13.8 294.6-3.6 404.2c0 .3.1.5.2.8s.3.4.5.6c44.4 32.9 94 58 146.8 74.2.4.1.8.1 1.1 0s.7-.4.9-.7c11.3-15.4 21.4-31.8 30-48.8.1-.2.2-.5.2-.8s0-.5-.1-.8-.2-.5-.4-.6-.4-.3-.7-.4c-15.8-6.1-31.2-13.4-45.9-21.9-.3-.2-.5-.4-.7-.6s-.3-.6-.3-.9 0-.6.2-.9.3-.5.6-.7c3.1-2.3 6.2-4.7 9.1-7.1.3-.2.6-.4.9-.4s.7 0 1 .1c96.2 43.9 200.4 43.9 295.5 0 .3-.1.7-.2 1-.2s.7.2.9.4c2.9 2.4 6 4.9 9.1 7.2.2.2.4.4.6.7s.2.6.2.9-.1.6-.3.9-.4.5-.6.6c-14.7 8.6-30 15.9-45.9 21.8-.2.1-.5.2-.7.4s-.3.4-.4.7-.1.5-.1.8.1.5.2.8c8.8 17 18.8 33.3 30 48.8.2.3.6.6.9.7s.8.1 1.1 0c52.9-16.2 102.6-41.3 147.1-74.2.2-.2.4-.4.5-.6s.2-.5.2-.8c12.3-126.8-20.5-236.9-86.9-334.5zm-302 267.7c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.4 59.2-52.8 59.2m195.4 0c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.2 59.2-52.8 59.2"></path></svg>
+          </a>
+        
+          <a href="https://github.com/sponsors/chrisbenincasa" title="Sponsor Tunarr on GitHub" class="md-header__button md-icon" target="_blank" rel="noopener">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="m241 87.1 15 20.7 15-20.7C296 52.5 336.2 32 378.9 32 452.4 32 512 91.6 512 165.1v2.6c0 112.2-139.9 242.5-212.9 298.2-12.4 9.4-27.6 14.1-43.1 14.1s-30.8-4.6-43.1-14.1C139.9 410.2 0 279.9 0 167.7v-2.6C0 91.6 59.6 32 133.1 32 175.8 32 216 52.5 241 87.1"></path></svg>
+          </a>
+        
+      </div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/chrisbenincasa/tunarr" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    chrisbenincasa/tunarr
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Tunarr" class="md-nav__button md-logo" aria-label="Tunarr" data-md-component="logo">
+      
+  <img src="../../../assets/tunarr.png" alt="logo">
+
+    </a>
+    Tunarr
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/chrisbenincasa/tunarr" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    chrisbenincasa/tunarr
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix="">
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api-docs.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Docs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3">
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Getting Started
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Install
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/run/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Run
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4">
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Migration
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Migration
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/migration/migrate-to-1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Migrate to 1.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4">
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configure
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Configure
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_1">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/media_sources/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Media Sources
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_1" id="__nav_4_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Media Sources
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/plex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plex
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/jellyfin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Jellyfin
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/emby/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Emby
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_1_5">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/media_sources/local/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_1_5" id="__nav_4_1_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_4_1_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_1_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Local
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/local/movies/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Movies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/local/shows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shows
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/local/other_videos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Other Video
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/local/music/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Music
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/local/music_videos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Music Videos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/ffmpeg/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FFmpeg
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    FFmpeg
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/ffmpeg/transcode_config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transcode Configs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../misc/search/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Search
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Search
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/channels/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Channels
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_4" id="__nav_4_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Channels
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/channels/properties/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Properties
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/channels/flex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flex
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/channels/epg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EPG
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/channels/transcoding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transcoding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/channels/watermarks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Watermarks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/channels/programming/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Programming
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/library/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Library
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Library
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/library/filler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filler
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/library/custom-shows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Custom Shows
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/library/smart-collections/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Smart Collections
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/scheduling/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scheduling
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_6" id="__nav_4_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Scheduling
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/concepts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concepts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/random-slots/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Slot Editor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/time-slots/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Time Slots
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/cyclic-shuffle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cyclic Shuffle
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/block-shuffle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Block Shuffle
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/mid-roll-breaks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mid-Roll Breaks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/replicate/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Replicate
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/consolidate/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Consolidate
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_7">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/clients/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Clients
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_7" id="__nav_4_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Clients
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/clients/plex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plex
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/clients/jellyfin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Jellyfin
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_8">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/system/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    System
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/system/backup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/system/logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5">
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Misc.
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Misc.
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../misc/faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../misc/common-issues/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common Issues
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../misc/troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stream Troubleshooter
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6">
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Development
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../dev/contributing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+      
+        <li class="md-nav__item">
+  <a href="#purpose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Purpose
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#system-of-interest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        System of Interest
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#responsibilities-owned-by-channelforge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Responsibilities Owned by ChannelForge
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#responsibilities-not-owned-by-channelforge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Responsibilities Not Owned by ChannelForge
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#human-actors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Human Actors
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#external-systems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        External Systems
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="External Systems">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plex" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plex
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jellyfin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Jellyfin
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emby" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Emby
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iptv-and-media-clients" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IPTV and Media Clients
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#metadata-providers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Metadata Providers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reverse-proxy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reverse Proxy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#community-content-sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Community Content Sources
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docker-host" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Docker Host
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#system-context-diagram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        System Context Diagram
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#logical-runtime-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logical Runtime Components
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Logical Runtime Components">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#management-web-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Management Web Interface
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#api-and-application-core" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        API and Application Core
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#background-job-runtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Background Job Runtime
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#programming-engine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Programming Engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#network-health-and-recommendations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Network Health and Recommendations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#playout-and-stream-runtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Playout and Stream Runtime
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#output-adapters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Output Adapters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#persistence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Persistence
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#persistent-file-storage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Persistent File Storage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ffmpeg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FFmpeg
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#version-1-deployment-topology" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Version 1 Deployment Topology
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#trust-boundaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trust Boundaries
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Trust Boundaries">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#browser-and-api-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Browser and API Boundary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#media-source-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Media-Source Boundary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#community-content-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Community-Content Boundary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filesystem-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Filesystem Boundary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#streaming-client-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Streaming-Client Boundary
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-ownership-and-authority" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data Ownership and Authority
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#primary-interaction-flows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Primary Interaction Flows
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Primary Interaction Flows">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#instance-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Instance Setup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#media-import-and-synchronization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Media Import and Synchronization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#schedule-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Schedule Generation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#guide-and-playlist-publication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guide and Playlist Publication
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#live-playback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Live Playback
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#template-or-pack-import" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Template or Pack Import
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#failure-isolation-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Failure Isolation Requirements
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Failure Isolation Requirements">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#media-source-failure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Media-Source Failure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#schedule-generation-failure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Schedule-Generation Failure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#playout-failure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Playout Failure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#guide-generation-failure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guide-Generation Failure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#background-job-failure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Background-Job Failure
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#system-invariants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        System Invariants
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#version-1-non-goals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Version 1 Non-Goals
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deferred-decisions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deferred Decisions
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/chrisbenincasa/tunarr/edit/dev/docs/architecture/spec/02-system-context.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"></path></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/chrisbenincasa/tunarr/raw/dev/docs/architecture/spec/02-system-context.md" title="View source of this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"></path></svg>
+    </a>
+  
+
+
+<h1 id="channelforge-system-context">ChannelForge System Context<a class="headerlink" href="#channelforge-system-context" title="Permanent link">¶</a></h1>
+<ul>
+<li><strong>Specification version:</strong> 0.1</li>
+<li><strong>Status:</strong> Draft</li>
+<li><strong>Last updated:</strong> 2026-07-26</li>
+</ul>
+<h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">¶</a></h2>
+<p>This document defines the system boundary of ChannelForge, the people and
+systems that interact with it, and the logical runtime components contained
+inside a ChannelForge deployment.</p>
+<p>This is a system-level view. Detailed domain entities, database tables, API
+routes, scheduling algorithms, and plugin contracts are defined in later
+documents.</p>
+<h2 id="system-of-interest">System of Interest<a class="headerlink" href="#system-of-interest" title="Permanent link">¶</a></h2>
+<p>ChannelForge is a self-hosted virtual television programming and playout
+platform.</p>
+<p>It imports media information from supported media servers, maintains a
+normalized catalog, models television networks, generates deterministic
+schedules, executes live playout, and exposes channel and guide information to
+compatible clients.</p>
+<p>The initial deployment target is a single Docker container with persistent local
+storage.</p>
+<p>ChannelForge is a modular monolith. Its internal responsibilities must remain
+separated through explicit application and module boundaries even when they run
+inside the same process or container.</p>
+<h2 id="responsibilities-owned-by-channelforge">Responsibilities Owned by ChannelForge<a class="headerlink" href="#responsibilities-owned-by-channelforge" title="Permanent link">¶</a></h2>
+<p>ChannelForge owns:</p>
+<ul>
+<li>User and instance configuration</li>
+<li>Network definitions</li>
+<li>Channel definitions</li>
+<li>Network profiles</li>
+<li>Dayparts</li>
+<li>Programming blocks</li>
+<li>Scheduling rules</li>
+<li>Schedule plans</li>
+<li>Approved lineups</li>
+<li>Normalized catalog records</li>
+<li>Media-source bindings</li>
+<li>Branding configuration</li>
+<li>Presentation-asset configuration</li>
+<li>Network-health metrics</li>
+<li>Programming Director recommendations</li>
+<li>IPTV playlist generation</li>
+<li>XMLTV generation</li>
+<li>HDHomeRun-compatible discovery and lineup data</li>
+<li>Live playout coordination</li>
+<li>ChannelForge-owned identifiers</li>
+<li>Import, synchronization, and background-job state</li>
+<li>Migration state for inherited Tunarr data</li>
+</ul>
+<h2 id="responsibilities-not-owned-by-channelforge">Responsibilities Not Owned by ChannelForge<a class="headerlink" href="#responsibilities-not-owned-by-channelforge" title="Permanent link">¶</a></h2>
+<p>ChannelForge does not own:</p>
+<ul>
+<li>The original media files managed by Plex, Jellyfin, or Emby</li>
+<li>The availability or integrity of external media servers</li>
+<li>Client DVR databases</li>
+<li>Client playback implementations</li>
+<li>Third-party metadata-service availability</li>
+<li>Host operating-system security</li>
+<li>Docker host configuration</li>
+<li>Reverse-proxy configuration</li>
+<li>Network routing outside the ChannelForge deployment</li>
+<li>Public distribution infrastructure for community packs or plugins</li>
+<li>Media acquisition or downloading</li>
+<li>Digital-rights-management circumvention</li>
+</ul>
+<h2 id="human-actors">Human Actors<a class="headerlink" href="#human-actors" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Actor</th>
+<th>Primary responsibilities</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Administrator</td>
+<td>Configures the instance, users, media sources, secrets, storage, output settings, and system-level policies</td>
+</tr>
+<tr>
+<td>Operator</td>
+<td>Creates and manages networks, programming rules, schedules, branding, health recommendations, and playout</td>
+</tr>
+<tr>
+<td>Viewer</td>
+<td>Uses permitted read-only management views such as schedules, guide information, and network health</td>
+</tr>
+<tr>
+<td>API Client</td>
+<td>Uses the REST API for approved automation or integration workflows</td>
+</tr>
+</tbody>
+</table>
+<p>An individual user may hold more than one role. Exact authorization rules are
+defined in the security specification.</p>
+<h2 id="external-systems">External Systems<a class="headerlink" href="#external-systems" title="Permanent link">¶</a></h2>
+<h3 id="plex">Plex<a class="headerlink" href="#plex" title="Permanent link">¶</a></h3>
+<p>Plex may interact with ChannelForge in two separate roles:</p>
+<ol>
+<li>As a media source from which ChannelForge imports libraries and resolves
+   playback.</li>
+<li>As a Live TV or DVR client that consumes ChannelForge tuner, stream, and
+   guide output.</li>
+</ol>
+<p>These roles must remain logically separate even when they refer to the same Plex
+installation.</p>
+<h3 id="jellyfin">Jellyfin<a class="headerlink" href="#jellyfin" title="Permanent link">¶</a></h3>
+<p>Jellyfin may act as:</p>
+<ol>
+<li>A media source.</li>
+<li>A Live TV client consuming M3U, XMLTV, or compatible tuner output.</li>
+</ol>
+<h3 id="emby">Emby<a class="headerlink" href="#emby" title="Permanent link">¶</a></h3>
+<p>Emby may act as:</p>
+<ol>
+<li>A media source.</li>
+<li>A Live TV client consuming supported IPTV and guide output.</li>
+</ol>
+<h3 id="iptv-and-media-clients">IPTV and Media Clients<a class="headerlink" href="#iptv-and-media-clients" title="Permanent link">¶</a></h3>
+<p>Compatible clients may consume:</p>
+<ul>
+<li>M3U or M3U8 playlists</li>
+<li>Live channel streams</li>
+<li>XMLTV guide data</li>
+<li>HDHomeRun-compatible discovery and lineup endpoints</li>
+</ul>
+<p>Clients do not receive direct database access or unrestricted media-source
+credentials.</p>
+<h3 id="metadata-providers">Metadata Providers<a class="headerlink" href="#metadata-providers" title="Permanent link">¶</a></h3>
+<p>Future integrations may enrich normalized metadata using external providers
+such as TMDb or TVDB.</p>
+<p>Metadata enrichment is optional and must preserve provenance. External metadata
+must not silently replace explicit user overrides.</p>
+<h3 id="reverse-proxy">Reverse Proxy<a class="headerlink" href="#reverse-proxy" title="Permanent link">¶</a></h3>
+<p>A reverse proxy may provide:</p>
+<ul>
+<li>TLS termination</li>
+<li>Hostname routing</li>
+<li>External authentication integration</li>
+<li>Access restrictions</li>
+<li>Request logging</li>
+</ul>
+<p>ChannelForge must not require a reverse proxy for ordinary local deployment.</p>
+<h3 id="community-content-sources">Community Content Sources<a class="headerlink" href="#community-content-sources" title="Permanent link">¶</a></h3>
+<p>Users may obtain templates, programming packs, or plugins from external
+community sources.</p>
+<p>Imported community content is untrusted input and must be validated before it
+can affect active networks, schedules, files, or runtime behavior.</p>
+<h3 id="docker-host">Docker Host<a class="headerlink" href="#docker-host" title="Permanent link">¶</a></h3>
+<p>The Docker host provides:</p>
+<ul>
+<li>CPU</li>
+<li>Memory</li>
+<li>Storage</li>
+<li>Network interfaces</li>
+<li>Device access</li>
+<li>Optional hardware-transcoding devices</li>
+<li>Container lifecycle management</li>
+</ul>
+<p>ChannelForge must expose sufficient diagnostics for the operator to distinguish
+application failures from host-resource failures.</p>
+<h2 id="system-context-diagram">System Context Diagram<a class="headerlink" href="#system-context-diagram" title="Permanent link">¶</a></h2>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>flowchart LR
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    Admin[Administrator]
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    Operator[Operator]
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    Viewer[Viewer]
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    Automation[API Client]
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    Plex[Plex]
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    Jellyfin[Jellyfin]
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    Emby[Emby]
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    IPTV[IPTV and Media Clients]
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    Metadata[Metadata Providers]
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    Community[Community Content Sources]
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    Proxy[Reverse Proxy]
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>    Host[Docker Host]
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>    subgraph ChannelForge["ChannelForge Deployment"]
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>        Web["Management Web Interface"]
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>        API["Fastify API and Application Core"]
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>        Jobs["Background Job Runtime"]
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>        Programming["Programming Engine"]
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>        Health["Network Health and Recommendations"]
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>        Playout["Playout and Stream Runtime"]
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>        Outputs["Output Adapters"]
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>        Database[("SQLite Database")]
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>        Storage[("Persistent File Storage")]
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>        FFmpeg["FFmpeg Processes"]
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>    end
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    Admin --&gt; Web
+</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>    Operator --&gt; Web
+</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>    Viewer --&gt; Web
+</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>    Automation --&gt; API
+</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>
+</span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>    Web --&gt; API
+</span><span id="__span-0-35"><a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>    Proxy --&gt; API
+</span><span id="__span-0-36"><a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>
+</span><span id="__span-0-37"><a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>    API --&gt; Database
+</span><span id="__span-0-38"><a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>    API --&gt; Storage
+</span><span id="__span-0-39"><a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>    API --&gt; Jobs
+</span><span id="__span-0-40"><a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>    API --&gt; Programming
+</span><span id="__span-0-41"><a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>    API --&gt; Health
+</span><span id="__span-0-42"><a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>
+</span><span id="__span-0-43"><a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>    Jobs --&gt; Plex
+</span><span id="__span-0-44"><a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>    Jobs --&gt; Jellyfin
+</span><span id="__span-0-45"><a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>    Jobs --&gt; Emby
+</span><span id="__span-0-46"><a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>    Jobs --&gt; Metadata
+</span><span id="__span-0-47"><a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>    Jobs --&gt; Database
+</span><span id="__span-0-48"><a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>
+</span><span id="__span-0-49"><a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>    Programming --&gt; Database
+</span><span id="__span-0-50"><a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>    Health --&gt; Database
+</span><span id="__span-0-51"><a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>
+</span><span id="__span-0-52"><a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>    Playout --&gt; Plex
+</span><span id="__span-0-53"><a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>    Playout --&gt; Jellyfin
+</span><span id="__span-0-54"><a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>    Playout --&gt; Emby
+</span><span id="__span-0-55"><a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>    Playout --&gt; FFmpeg
+</span><span id="__span-0-56"><a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>    FFmpeg --&gt; Outputs
+</span><span id="__span-0-57"><a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>
+</span><span id="__span-0-58"><a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>    API --&gt; Outputs
+</span><span id="__span-0-59"><a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>    Database --&gt; Outputs
+</span><span id="__span-0-60"><a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>
+</span><span id="__span-0-61"><a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>    Outputs --&gt; Plex
+</span><span id="__span-0-62"><a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>    Outputs --&gt; Jellyfin
+</span><span id="__span-0-63"><a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>    Outputs --&gt; Emby
+</span><span id="__span-0-64"><a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>    Outputs --&gt; IPTV
+</span><span id="__span-0-65"><a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>
+</span><span id="__span-0-66"><a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>    Community --&gt; API
+</span><span id="__span-0-67"><a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>
+</span><span id="__span-0-68"><a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>    Host --&gt; API
+</span><span id="__span-0-69"><a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>    Host --&gt; Storage
+</span><span id="__span-0-70"><a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>    Host --&gt; FFmpeg
+</span></code></pre></div>
+<h2 id="logical-runtime-components">Logical Runtime Components<a class="headerlink" href="#logical-runtime-components" title="Permanent link">¶</a></h2>
+<h3 id="management-web-interface">Management Web Interface<a class="headerlink" href="#management-web-interface" title="Permanent link">¶</a></h3>
+<p>The management interface provides browser-based access to ChannelForge.</p>
+<p>It is responsible for:</p>
+<ul>
+<li>Network management</li>
+<li>Programming configuration</li>
+<li>Schedule review</li>
+<li>Branding</li>
+<li>Library inspection</li>
+<li>Template and pack workflows</li>
+<li>Health and recommendation views</li>
+<li>Instance administration</li>
+</ul>
+<p>The web interface communicates through the public application API. It must not
+access the database, media-server credentials, or FFmpeg processes directly.</p>
+<p>The inherited Tunarr React interface may remain available during migration, but
+new ChannelForge functionality must use ChannelForge terminology and API
+contracts.</p>
+<h3 id="api-and-application-core">API and Application Core<a class="headerlink" href="#api-and-application-core" title="Permanent link">¶</a></h3>
+<p>The API and application core are hosted by Fastify in the initial architecture.</p>
+<p>This component is responsible for:</p>
+<ul>
+<li>Request validation</li>
+<li>Authentication</li>
+<li>Authorization</li>
+<li>Application-service orchestration</li>
+<li>REST API contracts</li>
+<li>Configuration management</li>
+<li>Transaction boundaries</li>
+<li>Error normalization</li>
+<li>Module coordination</li>
+<li>Serving production web assets where applicable</li>
+</ul>
+<p>API routes must call application services rather than directly coordinating
+database queries, scheduling logic, and FFmpeg operations inside route handlers.</p>
+<h3 id="background-job-runtime">Background Job Runtime<a class="headerlink" href="#background-job-runtime" title="Permanent link">¶</a></h3>
+<p>The background-job runtime executes asynchronous work such as:</p>
+<ul>
+<li>Media-source imports</li>
+<li>Media synchronization</li>
+<li>Metadata enrichment</li>
+<li>Schedule generation</li>
+<li>Guide regeneration</li>
+<li>Network-health calculation</li>
+<li>Cleanup</li>
+<li>Backups</li>
+<li>Migration jobs</li>
+</ul>
+<p>The initial implementation may run jobs inside the main ChannelForge container.</p>
+<p>A separate worker service is not required for version 1. The job boundary must
+still be explicit so jobs can later move to separate processes without
+redesigning the domain model.</p>
+<h3 id="programming-engine">Programming Engine<a class="headerlink" href="#programming-engine" title="Permanent link">¶</a></h3>
+<p>The Programming Engine generates schedule plans from:</p>
+<ul>
+<li>Network configuration</li>
+<li>Channel configuration</li>
+<li>Dayparts</li>
+<li>Programming blocks</li>
+<li>Scheduling rules</li>
+<li>Catalog eligibility</li>
+<li>Schedule history</li>
+<li>Planning horizon</li>
+<li>Random seed</li>
+<li>Existing approved schedule state</li>
+</ul>
+<p>The Programming Engine must not:</p>
+<ul>
+<li>Start FFmpeg</li>
+<li>Resolve active stream URLs</li>
+<li>Serve client sessions</li>
+<li>Modify approved schedules without an explicit application command</li>
+<li>Depend directly on HTTP route objects</li>
+</ul>
+<h3 id="network-health-and-recommendations">Network Health and Recommendations<a class="headerlink" href="#network-health-and-recommendations" title="Permanent link">¶</a></h3>
+<p>The health subsystem calculates metrics from network configuration, catalog
+eligibility, schedules, and airing history.</p>
+<p>The Programming Director converts supported evidence into explainable
+recommendations.</p>
+<p>Recommendations must not silently alter active configuration.</p>
+<h3 id="playout-and-stream-runtime">Playout and Stream Runtime<a class="headerlink" href="#playout-and-stream-runtime" title="Permanent link">¶</a></h3>
+<p>The playout subsystem converts approved schedule state into active stream
+output.</p>
+<p>It is responsible for:</p>
+<ul>
+<li>Determining the currently airing schedule entry</li>
+<li>Resolving a playable media-source variant</li>
+<li>Starting and supervising FFmpeg</li>
+<li>Applying remuxing or transcoding configuration</li>
+<li>Handling presentation assets</li>
+<li>Recovering from unavailable media</li>
+<li>Tracking playout state</li>
+<li>Serving or coordinating stream sessions</li>
+</ul>
+<p>Playout consumes approved scheduling results. It does not decide the editorial
+identity of the network.</p>
+<h3 id="output-adapters">Output Adapters<a class="headerlink" href="#output-adapters" title="Permanent link">¶</a></h3>
+<p>Output adapters expose channel and guide state through supported formats and
+protocols.</p>
+<p>Initial adapters include:</p>
+<ul>
+<li>IPTV playlist output</li>
+<li>XMLTV guide output</li>
+<li>HDHomeRun-compatible discovery and lineup output</li>
+<li>Live stream endpoints</li>
+</ul>
+<p>All output adapters must use the same canonical ChannelForge channel
+identifiers.</p>
+<h3 id="persistence">Persistence<a class="headerlink" href="#persistence" title="Permanent link">¶</a></h3>
+<p>SQLite is the initial transactional source of truth.</p>
+<p>The database stores persistent application state including:</p>
+<ul>
+<li>Catalog records</li>
+<li>Source bindings</li>
+<li>Networks</li>
+<li>Channels</li>
+<li>Rules</li>
+<li>Schedule plans</li>
+<li>Schedule entries</li>
+<li>Users and authorization data</li>
+<li>Job state</li>
+<li>Health results</li>
+<li>Revisions</li>
+<li>Migration state</li>
+</ul>
+<p>Database access must be isolated behind repository or persistence interfaces.
+New domain services must not depend directly on SQLite-specific SQL behavior
+unless the dependency is explicitly documented.</p>
+<h3 id="persistent-file-storage">Persistent File Storage<a class="headerlink" href="#persistent-file-storage" title="Permanent link">¶</a></h3>
+<p>Persistent storage contains non-database application files such as:</p>
+<ul>
+<li>Database files</li>
+<li>Database backups</li>
+<li>Uploaded logos</li>
+<li>Branding assets</li>
+<li>Imported pack files</li>
+<li>Generated artifacts</li>
+<li>Logs</li>
+<li>Temporary runtime files that must survive process restarts where required</li>
+</ul>
+<p>The exact directory layout is defined in the deployment and migration
+specifications.</p>
+<h3 id="ffmpeg">FFmpeg<a class="headerlink" href="#ffmpeg" title="Permanent link">¶</a></h3>
+<p>FFmpeg is an external executable managed by the ChannelForge runtime.</p>
+<p>It runs within the deployment boundary but outside the Node.js application
+process.</p>
+<p>ChannelForge is responsible for:</p>
+<ul>
+<li>Building valid FFmpeg commands</li>
+<li>Starting processes</li>
+<li>Monitoring processes</li>
+<li>Capturing diagnostics</li>
+<li>Terminating abandoned processes</li>
+<li>Applying configured hardware acceleration</li>
+<li>Recovering from process failure</li>
+</ul>
+<p>FFmpeg is not permitted to modify ChannelForge scheduling or catalog state
+directly.</p>
+<h2 id="version-1-deployment-topology">Version 1 Deployment Topology<a class="headerlink" href="#version-1-deployment-topology" title="Permanent link">¶</a></h2>
+<p>The canonical version 1 deployment consists of:</p>
+<ul>
+<li>One ChannelForge Docker container</li>
+<li>One persistent data volume</li>
+<li>Configurable HTTP exposure</li>
+<li>UDP exposure where required for tuner discovery</li>
+<li>Optional hardware-device mappings</li>
+<li>Access to configured Plex, Jellyfin, or Emby servers</li>
+</ul>
+<p>Version 1 does not require:</p>
+<ul>
+<li>PostgreSQL</li>
+<li>Redis</li>
+<li>A separate worker container</li>
+<li>A cloud control plane</li>
+<li>A Kubernetes cluster</li>
+<li>A public community registry</li>
+</ul>
+<p>Docker Compose is the canonical deployment definition.</p>
+<p>The Unraid Community Applications template must represent the same container
+configuration rather than defining a separate architecture.</p>
+<h2 id="trust-boundaries">Trust Boundaries<a class="headerlink" href="#trust-boundaries" title="Permanent link">¶</a></h2>
+<h3 id="browser-and-api-boundary">Browser and API Boundary<a class="headerlink" href="#browser-and-api-boundary" title="Permanent link">¶</a></h3>
+<p>All browser and API input is untrusted.</p>
+<p>ChannelForge must validate:</p>
+<ul>
+<li>Request structure</li>
+<li>Identifiers</li>
+<li>Permissions</li>
+<li>File uploads</li>
+<li>Template data</li>
+<li>Pack data</li>
+<li>Plugin manifests</li>
+<li>Path values</li>
+<li>URLs</li>
+<li>Scheduling expressions</li>
+</ul>
+<p>The browser must never receive media-source access tokens unless a narrowly
+defined integration requires it and an accepted security decision permits it.</p>
+<h3 id="media-source-boundary">Media-Source Boundary<a class="headerlink" href="#media-source-boundary" title="Permanent link">¶</a></h3>
+<p>Plex, Jellyfin, and Emby responses are external data.</p>
+<p>ChannelForge must tolerate:</p>
+<ul>
+<li>Missing fields</li>
+<li>Changed metadata</li>
+<li>Deleted media</li>
+<li>Duplicate identifiers</li>
+<li>Unavailable servers</li>
+<li>Expired tokens</li>
+<li>Invalid playback URLs</li>
+<li>Partial synchronization</li>
+<li>Rate limits</li>
+<li>Version differences</li>
+</ul>
+<p>An integration failure must not corrupt the normalized catalog or active
+schedule state.</p>
+<h3 id="community-content-boundary">Community-Content Boundary<a class="headerlink" href="#community-content-boundary" title="Permanent link">¶</a></h3>
+<p>Templates, packs, artwork, and plugins from community sources are untrusted.</p>
+<p>Import must occur through validation and staging before activation.</p>
+<p>A pack must not automatically receive:</p>
+<ul>
+<li>Database access</li>
+<li>Arbitrary filesystem access</li>
+<li>Process execution</li>
+<li>Network access</li>
+<li>Secret access</li>
+<li>Permission to overwrite active networks</li>
+</ul>
+<h3 id="filesystem-boundary">Filesystem Boundary<a class="headerlink" href="#filesystem-boundary" title="Permanent link">¶</a></h3>
+<p>User-supplied paths and archive contents must be normalized and constrained.</p>
+<p>ChannelForge must prevent:</p>
+<ul>
+<li>Directory traversal</li>
+<li>Accidental overwrite of unrelated host files</li>
+<li>Archive extraction outside approved directories</li>
+<li>Executable content masquerading as ordinary assets</li>
+<li>Secret inclusion in exported packs</li>
+</ul>
+<h3 id="streaming-client-boundary">Streaming-Client Boundary<a class="headerlink" href="#streaming-client-boundary" title="Permanent link">¶</a></h3>
+<p>Streaming clients are not trusted management users.</p>
+<p>Access to live streams must not imply access to:</p>
+<ul>
+<li>Administrative APIs</li>
+<li>Media-source tokens</li>
+<li>User records</li>
+<li>Pack imports</li>
+<li>Scheduling controls</li>
+<li>Host diagnostics containing secrets</li>
+</ul>
+<h2 id="data-ownership-and-authority">Data Ownership and Authority<a class="headerlink" href="#data-ownership-and-authority" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Data</th>
+<th>Authority</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Network configuration</td>
+<td>ChannelForge</td>
+</tr>
+<tr>
+<td>Channel configuration</td>
+<td>ChannelForge</td>
+</tr>
+<tr>
+<td>Schedule plans</td>
+<td>ChannelForge</td>
+</tr>
+<tr>
+<td>Approved lineups</td>
+<td>ChannelForge</td>
+</tr>
+<tr>
+<td>Playout state</td>
+<td>ChannelForge runtime</td>
+</tr>
+<tr>
+<td>Normalized catalog fields</td>
+<td>ChannelForge, with recorded provenance</td>
+</tr>
+<tr>
+<td>Source item identifiers</td>
+<td>External media source</td>
+</tr>
+<tr>
+<td>Original media files</td>
+<td>Plex, Jellyfin, Emby, or local storage owner</td>
+</tr>
+<tr>
+<td>User overrides</td>
+<td>ChannelForge</td>
+</tr>
+<tr>
+<td>Imported template definition</td>
+<td>Imported source until copied into a network snapshot</td>
+</tr>
+<tr>
+<td>Template snapshot</td>
+<td>ChannelForge</td>
+</tr>
+<tr>
+<td>Media-source credentials</td>
+<td>ChannelForge secret storage</td>
+</tr>
+<tr>
+<td>Client DVR recordings</td>
+<td>Client system</td>
+</tr>
+<tr>
+<td>Host resource limits</td>
+<td>Docker host</td>
+</tr>
+</tbody>
+</table>
+<h2 id="primary-interaction-flows">Primary Interaction Flows<a class="headerlink" href="#primary-interaction-flows" title="Permanent link">¶</a></h2>
+<h3 id="instance-setup">Instance Setup<a class="headerlink" href="#instance-setup" title="Permanent link">¶</a></h3>
+<ol>
+<li>An administrator opens the management interface.</li>
+<li>ChannelForge establishes or verifies the initial administrative identity.</li>
+<li>The administrator configures storage, media sources, and output settings.</li>
+<li>ChannelForge validates connectivity before activating each integration.</li>
+</ol>
+<h3 id="media-import-and-synchronization">Media Import and Synchronization<a class="headerlink" href="#media-import-and-synchronization" title="Permanent link">¶</a></h3>
+<ol>
+<li>An administrator or operator starts an import or scheduled synchronization.</li>
+<li>The job runtime requests media data from a source adapter.</li>
+<li>Source data is normalized into ChannelForge catalog records.</li>
+<li>Source bindings retain external identifiers.</li>
+<li>Catalog changes are committed transactionally.</li>
+<li>Deleted or unavailable source items are marked according to synchronization
+   policy rather than silently destroying schedule history.</li>
+</ol>
+<h3 id="schedule-generation">Schedule Generation<a class="headerlink" href="#schedule-generation" title="Permanent link">¶</a></h3>
+<ol>
+<li>An operator requests schedule generation for a network, channel, and horizon.</li>
+<li>ChannelForge loads the relevant configuration revisions and catalog snapshot.</li>
+<li>Hard constraints filter ineligible candidates.</li>
+<li>Soft constraints and placement policies score and position candidates.</li>
+<li>Deterministic randomization uses a recorded seed.</li>
+<li>The Programming Engine produces a schedule plan.</li>
+<li>The plan is validated and presented for review or automatic approval,
+   depending on network policy.</li>
+<li>Approval materializes the active lineup used by guide and playout systems.</li>
+</ol>
+<h3 id="guide-and-playlist-publication">Guide and Playlist Publication<a class="headerlink" href="#guide-and-playlist-publication" title="Permanent link">¶</a></h3>
+<ol>
+<li>An output adapter reads canonical channel and approved schedule state.</li>
+<li>ChannelForge generates XMLTV, M3U, or HDHomeRun-compatible output.</li>
+<li>Compatible clients retrieve the output.</li>
+<li>Every adapter uses the same ChannelForge channel identity mapping.</li>
+</ol>
+<h3 id="live-playback">Live Playback<a class="headerlink" href="#live-playback" title="Permanent link">¶</a></h3>
+<ol>
+<li>A client requests a channel stream.</li>
+<li>ChannelForge identifies the active schedule entry.</li>
+<li>Playout resolves an available playback variant.</li>
+<li>ChannelForge starts or joins the required stream session.</li>
+<li>FFmpeg remuxes or transcodes when necessary.</li>
+<li>Stream output is delivered to the client.</li>
+<li>Failures are recorded and recovery policy selects fallback behavior.</li>
+</ol>
+<h3 id="template-or-pack-import">Template or Pack Import<a class="headerlink" href="#template-or-pack-import" title="Permanent link">¶</a></h3>
+<ol>
+<li>A user selects a local template or programming pack.</li>
+<li>ChannelForge reads the manifest without activating content.</li>
+<li>Schema, version, paths, assets, and permissions are validated.</li>
+<li>The user reviews proposed changes.</li>
+<li>Accepted content is copied into ChannelForge-owned records or storage.</li>
+<li>Existing networks remain unchanged unless the user explicitly applies an
+   update.</li>
+</ol>
+<h2 id="failure-isolation-requirements">Failure Isolation Requirements<a class="headerlink" href="#failure-isolation-requirements" title="Permanent link">¶</a></h2>
+<h3 id="media-source-failure">Media-Source Failure<a class="headerlink" href="#media-source-failure" title="Permanent link">¶</a></h3>
+<p>A failed media source must not prevent management of unrelated networks or
+sources.</p>
+<p>Previously imported catalog records remain available for inspection, but
+playout eligibility must reflect current source availability policy.</p>
+<h3 id="schedule-generation-failure">Schedule-Generation Failure<a class="headerlink" href="#schedule-generation-failure" title="Permanent link">¶</a></h3>
+<p>A failed generation attempt must not replace the active approved schedule.</p>
+<p>The failure must retain:</p>
+<ul>
+<li>Network and channel identifiers</li>
+<li>Input revision identifiers</li>
+<li>Random seed</li>
+<li>Failed rule or stage</li>
+<li>Diagnostic message</li>
+<li>Timestamp</li>
+</ul>
+<h3 id="playout-failure">Playout Failure<a class="headerlink" href="#playout-failure" title="Permanent link">¶</a></h3>
+<p>A failed program must not corrupt the approved schedule plan.</p>
+<p>Playout recovery may:</p>
+<ul>
+<li>Retry the source</li>
+<li>Select another playback variant</li>
+<li>Insert configured filler</li>
+<li>Display an error stream</li>
+<li>Advance to the next eligible entry</li>
+</ul>
+<p>Recovery behavior must be recorded separately from editorial schedule state.</p>
+<h3 id="guide-generation-failure">Guide-Generation Failure<a class="headerlink" href="#guide-generation-failure" title="Permanent link">¶</a></h3>
+<p>A failed XMLTV or playlist regeneration must not delete the last valid published
+artifact until a valid replacement is available.</p>
+<h3 id="background-job-failure">Background-Job Failure<a class="headerlink" href="#background-job-failure" title="Permanent link">¶</a></h3>
+<p>Jobs must expose status and diagnostics.</p>
+<p>A failed job must not remain indefinitely marked as running after process
+restart.</p>
+<h2 id="system-invariants">System Invariants<a class="headerlink" href="#system-invariants" title="Permanent link">¶</a></h2>
+<ol>
+<li>The management interface does not access SQLite directly.</li>
+<li>API routes do not contain the scheduling algorithm.</li>
+<li>The Programming Engine does not start FFmpeg.</li>
+<li>Playout does not silently rewrite network editorial rules.</li>
+<li>Media-source identifiers are not used as canonical ChannelForge identifiers.</li>
+<li>An imported template does not become active without validation.</li>
+<li>Updating a template does not silently mutate existing networks.</li>
+<li>Failed schedule generation does not replace an approved schedule.</li>
+<li>All output adapters use a shared canonical channel identity.</li>
+<li>Secrets are excluded from ordinary API responses and exported packs.</li>
+<li>Community content is treated as untrusted input.</li>
+<li>The application remains operable without Redis or PostgreSQL in version 1.</li>
+<li>Docker and Unraid deployments use the same application architecture.</li>
+<li>Inherited Tunarr runtime behavior is isolated behind explicit compatibility
+    or application boundaries as migration proceeds.</li>
+</ol>
+<h2 id="version-1-non-goals">Version 1 Non-Goals<a class="headerlink" href="#version-1-non-goals" title="Permanent link">¶</a></h2>
+<p>Version 1 does not attempt to provide:</p>
+<ul>
+<li>A hosted ChannelForge cloud service</li>
+<li>A public plugin marketplace</li>
+<li>A public programming-pack registry</li>
+<li>Multi-node distributed playout</li>
+<li>Automatic media acquisition</li>
+<li>DRM removal</li>
+<li>A replacement for Plex, Jellyfin, or Emby</li>
+<li>A general-purpose video editor</li>
+<li>A broadcast-grade hardware automation system</li>
+<li>Mandatory external database infrastructure</li>
+<li>Unrestricted third-party plugin execution</li>
+</ul>
+<h2 id="deferred-decisions">Deferred Decisions<a class="headerlink" href="#deferred-decisions" title="Permanent link">¶</a></h2>
+<p>The following decisions are intentionally deferred to later specification
+documents or ADRs:</p>
+<ul>
+<li>Exact authentication mechanism</li>
+<li>Initial administrator bootstrap process</li>
+<li>Password and session storage design</li>
+<li>Plugin process isolation mechanism</li>
+<li>Remote community-registry protocol</li>
+<li>PostgreSQL support</li>
+<li>Distributed worker support</li>
+<li>Multi-host playout</li>
+<li>Search-index implementation</li>
+<li>Exact persistent directory layout</li>
+<li>Exact hardware-transcoding support matrix</li>
+<li>Public API versioning schedule</li>
+</ul>
+<!-- DO NOT FORMAT -->
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://discord.gg/nYkb7MhPfD" target="_blank" rel="noopener" title="Join the Tunarr Discord" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M492.5 69.8c-.2-.3-.4-.6-.8-.7-38.1-17.5-78.4-30-119.7-37.1-.4-.1-.8 0-1.1.1s-.6.4-.8.8c-5.5 9.9-10.5 20.2-14.9 30.6-44.6-6.8-89.9-6.8-134.4 0-4.5-10.5-9.5-20.7-15.1-30.6-.2-.3-.5-.6-.8-.8s-.7-.2-1.1-.2C162.5 39 122.2 51.5 84.1 69c-.3.1-.6.4-.8.7C7.1 183.5-13.8 294.6-3.6 404.2c0 .3.1.5.2.8s.3.4.5.6c44.4 32.9 94 58 146.8 74.2.4.1.8.1 1.1 0s.7-.4.9-.7c11.3-15.4 21.4-31.8 30-48.8.1-.2.2-.5.2-.8s0-.5-.1-.8-.2-.5-.4-.6-.4-.3-.7-.4c-15.8-6.1-31.2-13.4-45.9-21.9-.3-.2-.5-.4-.7-.6s-.3-.6-.3-.9 0-.6.2-.9.3-.5.6-.7c3.1-2.3 6.2-4.7 9.1-7.1.3-.2.6-.4.9-.4s.7 0 1 .1c96.2 43.9 200.4 43.9 295.5 0 .3-.1.7-.2 1-.2s.7.2.9.4c2.9 2.4 6 4.9 9.1 7.2.2.2.4.4.6.7s.2.6.2.9-.1.6-.3.9-.4.5-.6.6c-14.7 8.6-30 15.9-45.9 21.8-.2.1-.5.2-.7.4s-.3.4-.4.7-.1.5-.1.8.1.5.2.8c8.8 17 18.8 33.3 30 48.8.2.3.6.6.9.7s.8.1 1.1 0c52.9-16.2 102.6-41.3 147.1-74.2.2-.2.4-.4.5-.6s.2-.5.2-.8c12.3-126.8-20.5-236.9-86.9-334.5zm-302 267.7c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.4 59.2-52.8 59.2m195.4 0c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.2 59.2-52.8 59.2"></path></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://github.com/sponsors/chrisbenincasa" target="_blank" rel="noopener" title="Sponsor Tunarr on GitHub" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="m241 87.1 15 20.7 15-20.7C296 52.5 336.2 32 378.9 32 452.4 32 512 91.6 512 165.1v2.6c0 112.2-139.9 242.5-212.9 298.2-12.4 9.4-27.6 14.1-43.1 14.1s-30.8-4.6-43.1-14.1C139.9 410.2 0 279.9 0 167.7v-2.6C0 91.6 59.6 32 133.1 32 175.8 32 216 52.5 241 87.1"></path></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tracking", "navigation.path", "navigation.sections", "navigation.indexes", "navigation.footer", "content.code.copy", "content.code.select", "content.tooltips", "content.action.edit", "content.action.view"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  
+<script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(()=>{ lightbox.reload(); });
+</script></body></html>
