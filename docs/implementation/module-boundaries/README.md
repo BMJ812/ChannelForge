@@ -1,12 +1,13 @@
 # Milestone 02 Module-Boundary Evidence
 
 - **Milestone status:** In Progress
-- **Current implementation unit:** PR 02C - Public Contract Classification and Enforcement
+- **Current implementation unit:** PR 02D - Compatibility Namespace
 - **Enforcement mode:** Path-scoped strict enforcement
 - **Runtime behavior changed:** No
 - **Production file moved:** No
 - **Stable primitive extracted:** Yes
 - **Canonical public-contract boundary established:** Yes
+- **Tunarr compatibility boundary established:** Yes
 
 ## Purpose
 
@@ -19,6 +20,9 @@ entry point, and blocks new modules from adopting legacy shared surfaces.
 PR 02C classifies the inherited Types package, establishes one governed public-
 contract entry point, and prevents new modules from adopting legacy API, schema,
 or provider payload surfaces.
+PR 02D establishes the Tunarr compatibility namespace, adds the first
+compatibility read port and usage metric, and prevents new structural code from
+bypassing compatibility to inherited server internals.
 
 ## Evidence Artifacts
 
@@ -31,6 +35,7 @@ or provider payload surfaces.
 | `decision-register.md` | Local M02 implementation decisions that do not require ADRs |
 | `shared-kernel-classification.md` | Shared-package inventory, export classification, ownership, and migration disposition |
 | `public-contract-classification.md` | Types-package inventory, entry-point classification, and public-contract policy |
+| `compatibility-boundary.md` | Tunarr compatibility namespace, initial port, usage metric, and removal policy |
 | `scripts/architecture/shared-boundaries.json` | Machine-readable shared-package entry classification |
 | `scripts/architecture/types-boundaries.json` | Machine-readable Types-package entry classification |
 | `scripts/architecture/` | Deterministic architecture scanner, registries, and self-tests |

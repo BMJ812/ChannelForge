@@ -2,10 +2,10 @@
 
 - **Roadmap version:** 0.1
 - **Milestone status:** In Progress
-- **Last updated:** 2026-07-28
+- **Last updated:** 2026-08-13
 - **Risk classification:** Foundation / High
 - **Implementation authority:** Additive module boundaries and dependency enforcement
-- **Current implementation unit:** PR 02C - Public Contract Classification and Enforcement
+- **Current implementation unit:** PR 02D - Compatibility Namespace
 
 ## Purpose
 

@@ -68,6 +68,11 @@ export const ruleDefinitions = Object.freeze({
     title: 'New modules must not import inherited database internals directly',
     critical: false,
   },
+  'CMP-001': {
+    title:
+      'New structural roots must use compatibility for inherited server internals',
+    critical: true,
+  },
   'STR-001': {
     title: 'Module directories must use an approved canonical name',
     critical: false,
