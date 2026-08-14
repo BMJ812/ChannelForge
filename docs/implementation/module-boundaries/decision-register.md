@@ -1,7 +1,7 @@
 # Module-Boundary Decision Register
 
 - **Milestone:** M02
-- **Current unit:** PR 02A
+- **Current unit:** PR 02D
 - **ADR changes:** None
 
 ## Decisions
@@ -45,3 +45,19 @@
   and test workflows remain authoritative for their existing scope.
 - **Rollback:** Remove the dedicated workflow after equivalent matrix coverage
   exists elsewhere.
+
+### M02-DEC-005: Establish a Tunarr Anti-Corruption Namespace
+
+- **Status:** Accepted
+- **Decision:** Use `server/src/compatibility/tunarr/` as the temporary anti-corruption boundary for inherited Tunarr implementation.
+- **Reason:** New ChannelForge structures require explicit, measurable seams instead of direct dependencies on inherited server internals.
+- **Boundary:** Compatibility may call inherited implementation. New structural roots must use declared compatibility ports or later module-owned ports.
+- **Rollback:** Remove the namespace and CMP-001 when no new structural code depends on this compatibility surface.
+
+### M02-DEC-006: Measure Compatibility Use In Process First
+
+- **Status:** Accepted
+- **Decision:** Begin compatibility usage evidence with dependency-free process-local counters.
+- **Reason:** PR 02D requires measurable compatibility use without introducing telemetry infrastructure or durable state.
+- **Boundary:** Counters are migration diagnostics only and may later feed the Infrastructure telemetry boundary.
+- **Rollback:** Remove a counter with its compatibility adapter after the corresponding inherited dependency is retired.

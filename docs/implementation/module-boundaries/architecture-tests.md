@@ -1,6 +1,6 @@
 # Architecture Tests
 
-- **Authority:** Milestone 02 PR 02A through PR 02C
+- **Authority:** Milestone 02 PR 02A through PR 02D
 - **Tool:** Custom Node.js scanner using the existing TypeScript compiler API
 - **New dependency:** None
 - **Runtime behavior changed:** No
@@ -68,6 +68,12 @@ The self-test suite covers:
 - Forbidden scheduling-to-playout import
 - Forbidden web-to-server import
 - Allowed compatibility adapter behavior
+- Allowed business-module dependency on a declared compatibility port
+- Forbidden business-module dependency on compatibility implementation
+- Forbidden new-module direct import of inherited server internals
+- Direct module database import producing both `CMP-001` and `MOD-009`
+- Forbidden application-host direct import of inherited server internals
+- Allowed compatibility adapter import of inherited database code
 - Expired waiver
 - Critical-rule waiver rejection
 - Non-padded waiver milestone rejection

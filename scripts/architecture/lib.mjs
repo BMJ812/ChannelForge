@@ -409,6 +409,17 @@ function isPublicModuleEntry(relativePath) {
   return match !== null;
 }
 
+function isPublicCompatibilityPort(relativePath) {
+  const withoutExtension = stripSourceExtension(
+    normalizeRelativePath(relativePath ?? ''),
+  );
+
+  return [
+    'server/src/compatibility/tunarr/ports',
+    'server/src/compatibility/tunarr/ports/index',
+  ].includes(withoutExtension);
+}
+
 function collectImportSpecifiers(sourceText, fileName) {
   const sourceFile = ts.createSourceFile(
     fileName,
@@ -609,10 +620,11 @@ function evaluateImport({
   if (
     sourceInfo.category === 'module'
     && targetInfo.category === 'compatibility'
+    && !isPublicCompatibilityPort(targetInfo.relativePath)
   ) {
     add(
       'MOD-007',
-      'Business modules may not depend on compatibility implementations.',
+      'Business modules may depend only on declared compatibility ports.',
     );
   }
 
@@ -634,6 +646,23 @@ function evaluateImport({
     add(
       'MOD-009',
       'New modules may not import inherited database internals directly.',
+    );
+  }
+
+  const sourceMustUseCompatibility = [
+    'app',
+    'infrastructure',
+    'module',
+    'transport',
+  ].includes(sourceInfo.category);
+
+  if (
+    sourceMustUseCompatibility
+    && targetInfo.category === 'legacy-server'
+  ) {
+    add(
+      'CMP-001',
+      'New ChannelForge structural code must use the Tunarr compatibility boundary instead of inherited server internals.',
     );
   }
 

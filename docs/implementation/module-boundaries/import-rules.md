@@ -1,6 +1,6 @@
 # Initial Import Rules
 
-- **Authority:** Milestone 02 PR 02A through PR 02C
+- **Authority:** Milestone 02 PR 02A through PR 02D
 - **Enforcement mode:** Path-scoped strict
 - **Current milestone:** M02
 
@@ -14,9 +14,10 @@
 | `MOD-004` | Scheduling does not depend on Playout, FFmpeg, or process control | Scheduling module | Prohibited |
 | `MOD-005` | Playout does not import Programming internals | Playout module | Prohibited |
 | `MOD-006` | Web does not import server internals | `web/src/**` | Prohibited |
-| `MOD-007` | Business modules do not depend on compatibility implementations | New modules | Exact temporary waiver permitted |
+| `MOD-007` | Business modules may use declared compatibility ports but not compatibility implementations | New modules | Exact temporary waiver permitted |
 | `MOD-008` | Callers outside a module do not deep-import module internals | New structural roots | Exact temporary waiver permitted |
 | `MOD-009` | New modules do not import inherited database internals directly | New modules | Exact temporary waiver permitted |
+| `CMP-001` | New structural roots use compatibility instead of importing inherited server internals directly | New modules, application host, infrastructure, and transport | Prohibited |
 | `STR-001` | Module directories use an approved canonical name | New module directories | Ownership decision required |
 | `STR-002` | Every module exposes `index.ts` | New module directories | Not handled by import waiver |
 | `STR-003` | Every module contains `README.md` | New module directories | Not handled by import waiver |
@@ -38,6 +39,7 @@ The initial non-waivable rules are:
 MOD-004
 MOD-005
 MOD-006
+CMP-001
 SHR-001
 SHR-002
 SHR-003

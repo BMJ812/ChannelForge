@@ -224,6 +224,149 @@ test('allows compatibility adapters to use legacy code and public ports', async 
   });
 });
 
+test('allows modules to depend on public compatibility ports', async () => {
+  await withRepository(async (repoRoot) => {
+    await writeRepoFile(
+      repoRoot,
+      'server/src/compatibility/tunarr/ports/index.ts',
+      'export interface LegacyReadPort { read(): string; }\n',
+    );
+
+    await createModule(repoRoot, 'instance', {
+      'application/service.ts':
+        "import type { LegacyReadPort } from '@/compatibility/tunarr/ports';\n"
+        + 'export type Port = LegacyReadPort;\n',
+    });
+
+    const result = await checkArchitecture({
+      registry: emptyRegistry,
+      repoRoot,
+    });
+
+    assert.deepEqual(result.violations, []);
+  });
+});
+
+test('rejects module imports of compatibility implementations', async () => {
+  await withRepository(async (repoRoot) => {
+    await writeRepoFile(
+      repoRoot,
+      'server/src/compatibility/tunarr/adapters/legacy.ts',
+      'export const legacyAdapter = true;\n',
+    );
+
+    await createModule(repoRoot, 'instance', {
+      'application/service.ts':
+        "import { legacyAdapter } from '@/compatibility/tunarr/adapters/legacy.js';\n"
+        + 'export const service = legacyAdapter;\n',
+    });
+
+    const result = await checkArchitecture({
+      registry: emptyRegistry,
+      repoRoot,
+    });
+
+    assert.deepEqual(ruleIds(result), ['MOD-007']);
+  });
+});
+
+test('rejects new modules importing inherited server internals directly', async () => {
+  await withRepository(async (repoRoot) => {
+    await writeRepoFile(
+      repoRoot,
+      'server/src/services/LegacyIdentityService.ts',
+      'export const legacyIdentity = true;\n',
+    );
+
+    await createModule(repoRoot, 'instance', {
+      'application/service.ts':
+        "import { legacyIdentity } from '@/services/LegacyIdentityService.js';\n"
+        + 'export const service = legacyIdentity;\n',
+    });
+
+    const result = await checkArchitecture({
+      registry: emptyRegistry,
+      repoRoot,
+    });
+
+    assert.deepEqual(ruleIds(result), ['CMP-001']);
+    assert.equal(result.violations[0].critical, true);
+  });
+});
+
+test('rejects module database imports with both database and compatibility rules', async () => {
+  await withRepository(async (repoRoot) => {
+    await writeRepoFile(
+      repoRoot,
+      'server/src/db/SettingsDB.ts',
+      'export const legacySettings = true;\n',
+    );
+
+    await createModule(repoRoot, 'instance', {
+      'application/service.ts':
+        "import { legacySettings } from '@/db/SettingsDB.js';\n"
+        + 'export const service = legacySettings;\n',
+    });
+
+    const result = await checkArchitecture({
+      registry: emptyRegistry,
+      repoRoot,
+    });
+
+    assert.deepEqual(ruleIds(result), ['CMP-001', 'MOD-009']);
+    assert.equal(result.violations[0].critical, true);
+    assert.equal(result.violations[1].critical, false);
+  });
+});
+
+test('rejects application-host imports of inherited server internals', async () => {
+  await withRepository(async (repoRoot) => {
+    await writeRepoFile(
+      repoRoot,
+      'server/src/services/LegacyIdentityService.ts',
+      'export const legacyIdentity = true;\n',
+    );
+
+    await writeRepoFile(
+      repoRoot,
+      'server/src/app/bootstrap/service.ts',
+      "import { legacyIdentity } from '@/services/LegacyIdentityService.js';\n"
+        + 'export const service = legacyIdentity;\n',
+    );
+
+    const result = await checkArchitecture({
+      registry: emptyRegistry,
+      repoRoot,
+    });
+
+    assert.deepEqual(ruleIds(result), ['CMP-001']);
+  });
+});
+
+test('allows compatibility adapters to import inherited database code', async () => {
+  await withRepository(async (repoRoot) => {
+    await writeRepoFile(
+      repoRoot,
+      'server/src/db/SettingsDB.ts',
+      'export const legacySettings = true;\n',
+    );
+
+    await writeRepoFile(
+      repoRoot,
+      'server/src/compatibility/tunarr/adapters/settings.ts',
+      "import { legacySettings } from '@/db/SettingsDB.js';\n"
+        + 'export const adapter = legacySettings;\n',
+    );
+
+    const result = await checkArchitecture({
+      registry: emptyRegistry,
+      repoRoot,
+    });
+
+    assert.deepEqual(result.violations, []);
+  });
+});
+
 test('rejects expired waivers', async () => {
   await withRepository(async (repoRoot) => {
     await createModule(repoRoot, 'catalog', {
