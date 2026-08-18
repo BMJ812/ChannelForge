@@ -9,6 +9,8 @@ PR 02F establishes the source-observation boundary only.
 
 ## Public Interface
 
+- `CatalogItemId`
+- `CatalogSnapshotId`
 - `CatalogCommandService`
 - `CatalogSourceObservationPort`
 - `CatalogSourceObservation`
