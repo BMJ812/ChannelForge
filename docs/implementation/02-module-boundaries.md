@@ -2,10 +2,10 @@
 
 - **Roadmap version:** 0.1
 - **Milestone status:** In Progress
-- **Last updated:** 2026-08-13
+- **Last updated:** 2026-08-14
 - **Risk classification:** Foundation / High
 - **Implementation authority:** Additive module boundaries and dependency enforcement
-- **Current implementation unit:** PR 02D - Compatibility Namespace
+- **Current implementation unit:** PR 02E - Access and Instance Module Shells
 
 ## Purpose
 
