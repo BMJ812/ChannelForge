@@ -1,4 +1,5 @@
 import type { SettingsDB } from '@/db/SettingsDB.js';
+import type { InstanceIdentityReader } from '@/modules/instance/index.js';
 
 import type {
   ChannelForgeInstanceIdentity,
@@ -10,7 +11,7 @@ import {
 } from '../usage/CompatibilityUsageMetrics.js';
 
 export class TunarrInstanceIdentityAdapter
-  implements TunarrInstanceIdentityPort
+  implements TunarrInstanceIdentityPort, InstanceIdentityReader
 {
   constructor(
     private readonly settingsDB: Pick<SettingsDB, 'clientId'>,
