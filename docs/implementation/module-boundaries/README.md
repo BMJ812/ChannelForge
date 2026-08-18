@@ -1,7 +1,7 @@
 # Milestone 02 Module-Boundary Evidence
 
 - **Milestone status:** In Progress
-- **Current implementation unit:** PR 02F - Media Sources and Catalog Module Shells
+- **Current implementation unit:** PR 02I-J - Runtime and Supporting Boundaries
 - **Enforcement mode:** Path-scoped strict enforcement
 - **Runtime behavior changed:** No
 - **Production file moved:** No
