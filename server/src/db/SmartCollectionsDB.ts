@@ -9,7 +9,6 @@ import { head } from 'lodash-es';
 import NodeCache from 'node-cache';
 import { StrictOmit } from 'ts-essentials';
 import { v4 } from 'uuid';
-import { SearchClause } from '../../../shared/dist/src/util/searchUtil.js';
 import {
   MeilisearchService,
   ProgramSearchDocument,
@@ -229,7 +228,7 @@ export class SmartCollectionsDB {
       );
     }
 
-    const clauseResult: Result<SearchClause> = await this.mu.runExclusive(
+    const clauseResult: Result<search.SearchClause> = await this.mu.runExclusive(
       () => {
         this.searchParser.reset();
         this.searchParser.input = tokenized.tokens;

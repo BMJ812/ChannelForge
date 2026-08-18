@@ -10,14 +10,22 @@ Tunarr implementation and ChannelForge-owned concepts.
 - Persistence records and inherited DTOs must not escape through ports.
 - Compatibility use must remain measurable and removable.
 
-## Initial Port
+## Current Adapters
 
-`TunarrInstanceIdentityPort` translates the inherited SettingsDB `clientId`
-read into the ChannelForge concept `instanceId`.
+`TunarrInstanceIdentityAdapter` translates the inherited SettingsDB
+`clientId` read into the ChannelForge concept `instanceId`.
+
+`TunarrMediaSourceSynchronizationAdapter` translates ChannelForge Media
+Sources synchronization requests into the inherited media-source scan
+coordinator without exposing legacy scanner or database types.
 
 ## Usage Evidence
 
-Each read through the initial adapter increments the process-local
-`instance-identity-read` compatibility counter.
+Compatibility activity is measured with process-local counters.
 
-The counter is diagnostic migration evidence and is not durable product state.
+- `instance-identity-read` records inherited instance identity reads.
+- `media-source-synchronization-request` records synchronization requests
+  delegated to the inherited scan coordinator.
+
+These counters are diagnostic migration evidence and are not durable
+product state.

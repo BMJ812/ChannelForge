@@ -1,15 +1,7 @@
 {
   "schemaVersion": 1,
   "package": "@tunarr/shared",
-  "legacyDeepImportBaseline": [
-    {
-      "import": "../../../shared/dist/src/util/searchUtil.js",
-      "owner": "Catalog",
-      "reason": "Inherited SmartCollectionsDB consumer migration is deferred from PR 02B.",
-      "removalUnit": "PR 02F",
-      "source": "server/src/db/SmartCollectionsDB.ts"
-    }
-  ],
+  "legacyDeepImportBaseline": [],
   "entryPoints": {
     ".": "legacy-compatibility",
     "./constants": "legacy-compatibility",

@@ -2,10 +2,10 @@
 
 - **Roadmap version:** 0.1
 - **Milestone status:** In Progress
-- **Last updated:** 2026-08-14
+- **Last updated:** 2026-08-18
 - **Risk classification:** Foundation / High
 - **Implementation authority:** Additive module boundaries and dependency enforcement
-- **Current implementation unit:** PR 02E - Access and Instance Module Shells
+- **Current implementation unit:** PR 02F - Media Sources and Catalog Module Shells
 
 ## Purpose
 
