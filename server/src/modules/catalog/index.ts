@@ -1,3 +1,7 @@
+export type {
+  CatalogItemId,
+  CatalogSnapshotId,
+} from './domain/CatalogIdentity.js';
 export { createCatalogModule } from './application/CatalogModule.js';
 
 export type {
