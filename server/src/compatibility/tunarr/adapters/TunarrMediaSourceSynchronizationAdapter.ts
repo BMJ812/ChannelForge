@@ -4,6 +4,7 @@ import type {
 } from '@/modules/media-sources/index.js';
 import type { MediaSourceScanCoordinator } from '@/services/scanner/MediaSourceScanCoordinator.js';
 import type { MediaSourceId as LegacyMediaSourceId } from '@tunarr/shared';
+import { tag } from '@tunarr/types';
 
 import {
   TunarrCompatibilityUsageMetrics,
@@ -30,7 +31,7 @@ export class TunarrMediaSourceSynchronizationAdapter
 
     if (request.scope === 'local-source') {
       return this.coordinator.addLocal({
-        mediaSourceId: request.mediaSourceId as LegacyMediaSourceId,
+        mediaSourceId: tag<LegacyMediaSourceId>(request.mediaSourceId),
         forceScan: request.force ?? false,
         ...(request.pathFilter === undefined
           ? {}

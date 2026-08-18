@@ -7,8 +7,6 @@ export type {
   NetworksModuleDependencies,
 } from './application/NetworksModule.js';
 
-export type {
-  NetworkId,
-  NetworkProfileRevisionId,
-  NetworkSummary,
-} from './domain/Network.js';
+export { NetworkId, NetworkProfileRevisionId } from './domain/Network.js';
+
+export type { NetworkSummary } from './domain/Network.js';

@@ -1,5 +1,7 @@
 import {
   createMediaSourcesModule,
+  MediaSourceId,
+  MediaSourceLibraryId,
   type MediaSourceSynchronizationPort,
 } from '@/modules/media-sources/index.js';
 import type { MediaSourceScanCoordinator } from '@/services/scanner/MediaSourceScanCoordinator.js';
@@ -28,14 +30,16 @@ describe('TunarrMediaSourceSynchronizationAdapter', () => {
 
     const result = await adapter.requestSynchronization({
       scope: 'library',
-      libraryId: 'library-1',
+      libraryId: MediaSourceLibraryId.parse(
+        '123e4567-e89b-42d3-a456-426614174001',
+      ),
       force: true,
       pathFilter: 'movies',
     });
 
     expect(result).toBe(true);
     expect(add).toHaveBeenCalledWith({
-      libraryId: 'library-1',
+      libraryId: '123e4567-e89b-42d3-a456-426614174001',
       forceScan: true,
       pathFilter: 'movies',
     });
@@ -46,7 +50,7 @@ describe('TunarrMediaSourceSynchronizationAdapter', () => {
     });
   });
 
-  it('translates a local-source request to the inherited local scan path', async () => {
+  it('translates a ChannelForge MediaSourceId to the inherited local scan identity', async () => {
     const add = vi.fn<LegacyScanCoordinator['add']>(async () => false);
     const addLocal = vi.fn<LegacyScanCoordinator['addLocal']>(async () => true);
     const metrics = new TunarrCompatibilityUsageMetrics();
@@ -58,12 +62,14 @@ describe('TunarrMediaSourceSynchronizationAdapter', () => {
 
     const result = await adapter.requestSynchronization({
       scope: 'local-source',
-      mediaSourceId: 'source-1',
+      mediaSourceId: MediaSourceId.parse(
+        '123e4567-e89b-42d3-a456-426614174002',
+      ),
     });
 
     expect(result).toBe(true);
     expect(addLocal).toHaveBeenCalledWith({
-      mediaSourceId: 'source-1',
+      mediaSourceId: '123e4567-e89b-42d3-a456-426614174002',
       forceScan: false,
     });
     expect(add).not.toHaveBeenCalled();
@@ -87,11 +93,13 @@ describe('TunarrMediaSourceSynchronizationAdapter', () => {
 
     await mediaSources.commands.requestSynchronization({
       scope: 'library',
-      libraryId: 'library-2',
+      libraryId: MediaSourceLibraryId.parse(
+        '123e4567-e89b-42d3-a456-426614174003',
+      ),
     });
 
     expect(add).toHaveBeenCalledWith({
-      libraryId: 'library-2',
+      libraryId: '123e4567-e89b-42d3-a456-426614174003',
       forceScan: false,
     });
     expect(metrics.snapshot()).toEqual({
