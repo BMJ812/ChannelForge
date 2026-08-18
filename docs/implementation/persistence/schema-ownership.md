@@ -23,3 +23,12 @@ They do not become authoritative for inherited Tunarr Channel, Program, Media
 Source, scheduling, or runtime state.
 
 No inherited table is deleted or rewritten by this schema unit.
+
+## Instance Persistence
+
+| Table | Owning boundary | Authoritative | Mutable | Migration owner | Retention |
+| --- | --- | --- | --- | --- | --- |
+| `cf_instance` | Instance | Yes, for ChannelForge Instance identity | Yes, optimistic versioning | Migration | Application lifetime |
+
+`cf_instance` remains distinct from inherited Tunarr installation/settings
+identity until compatibility cutover is explicitly approved.

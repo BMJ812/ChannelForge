@@ -37,7 +37,7 @@ afterEach(() => {
 });
 
 describe('ChannelForgeMigrationRunner', () => {
-  it('creates the first ChannelForge-owned migration schema', () => {
+  it('creates the current ChannelForge-owned migration schema', () => {
     const database = openTestDatabase();
 
     try {
@@ -52,7 +52,10 @@ describe('ChannelForgeMigrationRunner', () => {
 
       const result = runner.migrate();
 
-      expect(result.applied).toEqual(['0001_migration_metadata']);
+      expect(result.applied).toEqual([
+        '0001_migration_metadata',
+        '0002_instance_identity',
+      ]);
 
       const tables = database
         .prepare(
@@ -70,6 +73,7 @@ describe('ChannelForgeMigrationRunner', () => {
       }>;
 
       expect(tables.map((row) => row.name)).toEqual([
+        'cf_instance',
         'cf_migration_checkpoint',
         'cf_migration_conflict',
         'cf_migration_run',
@@ -84,13 +88,17 @@ describe('ChannelForgeMigrationRunner', () => {
           migrationId: '0001_migration_metadata',
           status: 'APPLIED',
         }),
+        expect.objectContaining({
+          migrationId: '0002_instance_identity',
+          status: 'APPLIED',
+        }),
       ]);
     } finally {
       database.close();
     }
   });
 
-  it('is idempotent when the same migration is run again', () => {
+  it('is idempotent when the same migrations are run again', () => {
     const database = openTestDatabase();
 
     try {
@@ -104,7 +112,11 @@ describe('ChannelForgeMigrationRunner', () => {
       const second = runner.migrate();
 
       expect(second.applied).toEqual([]);
-      expect(second.alreadyApplied).toEqual(['0001_migration_metadata']);
+
+      expect(second.alreadyApplied).toEqual([
+        '0001_migration_metadata',
+        '0002_instance_identity',
+      ]);
 
       const count = database
         .prepare(
@@ -117,12 +129,11 @@ describe('ChannelForgeMigrationRunner', () => {
         count: number;
       };
 
-      expect(count.count).toBe(1);
+      expect(count.count).toBe(2);
     } finally {
       database.close();
     }
   });
-
   it('rejects a modified migration after it has been applied', () => {
     const database = openTestDatabase();
 
