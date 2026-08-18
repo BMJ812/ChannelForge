@@ -21,6 +21,7 @@ describe('TunarrInstanceIdentityAdapter', () => {
 
     expect(metrics.snapshot()).toEqual({
       'instance-identity-read': 1,
+      'media-source-synchronization-request': 0,
     });
   });
 
@@ -36,6 +37,7 @@ describe('TunarrInstanceIdentityAdapter', () => {
 
     expect(metrics.snapshot()).toEqual({
       'instance-identity-read': 2,
+      'media-source-synchronization-request': 0,
     });
   });
 
@@ -58,6 +60,7 @@ describe('TunarrInstanceIdentityAdapter', () => {
 
     expect(metrics.snapshot()).toEqual({
       'instance-identity-read': 1,
+      'media-source-synchronization-request': 0,
     });
   });
 });

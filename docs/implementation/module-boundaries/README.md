@@ -1,7 +1,7 @@
 # Milestone 02 Module-Boundary Evidence
 
 - **Milestone status:** In Progress
-- **Current implementation unit:** PR 02D - Compatibility Namespace
+- **Current implementation unit:** PR 02F - Media Sources and Catalog Module Shells
 - **Enforcement mode:** Path-scoped strict enforcement
 - **Runtime behavior changed:** No
 - **Production file moved:** No
@@ -76,9 +76,9 @@ Inherited server paths outside those roots remain outside the module-direction
 rules until a later migration unit places them behind a declared boundary.
 `SHR-001` scans `types/src/**`, legacy `server/src/**`, `server/scripts/**`, and
 root `scripts/**` solely to prevent new deep imports into shared package source
-or build output. The exact inherited `SmartCollectionsDB.ts` import is recorded for
-removal in PR 02F; the baseline cannot match another source path or import
-specifier, and an unused entry fails validation.
+or build output. PR 02F removes the inherited `SmartCollectionsDB.ts` deep
+import that was deferred from PR 02B. The inherited shared deep-import baseline
+is now empty.
 
 `TYP-001` applies the same no-deep-import policy to `types/src/**`,
 `types/dist/**`, and `types/build/**` across strict roots, legacy server

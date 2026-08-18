@@ -1,4 +1,7 @@
-export const TunarrCompatibilityUsageKeys = ['instance-identity-read'] as const;
+export const TunarrCompatibilityUsageKeys = [
+  'instance-identity-read',
+  'media-source-synchronization-request',
+] as const;
 
 export type TunarrCompatibilityUsageKey =
   (typeof TunarrCompatibilityUsageKeys)[number];
@@ -10,6 +13,7 @@ export type TunarrCompatibilityUsageSnapshot = Readonly<
 export class TunarrCompatibilityUsageMetrics {
   private readonly counts: Record<TunarrCompatibilityUsageKey, number> = {
     'instance-identity-read': 0,
+    'media-source-synchronization-request': 0,
   };
 
   record(key: TunarrCompatibilityUsageKey): number {
