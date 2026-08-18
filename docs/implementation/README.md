@@ -275,8 +275,8 @@ Roadmap document status terms:
 | Document | Status | Purpose |
 | --- | --- | --- |
 | `01-baseline-and-change-control.md` | Complete | Establishes repository baseline, characterization coverage, dependency inventory, and change-control rules |
-| `02-module-boundaries.md` | In Progress | Defines the modular-monolith package boundaries and dependency enforcement sequence |
-| `03-identity-persistence-and-migrations.md` | Draft | Introduces ChannelForge identifiers, persistence scaffolding, repositories, transactions, and migration metadata |
+| `02-module-boundaries.md` | Complete | Defines the modular-monolith package boundaries and dependency enforcement sequence |
+| `03-identity-persistence-and-migrations.md` | Accepted | Introduces ChannelForge identifiers, persistence scaffolding, repositories, transactions, and migration metadata |
 | `04-legacy-compatibility.md` | Draft | Defines compatibility reads, temporary write translation, legacy route handling, and legacy dependency measurement |
 | `05-media-sources-and-catalog.md` | Draft | Implements Media Sources, provider adapters, normalized Catalog Items, Source Bindings, Playback Variants, and synchronization |
 | `06-networks-and-channels.md` | Draft | Implements Network, Channel, profile revisions, programming configuration revisions, and ownership rules |

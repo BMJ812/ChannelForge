@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "evidenceType": "milestone-completion-snapshot",
+  "authoritativeRegistry": "../../../scripts/architecture/waivers.json",
+  "waiverCount": 0,
+  "waivers": []
+}
