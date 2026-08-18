@@ -13,3 +13,13 @@ export type {
   MigrationState,
   MigrationStatus,
 } from './domain/Migration.js';
+
+export {
+  BackupId,
+  IntegrityCheckId,
+} from './domain/PersistenceOperationalIds.js';
+
+export type {
+  BackupId as BackupIdentifier,
+  IntegrityCheckId as IntegrityCheckIdentifier,
+} from './domain/PersistenceOperationalIds.js';
