@@ -5,7 +5,7 @@
 - **Last updated:** 2026-08-18
 - **Risk classification:** Foundation / High
 - **Implementation authority:** Additive module boundaries and dependency enforcement
-- **Current implementation unit:** PR 02G-H - Editorial and Schedule Boundaries
+- **Current implementation unit:** PR 02I-J - Runtime and Supporting Boundaries
 
 ## Purpose
 
