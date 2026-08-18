@@ -22,7 +22,7 @@ These tables are authoritative only for ChannelForge migration infrastructure.
 They do not become authoritative for inherited Tunarr Channel, Program, Media
 Source, scheduling, or runtime state.
 
-No inherited table is deleted or rewritten by this schema unit.
+No inherited table is deleted or rewritten by these schema units.
 
 ## Instance Persistence
 
@@ -32,3 +32,13 @@ No inherited table is deleted or rewritten by this schema unit.
 
 `cf_instance` remains distinct from inherited Tunarr installation/settings
 identity until compatibility cutover is explicitly approved.
+
+## Backup and Integrity
+
+| Table | Owning boundary | Authoritative | Mutable | Migration owner | Retention |
+| --- | --- | --- | --- | --- | --- |
+| `cf_backup_record` | Persistence / Migration | Yes, for ChannelForge backup evidence | Lifecycle status | Migration | Rollback and retention policy |
+| `cf_integrity_check` | Persistence / Migration | Yes, for integrity evidence | No after insertion | Migration | Migration and operational evidence |
+
+These records protect later migrations but do not transfer authority from any
+inherited Tunarr domain table.

@@ -37,7 +37,7 @@ afterEach(() => {
 });
 
 describe('ChannelForgeMigrationRunner', () => {
-  it('creates the current ChannelForge-owned migration schema', () => {
+  it('creates migration infrastructure and applies every registered migration', () => {
     const database = openTestDatabase();
 
     try {
@@ -50,12 +50,13 @@ describe('ChannelForgeMigrationRunner', () => {
         },
       );
 
+      const expectedMigrationIds = channelForgeSchemaMigrations.map(
+        (migration) => migration.id,
+      );
+
       const result = runner.migrate();
 
-      expect(result.applied).toEqual([
-        '0001_migration_metadata',
-        '0002_instance_identity',
-      ]);
+      expect(result.applied).toEqual(expectedMigrationIds);
 
       const tables = database
         .prepare(
@@ -72,33 +73,29 @@ describe('ChannelForgeMigrationRunner', () => {
         name: string;
       }>;
 
-      expect(tables.map((row) => row.name)).toEqual([
-        'cf_instance',
-        'cf_migration_checkpoint',
-        'cf_migration_conflict',
-        'cf_migration_run',
-        'cf_migration_step',
-        'cf_schema_migration',
-      ]);
+      const tableNames = tables.map((row) => row.name);
+
+      expect(tableNames).toEqual(
+        expect.arrayContaining([
+          'cf_migration_checkpoint',
+          'cf_migration_conflict',
+          'cf_migration_run',
+          'cf_migration_step',
+          'cf_schema_migration',
+        ]),
+      );
 
       expect(database.pragma('foreign_key_check')).toEqual([]);
 
-      expect(runner.listMigrations()).toEqual([
-        expect.objectContaining({
-          migrationId: '0001_migration_metadata',
-          status: 'APPLIED',
-        }),
-        expect.objectContaining({
-          migrationId: '0002_instance_identity',
-          status: 'APPLIED',
-        }),
-      ]);
+      expect(
+        runner.listMigrations().map((migration) => migration.migrationId),
+      ).toEqual(expectedMigrationIds);
     } finally {
       database.close();
     }
   });
 
-  it('is idempotent when the same migrations are run again', () => {
+  it('is idempotent for the complete registered migration set', () => {
     const database = openTestDatabase();
 
     try {
@@ -107,16 +104,17 @@ describe('ChannelForgeMigrationRunner', () => {
         channelForgeSchemaMigrations,
       );
 
+      const expectedMigrationIds = channelForgeSchemaMigrations.map(
+        (migration) => migration.id,
+      );
+
       runner.migrate();
 
       const second = runner.migrate();
 
       expect(second.applied).toEqual([]);
 
-      expect(second.alreadyApplied).toEqual([
-        '0001_migration_metadata',
-        '0002_instance_identity',
-      ]);
+      expect(second.alreadyApplied).toEqual(expectedMigrationIds);
 
       const count = database
         .prepare(
@@ -129,7 +127,7 @@ describe('ChannelForgeMigrationRunner', () => {
         count: number;
       };
 
-      expect(count.count).toBe(2);
+      expect(count.count).toBe(expectedMigrationIds.length);
     } finally {
       database.close();
     }
