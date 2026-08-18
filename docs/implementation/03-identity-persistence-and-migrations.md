@@ -1,7 +1,7 @@
 # Milestone 03: Identity, Persistence, and Migrations
 
 - **Roadmap version:** 0.1
-- **Milestone status:** Draft
+- **Milestone status:** In Progress
 - **Last updated:** 2026-07-27
 - **Risk classification:** Persistence / Critical
 - **Implementation authority:** Additive ChannelForge persistence scaffolding

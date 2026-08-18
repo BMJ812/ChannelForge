@@ -8,8 +8,6 @@ export type {
   ChannelsModuleDependencies,
 } from './application/ChannelsModule.js';
 
-export type {
-  ChannelId,
-  ChannelNumber,
-  ChannelProfileRevisionId,
-} from './domain/Channel.js';
+export { ChannelId, ChannelProfileRevisionId } from './domain/Channel.js';
+
+export type { ChannelNumber } from './domain/Channel.js';
