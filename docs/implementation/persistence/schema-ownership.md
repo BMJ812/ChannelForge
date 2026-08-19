@@ -54,3 +54,13 @@ ChannelForge identity.
 
 Migration `0004_legacy_identity_mapping` initially enforces one-to-one
 cardinality.
+
+## Operational Safety
+
+| Table | Owning boundary | Authoritative | Mutable | Migration owner | Retention |
+| --- | --- | --- | --- | --- | --- |
+| `cf_audit_record` | Persistence infrastructure | Yes, for ChannelForge audit evidence | Append only | Migration | Operational/audit policy |
+| `cf_idempotency_record` | Persistence infrastructure | Yes, for command idempotency state | Controlled status transition | Migration | Idempotency retention policy |
+| `cf_migration_lease` | Persistence / Migration | Yes, for active migration lease ownership | Lease lifecycle | Migration | Active lease only |
+
+These tables do not transfer authority from inherited Tunarr domain tables.
