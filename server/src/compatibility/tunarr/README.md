@@ -121,3 +121,22 @@ The write is:
 No ChannelForge entity is created by the compatibility read.
 
 No inherited domain write authority changes.
+
+## Shadow Read Framework
+
+PR 04E adds a reusable `DUAL_COMPARE` framework under `shadow/`.
+
+The framework:
+
+- requires explicit legacy or canonical authority
+- compares deterministic checksums
+- classifies the exact M04 difference vocabulary
+- supports deterministic sampling
+- prohibits sampling for critical identity validation
+- accepts cancellation
+- records typed compatibility metrics
+- retains only bounded diagnostic findings
+- never retains compared payloads
+- never changes authority
+
+PR 04E does not enable a new production shadow policy.

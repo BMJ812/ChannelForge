@@ -61,6 +61,30 @@ export type {
   TunarrInstanceIdentityPort,
 } from './ports/index.js';
 
+export {
+  ShadowReadAuthorities,
+  ShadowReadDiagnostics,
+  ShadowReadDifferenceClasses,
+  ShadowReadFramework,
+  ShadowReadSeverities,
+  ShadowReadSkipReasons,
+} from './shadow/index.js';
+
+export type {
+  ShadowReadAuthority,
+  ShadowReadDiagnosticSink,
+  ShadowReadDiagnosticsSnapshot,
+  ShadowReadDifferenceClass,
+  ShadowReadExecution,
+  ShadowReadFinding,
+  ShadowReadObservation,
+  ShadowReadRequest,
+  ShadowReadSamplingPolicy,
+  ShadowReadSeverity,
+  ShadowReadSkipReason,
+  ShadowReadValueDifferenceClassifier,
+} from './shadow/index.js';
+
 export { getTunarrCompatibilityUsageSnapshot } from './usage/CompatibilityUsageMetrics.js';
 
 export type {
