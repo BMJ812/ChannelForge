@@ -1,7 +1,7 @@
 # ChannelForge Legacy Compatibility
 
 - **Milestone:** 04 â€” Legacy Compatibility
-- **Current unit:** PR 04A â€” Compatibility Core Contracts
+- **Current unit:** PR 04B â€” Legacy Identity Resolver
 - **Runtime cutover:** none
 - **Legacy authority change:** none
 
@@ -180,3 +180,24 @@ Removal requires:
 | Removal gate | M04 removal-readiness evidence |
 | Rollback | Remove contracts/docs; existing adapters continue unchanged |
 | Tests | Core contracts + existing compatibility regressions |
+
+## PR 04B Change-Control Record
+
+| Field | PR 04B |
+| --- | --- |
+| Legacy path | Qualified inherited identity references |
+| Target module | Compatibility identity resolver + Migration-owned identity state |
+| Compatibility mode | No runtime transition |
+| Read authority | Unchanged |
+| Write authority | Unchanged |
+| Mapping namespace | `tunarr` |
+| Fallback | Resolver returns controlled unmapped state; no new runtime fallback |
+| Tombstone | Durable lookup precedes mapping |
+| Conflict | Durable conflict ID returned; no arbitrary target selection |
+| Partial failure | Conflict mapping missing durable conflict ID fails safely |
+| Reconciliation | No reconciliation job invoked |
+| Metrics | Mapping/tombstone lookup, conflict, unmapped, error, latency |
+| Freeze gate | Not activated |
+| Removal gate | Resolver removable only after legacy identity paths retire |
+| Rollback | Stop resolver use; preserve additive tombstone history |
+| Tests | SQLite tombstone persistence + resolver integration + existing regressions |

@@ -40,6 +40,17 @@ export type {
 } from './domain/LegacyIdentityMapping.js';
 
 export {
+  LegacyIdentityTombstoneId,
+  LegacyIdentityTombstoneReasons,
+} from './domain/LegacyIdentityTombstone.js';
+
+export type {
+  LegacyIdentityTombstone,
+  LegacyIdentityTombstoneId as LegacyIdentityTombstoneIdentifier,
+  LegacyIdentityTombstoneReason,
+} from './domain/LegacyIdentityTombstone.js';
+
+export {
   BackupId,
   IntegrityCheckId,
 } from './domain/PersistenceOperationalIds.js';
@@ -52,6 +63,10 @@ export type {
 export { LegacyIdentityMappingConstraintError } from './ports/LegacyIdentityMappingRepository.js';
 
 export type { LegacyIdentityMappingRepository } from './ports/LegacyIdentityMappingRepository.js';
+
+export { LegacyIdentityTombstoneConstraintError } from './ports/LegacyIdentityTombstoneRepository.js';
+
+export type { LegacyIdentityTombstoneRepository } from './ports/LegacyIdentityTombstoneRepository.js';
 
 export {
   MigrationConflictId,

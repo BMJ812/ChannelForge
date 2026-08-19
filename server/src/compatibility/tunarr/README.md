@@ -67,3 +67,24 @@ Legacy jobs:               unchanged
 Legacy tables:             unchanged
 Production cutover:        none
 ```
+
+## Legacy Identity Resolver
+
+PR 04B adds a generic resolver under `identity/`.
+
+Resolution is:
+
+```text
+tombstone
+  -> verified mapping
+  -> conflict / unmapped
+```
+
+A tombstone blocks automatic rematerialization.
+
+Only `VERIFIED` mappings resolve to ChannelForge identity.
+
+Conflict state returns durable conflict identity and never selects an arbitrary
+candidate.
+
+The resolver is not wired into inherited production read authority by PR 04B.

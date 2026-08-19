@@ -48,12 +48,17 @@ inherited Tunarr domain table.
 | Table | Owning boundary | Authoritative | Mutable | Migration owner | Retention |
 | --- | --- | --- | --- | --- | --- |
 | `cf_legacy_identity_mapping` | Migration / Compatibility | Yes, for recorded legacy-to-ChannelForge identity relationships | Lifecycle status only | Migration | Migration and compatibility history |
+| `cf_legacy_identity_tombstone` | Migration / Compatibility | Yes, for retired or redirected qualified legacy identity | Insert-only in 04B | Migration | Migration and compatibility history |
 
 Legacy mappings do not make inherited or provider identifiers canonical
 ChannelForge identity.
 
 Migration `0004_legacy_identity_mapping` initially enforces one-to-one
 cardinality.
+
+Migration `0006_legacy_identity_tombstone` records durable retired, merged,
+invalid, omitted, replaced, or deleted qualified legacy identity without
+changing inherited Tunarr table authority.
 
 ## Operational Safety
 
