@@ -3,6 +3,7 @@ import { MediaSourceType } from '@/db/schema/base.js';
 import { JellyfinApiClient } from '@/external/jellyfin/JellyfinApiClient.js';
 import { mediaSourceParamsSchema, TruthyQueryParam } from '@/types/schemas.js';
 import { isDefined, nullToUndefined } from '@/util/index.js';
+import { getTunarrVersion } from '@/util/version.js';
 import type { ProgramOrFolder } from '@tunarr/types';
 import { tag } from '@tunarr/types';
 import { JellyfinLoginRequest, PagedResult } from '@tunarr/types/api';
@@ -61,6 +62,9 @@ export const jellyfinApiRouter: RouterPluginCallback = (fastify, _, done) => {
       ).read({
         operation: 'jellyfin-login-device-identity',
         routeTemplate: '/jellyfin/login',
+        applicationVersion: getTunarrVersion(),
+        correlationId: String(req.id),
+        lazyMappingPolicy: 'JELLYFIN_LOGIN_INSTANCE_IDENTITY',
       });
 
       const response = await JellyfinApiClient.login(

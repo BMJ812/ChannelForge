@@ -102,3 +102,22 @@ VERIFIED `tunarr` mapping agree exactly.
 All other states remain explicit legacy fallback during this support phase.
 
 No other route is cut over in PR 04C.
+
+## Lazy Instance Identity Mapping
+
+PR 04D permits `POST /jellyfin/login` to lazily create the singleton Instance
+identity mapping only under the explicit
+`JELLYFIN_LOGIN_INSTANCE_IDENTITY` policy.
+
+The write is:
+
+- immediate-transaction protected
+- idempotent
+- audited
+- tombstone-aware
+- uniqueness constrained
+- restricted to an already-existing ChannelForge Instance
+
+No ChannelForge entity is created by the compatibility read.
+
+No inherited domain write authority changes.

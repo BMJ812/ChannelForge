@@ -8,7 +8,9 @@ import { SqliteLegacyIdentityTombstoneRepository } from '@/infrastructure/databa
 import { InstanceId, type InstanceIdentity } from '@/modules/instance/index.js';
 
 import {
+  InstanceIdentityLazyMappingService,
   LegacyIdentityResolver,
+  type InstanceIdentityLazyMappingPolicyId,
   type LegacyIdentityResolution,
 } from '../identity/index.js';
 import type {
@@ -37,6 +39,10 @@ export const InstanceIdentityCompatibilityWarningCodes = [
   'LEGACY_IDENTITY_RESOLUTION_ERROR',
   'TARGET_TYPE_MISMATCH',
   'TARGET_IDENTITY_MISMATCH',
+  'LAZY_MAPPING_POLICY_REJECTED',
+  'LAZY_MAPPING_SUPPORT_UNAVAILABLE',
+  'LAZY_MAPPING_CONFLICT',
+  'LAZY_MAPPING_FAILED',
   'CANONICAL_READ_ERROR',
 ] as const;
 
@@ -47,6 +53,8 @@ export type InstanceIdentityCompatibilityReadRequest = Readonly<{
   operation: string;
   routeTemplate?: string;
   applicationVersion?: string;
+  correlationId?: string;
+  lazyMappingPolicy?: InstanceIdentityLazyMappingPolicyId;
 }>;
 
 export type InstanceIdentityCompatibilityReadResult = Extract<
@@ -235,6 +243,98 @@ export class CanonicalFirstTunarrInstanceIdentityReader {
       });
 
       if (resolution.kind !== 'MAPPED') {
+        const lazyMappingPolicy = request.lazyMappingPolicy ?? 'DISABLED';
+
+        if (
+          resolution.kind === 'UNMAPPED' &&
+          resolution.reason === 'NOT_FOUND' &&
+          lazyMappingPolicy !== 'DISABLED'
+        ) {
+          if (
+            request.routeTemplate === undefined ||
+            request.applicationVersion === undefined
+          ) {
+            return fallback(
+              'LAZY_MAPPING_POLICY_REJECTED',
+              legacyIdentity,
+              sourceSchemaVersion,
+            );
+          }
+
+          const canonicalInstanceId = InstanceId.toString(instance.instanceId);
+
+          const lazyMapping = new InstanceIdentityLazyMappingService(
+            this.database,
+            this.metrics,
+          ).ensureVerifiedMapping({
+            policyId: lazyMappingPolicy,
+            legacy: {
+              namespace: 'tunarr',
+              entityType: 'instance',
+              identifier: legacyIdentity.instanceId,
+            },
+            target: {
+              entityType: 'instance',
+              identifier: canonicalInstanceId,
+            },
+            operation,
+            routeTemplate: request.routeTemplate,
+            applicationVersion: request.applicationVersion,
+            sourceSchemaVersion,
+            ...(request.correlationId === undefined
+              ? {}
+              : {
+                  correlationId: request.correlationId,
+                }),
+          });
+
+          if (lazyMapping.kind === 'CREATED' || lazyMapping.kind === 'REUSED') {
+            this.metrics.increment(
+              'SHADOW_COMPARISONS',
+              baseDimensions('SUCCESS', sourceSchemaVersion),
+            );
+
+            this.metrics.increment(
+              'CANONICAL_READS',
+              baseDimensions('SUCCESS', sourceSchemaVersion),
+            );
+
+            return Object.freeze({
+              source: 'CANONICAL',
+              value: Object.freeze({
+                instanceId: canonicalInstanceId,
+              }),
+              mappingId: lazyMapping.mappingId,
+            });
+          }
+
+          if (lazyMapping.kind === 'CONFLICT') {
+            return fallback(
+              'LAZY_MAPPING_CONFLICT',
+              legacyIdentity,
+              sourceSchemaVersion,
+            );
+          }
+
+          if (lazyMapping.kind === 'UNAVAILABLE') {
+            return fallback(
+              lazyMapping.reason === 'POLICY_CONTEXT_MISMATCH'
+                ? 'LAZY_MAPPING_POLICY_REJECTED'
+                : 'LAZY_MAPPING_SUPPORT_UNAVAILABLE',
+              legacyIdentity,
+              sourceSchemaVersion,
+            );
+          }
+
+          if (lazyMapping.kind === 'FAILED') {
+            return fallback(
+              'LAZY_MAPPING_FAILED',
+              legacyIdentity,
+              sourceSchemaVersion,
+            );
+          }
+        }
+
         return fallback(
           warningForResolution(resolution),
           legacyIdentity,
