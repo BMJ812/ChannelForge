@@ -1,8 +1,8 @@
 # Milestone 04: Legacy Compatibility
 
 - **Roadmap version:** 0.1
-- **Milestone status:** Draft
-- **Last updated:** 2026-07-27
+- **Milestone status:** In Progress
+- **Last updated:** 2026-08-18
 - **Risk classification:** Compatibility / Critical
 - **Implementation authority:** Compatibility reads, temporary write translation, route isolation, and legacy dependency measurement
 

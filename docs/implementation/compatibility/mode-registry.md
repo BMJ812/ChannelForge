@@ -1,0 +1,56 @@
+# Compatibility Mode Registry
+
+- **Milestone:** 04
+- **Status:** Active
+- **Default:** `LEGACY_ONLY` unless an explicit compatibility PR records a
+  transition
+
+## Mode Definitions
+
+| Mode | Meaning |
+| --- | --- |
+| `LEGACY_ONLY` | Legacy state remains authoritative; ChannelForge may read through an adapter |
+| `LEGACY_READ_CANONICAL_WRITE` | Canonical writes exist while legacy reads remain active |
+| `CANONICAL_READ_LEGACY_FALLBACK` | Canonical read first; legacy read only when canonical state is absent |
+| `CANONICAL_ONLY` | Runtime uses ChannelForge state only; legacy may remain for rollback/history |
+| `DUAL_COMPARE` | Both states are read for comparison while one side remains authoritative |
+| `TEMPORARY_WRITE_TRANSLATION` | One authoritative command produces a required compatibility representation |
+| `FROZEN_LEGACY_WRITE` | Legacy mutation is rejected server-side |
+| `RETIRED` | Compatibility path is removed from active runtime; historical fixtures remain |
+
+## Current Runtime Registry
+
+| Concept | Current mode | Read authority | Write authority | Fallback | Cutover gate | Removal milestone |
+| --- | --- | --- | --- | --- | --- | --- |
+| Instance identity â€” inherited runtime | `LEGACY_ONLY` | Tunarr SettingsDB identity | Inherited Tunarr path | None changed by 04A | Explicit canonical-read wiring, mapping validation, shadow evidence | Later compatibility removal |
+| Instance identity â€” M03 mapping proof | `DUAL_COMPARE` diagnostic proof only | Inherited Tunarr remains authoritative | No writer introduced | Legacy result on missing/unverified/mismatched mapping | Separate production-read PR | Later compatibility removal |
+| Media Source synchronization delegation | `LEGACY_ONLY` | Inherited synchronization behavior | Inherited scan coordinator | None | Canonical Media Source synchronization implementation | Later compatibility removal |
+| Legacy management routes | `LEGACY_ONLY` | Inherited handlers | Inherited handlers | Existing behavior | Route inventory + adapter proof | Later compatibility removal |
+| Legacy background jobs | `LEGACY_ONLY` | Inherited runtime | Inherited runtime | Existing behavior | Job inventory + compatibility handler | Later compatibility removal |
+| Scheduling runtime | `LEGACY_ONLY` | Inherited scheduler | Inherited scheduler | Existing behavior | M04 scheduling containment + M07 replacement | Later compatibility removal |
+| Output protocols | `LEGACY_ONLY` | Inherited output behavior | Inherited generators/settings | Existing behavior | Protocol compatibility proof | Later compatibility removal |
+
+## Transition Rule
+
+A mode changes only in an explicit compatibility PR.
+
+That PR must record:
+
+- Previous mode
+- New mode
+- Read authority
+- Write authority
+- Mapping behavior
+- Metrics
+- Validation
+- Rollback point
+- Freeze gate when applicable
+- Removal gate
+
+A proof-only adapter or test does not silently change production mode.
+
+## PR 04A
+
+PR 04A establishes the mode vocabulary and registry.
+
+It performs no runtime mode transition.
