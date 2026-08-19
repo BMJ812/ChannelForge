@@ -5,6 +5,8 @@ export const CompatibilityCounterMetrics = [
   'CANONICAL_READS',
   'MAPPING_LOOKUPS',
   'MAPPING_CREATIONS',
+  'TOMBSTONE_LOOKUPS',
+  'TOMBSTONE_HITS',
   'SHADOW_COMPARISONS',
   'SHADOW_MISMATCHES',
   'LEGACY_ROUTE_CALLS',
@@ -43,6 +45,7 @@ export const CompatibilityMetricResults = [
   'FALLBACK',
   'CONFLICT',
   'NOT_FOUND',
+  'TOMBSTONED',
   'DEGRADED',
   'FROZEN',
   'SKIPPED',
@@ -65,19 +68,25 @@ export type CompatibilityMetricDimensions = Readonly<{
 export interface CompatibilityMetrics {
   increment(
     metric: CompatibilityCounterMetric,
+
     dimensions: CompatibilityMetricDimensions,
+
     amount?: number,
   ): void;
 
   setGauge(
     metric: CompatibilityGaugeMetric,
+
     value: number,
+
     dimensions: CompatibilityMetricDimensions,
   ): void;
 
   observeMilliseconds(
     metric: CompatibilityTimingMetric,
+
     milliseconds: number,
+
     dimensions: CompatibilityMetricDimensions,
   ): void;
 }

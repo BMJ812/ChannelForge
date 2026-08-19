@@ -156,6 +156,8 @@ describe('M04 compatibility core contracts', () => {
     expect(CompatibilityCounterMetrics).toContain('CANONICAL_READS');
     expect(CompatibilityCounterMetrics).toContain('MAPPING_LOOKUPS');
     expect(CompatibilityCounterMetrics).toContain('MAPPING_CONFLICTS');
+    expect(CompatibilityCounterMetrics).toContain('TOMBSTONE_LOOKUPS');
+    expect(CompatibilityCounterMetrics).toContain('TOMBSTONE_HITS');
     expect(CompatibilityGaugeMetrics).toEqual([
       'RECONCILIATION_QUEUE_DEPTH',
       'OLDEST_RECONCILIATION_FINDING_AGE_SECONDS',
@@ -168,6 +170,7 @@ describe('M04 compatibility core contracts', () => {
       'FALLBACK',
       'CONFLICT',
       'NOT_FOUND',
+      'TOMBSTONED',
       'DEGRADED',
       'FROZEN',
       'SKIPPED',

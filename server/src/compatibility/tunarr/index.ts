@@ -1,4 +1,17 @@
 export {
+  LegacyIdentityResolutionErrorReasons,
+  LegacyIdentityResolver,
+  LegacyIdentityUnmappedReasons,
+} from './identity/index.js';
+
+export type {
+  LegacyIdentityResolution,
+  LegacyIdentityResolutionErrorReason,
+  LegacyIdentityUnmappedReason,
+  ResolveLegacyIdentityRequest,
+} from './identity/index.js';
+
+export {
   CompatibilityCounterMetrics,
   CompatibilityErrorCodes,
   CompatibilityGaugeMetrics,

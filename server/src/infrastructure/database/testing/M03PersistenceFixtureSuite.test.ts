@@ -107,6 +107,8 @@ describe('M03 persistence fixture suite', () => {
   });
 
   it('restores a verified backup with persisted Instance identity and verified legacy mapping intact', async () => {
+    const currentSchemaVersion = channelForgeSchemaMigrations.length;
+
     const directory = createDirectory();
 
     const sourceFilename = join(directory, 'source.sqlite');
@@ -124,7 +126,7 @@ describe('M03 persistence fixture suite', () => {
       const instanceRepository = new SqliteInstanceRepository(source);
 
       const instance = bootstrapInstance(instanceRepository, {
-        schemaVersion: 5,
+        schemaVersion: currentSchemaVersion,
         applicationVersion: 'fixture-test',
         displayName: 'Fixture Instance',
         defaultTimeZone: 'UTC',
@@ -168,7 +170,7 @@ describe('M03 persistence fixture suite', () => {
 
         applicationVersion: 'fixture-test',
 
-        schemaVersion: 5,
+        schemaVersion: currentSchemaVersion,
 
         createdBy: 'fixture-suite',
 
