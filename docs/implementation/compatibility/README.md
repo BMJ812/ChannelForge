@@ -1,7 +1,7 @@
 # ChannelForge Legacy Compatibility
 
 - **Milestone:** 04 â€” Legacy Compatibility
-- **Current unit:** PR 04C â€” First Compatibility Read
+- **Current unit:** PR 04D â€” Lazy Mapping
 - **Runtime cutover:** none
 - **Legacy authority change:** none
 
@@ -222,3 +222,24 @@ Removal requires:
 | Removal gate | Jellyfin fallback removable only after mapping coverage and support window |
 | Rollback | Restore legacy adapter at route; no data rollback |
 | Tests | Canonical hit, schema fallback, unverified mapping, tombstone, mismatch, existing compatibility regressions |
+
+## PR 04D Change-Control Record
+
+| Field | PR 04D |
+| --- | --- |
+| Legacy path | Jellyfin login Instance identity with no existing mapping |
+| Target module | Compatibility lazy identity mapping |
+| Compatibility mode | `CANONICAL_READ_LEGACY_FALLBACK` unchanged |
+| Read authority | Canonical after safe mapping creation/verification; legacy fallback otherwise |
+| Write authority | Inherited domain write authority unchanged; Migration owns mapping metadata |
+| Mapping namespace | `tunarr` |
+| Lazy policy | `JELLYFIN_LOGIN_INSTANCE_IDENTITY` only |
+| Fallback | Inherited SettingsDB client ID |
+| Partial failure | Transaction rollback + bounded warning + legacy fallback |
+| Conflict | Preserve existing mapping, durable failure audit, no arbitrary target |
+| Reconciliation | None queued by 04D |
+| Metrics | Mapping creation, lazy mapping, conflict, canonical/fallback, errors |
+| Freeze gate | Not activated |
+| Removal gate | Lazy policy removable after mapping coverage is complete |
+| Rollback | Disable lazy policy; retain verified mapping history |
+| Tests | eligibility, idempotency, audit, tombstone, competing proposal, reader integration |

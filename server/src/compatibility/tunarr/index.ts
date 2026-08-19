@@ -11,12 +11,21 @@ export type {
 } from './adapters/CanonicalFirstTunarrInstanceIdentityReader.js';
 
 export {
+  InstanceIdentityLazyMappingConflictReasons,
+  InstanceIdentityLazyMappingPolicyIds,
+  InstanceIdentityLazyMappingService,
+  InstanceIdentityLazyMappingUnavailableReasons,
   LegacyIdentityResolutionErrorReasons,
   LegacyIdentityResolver,
   LegacyIdentityUnmappedReasons,
 } from './identity/index.js';
 
 export type {
+  InstanceIdentityLazyMappingConflictReason,
+  InstanceIdentityLazyMappingPolicyId,
+  InstanceIdentityLazyMappingRequest,
+  InstanceIdentityLazyMappingResult,
+  InstanceIdentityLazyMappingUnavailableReason,
   LegacyIdentityResolution,
   LegacyIdentityResolutionErrorReason,
   LegacyIdentityUnmappedReason,

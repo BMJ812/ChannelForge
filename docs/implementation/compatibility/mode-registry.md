@@ -22,7 +22,7 @@
 
 | Concept | Current mode | Read authority | Write authority | Fallback | Cutover gate | Removal milestone |
 | --- | --- | --- | --- | --- | --- | --- |
-| Instance identity â€” Jellyfin login | `CANONICAL_READ_LEGACY_FALLBACK` | Persisted ChannelForge Instance when a VERIFIED `tunarr` mapping agrees; inherited SettingsDB client ID otherwise | Inherited Tunarr path | Explicit inherited client-ID fallback with bounded warning | Mapping coverage + runtime fallback evidence before broader adoption | Later compatibility removal |
+| Instance identity â€” Jellyfin login | `CANONICAL_READ_LEGACY_FALLBACK` | Persisted ChannelForge Instance when a VERIFIED `tunarr` mapping agrees; approved 04D policy may lazily create/verify the singleton mapping | Inherited Tunarr path | Explicit inherited client-ID fallback with bounded warning | Mapping coverage + runtime fallback evidence before broader adoption | Later compatibility removal |
 | Instance identity â€” M03 mapping proof | `DUAL_COMPARE` diagnostic proof only | Inherited Tunarr remains authoritative | No writer introduced | Legacy result on missing/unverified/mismatched mapping | Separate production-read PR | Later compatibility removal |
 | Media Source synchronization delegation | `LEGACY_ONLY` | Inherited synchronization behavior | Inherited scan coordinator | None | Canonical Media Source synchronization implementation | Later compatibility removal |
 | Legacy management routes | `LEGACY_ONLY` | Inherited handlers | Inherited handlers | Existing behavior | Route inventory + adapter proof | Later compatibility removal |
@@ -71,3 +71,20 @@ Canonical use requires:
 Write authority remains inherited.
 
 No lazy mapping or schema mutation is performed by the read path.
+
+## PR 04D
+
+PR 04D keeps Jellyfin login in
+`CANONICAL_READ_LEGACY_FALLBACK`.
+
+It adds one explicit lazy-mapping policy:
+
+```text
+JELLYFIN_LOGIN_INSTANCE_IDENTITY
+```
+
+The policy may create and verify only the installation-level
+`tunarr / instance / <legacy client ID>` mapping to an already-existing
+persisted ChannelForge Instance.
+
+Write authority for inherited application state does not change.
