@@ -88,3 +88,17 @@ Conflict state returns durable conflict identity and never selects an arbitrary
 candidate.
 
 The resolver is not wired into inherited production read authority by PR 04B.
+
+## First Production Compatibility Read
+
+PR 04C moves `POST /jellyfin/login` to a canonical-first Instance identity read.
+
+The reader reuses the inherited process SQLite connection and performs no schema
+or identity writes.
+
+Canonical identity is returned only when persisted Instance identity and a
+VERIFIED `tunarr` mapping agree exactly.
+
+All other states remain explicit legacy fallback during this support phase.
+
+No other route is cut over in PR 04C.

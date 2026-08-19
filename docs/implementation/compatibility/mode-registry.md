@@ -22,7 +22,7 @@
 
 | Concept | Current mode | Read authority | Write authority | Fallback | Cutover gate | Removal milestone |
 | --- | --- | --- | --- | --- | --- | --- |
-| Instance identity â€” inherited runtime | `LEGACY_ONLY` | Tunarr SettingsDB identity | Inherited Tunarr path | None changed by 04A | Explicit canonical-read wiring, mapping validation, shadow evidence | Later compatibility removal |
+| Instance identity â€” Jellyfin login | `CANONICAL_READ_LEGACY_FALLBACK` | Persisted ChannelForge Instance when a VERIFIED `tunarr` mapping agrees; inherited SettingsDB client ID otherwise | Inherited Tunarr path | Explicit inherited client-ID fallback with bounded warning | Mapping coverage + runtime fallback evidence before broader adoption | Later compatibility removal |
 | Instance identity â€” M03 mapping proof | `DUAL_COMPARE` diagnostic proof only | Inherited Tunarr remains authoritative | No writer introduced | Legacy result on missing/unverified/mismatched mapping | Separate production-read PR | Later compatibility removal |
 | Media Source synchronization delegation | `LEGACY_ONLY` | Inherited synchronization behavior | Inherited scan coordinator | None | Canonical Media Source synchronization implementation | Later compatibility removal |
 | Legacy management routes | `LEGACY_ONLY` | Inherited handlers | Inherited handlers | Existing behavior | Route inventory + adapter proof | Later compatibility removal |
@@ -54,3 +54,20 @@ A proof-only adapter or test does not silently change production mode.
 PR 04A establishes the mode vocabulary and registry.
 
 It performs no runtime mode transition.
+
+## PR 04C
+
+PR 04C transitions only Jellyfin login Instance identity from `LEGACY_ONLY` to
+`CANONICAL_READ_LEGACY_FALLBACK`.
+
+Canonical use requires:
+
+- persisted ChannelForge Instance
+- VERIFIED `tunarr` mapping
+- mapping target type `instance`
+- exact target ID match
+- no tombstone
+
+Write authority remains inherited.
+
+No lazy mapping or schema mutation is performed by the read path.

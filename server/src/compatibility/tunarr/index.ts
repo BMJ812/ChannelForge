@@ -1,4 +1,16 @@
 export {
+  CanonicalFirstTunarrInstanceIdentityReader,
+  InstanceIdentityCompatibilityWarningCodes,
+} from './adapters/CanonicalFirstTunarrInstanceIdentityReader.js';
+
+export type {
+  CanonicalFirstTunarrInstanceIdentityReaderOptions,
+  InstanceIdentityCompatibilityReadRequest,
+  InstanceIdentityCompatibilityReadResult,
+  InstanceIdentityCompatibilityWarningCode,
+} from './adapters/CanonicalFirstTunarrInstanceIdentityReader.js';
+
+export {
   LegacyIdentityResolutionErrorReasons,
   LegacyIdentityResolver,
   LegacyIdentityUnmappedReasons,
@@ -46,3 +58,16 @@ export type {
   TunarrCompatibilityUsageKey,
   TunarrCompatibilityUsageSnapshot,
 } from './usage/CompatibilityUsageMetrics.js';
+
+export {
+  getTunarrRuntimeCompatibilityMetricsSnapshot,
+  RuntimeCompatibilityMetrics,
+  tunarrRuntimeCompatibilityMetrics,
+} from './usage/RuntimeCompatibilityMetrics.js';
+
+export type {
+  RuntimeCompatibilityCounterSnapshot,
+  RuntimeCompatibilityGaugeSnapshot,
+  RuntimeCompatibilityMetricsSnapshot,
+  RuntimeCompatibilityTimingSnapshot,
+} from './usage/RuntimeCompatibilityMetrics.js';
