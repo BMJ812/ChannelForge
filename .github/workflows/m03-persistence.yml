@@ -39,5 +39,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Build workspace test dependencies
+        run: pnpm turbo build --filter="@tunarr/shared"
+
       - name: Run M03 persistence suite
         run: pnpm --filter "@tunarr/server" exec vitest --run src/modules/media-sources/domain/QualifiedExternalId.test.ts src/infrastructure/database/connection/ChannelForgeSqliteConnection.test.ts src/infrastructure/database/connection/ChannelForgeSqliteConnectionManager.test.ts src/infrastructure/database/migrations/ChannelForgeMigrationRunner.test.ts src/infrastructure/database/repositories/SqliteInstanceRepository.test.ts src/infrastructure/database/repositories/SqliteLegacyIdentityMappingRepository.test.ts src/infrastructure/database/repositories/SqliteMigrationConflictRepository.test.ts src/infrastructure/database/transactions/SqliteTransactionCoordinator.test.ts src/infrastructure/database/integrity/SqliteIntegrityVerifier.test.ts src/infrastructure/database/backup/ChannelForgeBackupPreflightService.test.ts src/infrastructure/database/preflight/SqliteMigrationLeaseCoordinator.test.ts src/infrastructure/database/preflight/ChannelForgeMigrationPreflightCoordinator.test.ts src/infrastructure/database/audit/SqliteAuditSink.test.ts src/infrastructure/database/idempotency/SqliteIdempotencyStore.test.ts src/infrastructure/database/testing/M03PersistenceFixtureSuite.test.ts src/infrastructure/database/testing/M03BatchResumeFailureInjection.test.ts src/infrastructure/database/testing/M03PersistenceFailureInjection.test.ts src/compatibility/tunarr/adapters/TunarrInstanceIdentityMappingProof.test.ts src/compatibility/tunarr/adapters/MappedTunarrInstanceIdentityReader.test.ts
