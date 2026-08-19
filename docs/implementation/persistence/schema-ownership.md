@@ -42,3 +42,15 @@ identity until compatibility cutover is explicitly approved.
 
 These records protect later migrations but do not transfer authority from any
 inherited Tunarr domain table.
+
+## Legacy Identity Mapping
+
+| Table | Owning boundary | Authoritative | Mutable | Migration owner | Retention |
+| --- | --- | --- | --- | --- | --- |
+| `cf_legacy_identity_mapping` | Migration / Compatibility | Yes, for recorded legacy-to-ChannelForge identity relationships | Lifecycle status only | Migration | Migration and compatibility history |
+
+Legacy mappings do not make inherited or provider identifiers canonical
+ChannelForge identity.
+
+Migration `0004_legacy_identity_mapping` initially enforces one-to-one
+cardinality.
