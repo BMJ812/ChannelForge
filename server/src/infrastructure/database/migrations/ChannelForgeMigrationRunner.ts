@@ -53,6 +53,16 @@ export class MigrationChecksumMismatchError extends Error {
   }
 }
 
+export class UnsupportedSchemaAheadError extends Error {
+  constructor(readonly unknownAppliedMigrationIds: readonly string[]) {
+    super(
+      `Database schema is ahead of this application: ${unknownAppliedMigrationIds.join(', ')}`,
+    );
+
+    this.name = 'UnsupportedSchemaAheadError';
+  }
+}
+
 export class DuplicateSchemaMigrationError extends Error {
   constructor(readonly migrationId: string) {
     super(`Duplicate schema migration ID: ${migrationId}`);
@@ -83,6 +93,7 @@ export class ChannelForgeMigrationRunner {
 
   migrate(): MigrationExecutionResult {
     this.ensureMigrationLedger();
+    this.assertNoUnknownAppliedMigrations();
 
     const applied: string[] = [];
     const alreadyApplied: string[] = [];
@@ -235,6 +246,31 @@ export class ChannelForgeMigrationRunner {
         }),
       ),
     );
+  }
+
+  private assertNoUnknownAppliedMigrations(): void {
+    const known = new Set(this.migrations.map((migration) => migration.id));
+
+    const appliedRows = this.database
+      .prepare(
+        `
+          SELECT migration_id
+          FROM cf_schema_migration
+          WHERE status = 'APPLIED'
+          ORDER BY migration_id ASC
+        `,
+      )
+      .all() as Array<{
+      migration_id: string;
+    }>;
+
+    const unknown = appliedRows
+      .map((row) => row.migration_id)
+      .filter((migrationId) => !known.has(migrationId));
+
+    if (unknown.length !== 0) {
+      throw new UnsupportedSchemaAheadError(Object.freeze(unknown));
+    }
   }
 
   private getMigration(migrationId: string): SchemaMigrationRow | undefined {

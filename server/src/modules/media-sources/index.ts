@@ -19,6 +19,16 @@ export type {
   RemoteMediaSourceKind,
 } from './domain/MediaSource.js';
 
+export {
+  createQualifiedExternalId,
+  sameQualifiedExternalId,
+} from './domain/QualifiedExternalId.js';
+
+export type {
+  CreateQualifiedExternalIdRequest,
+  QualifiedExternalId,
+} from './domain/QualifiedExternalId.js';
+
 export type {
   MediaSourceProviderAdapter,
   MediaSourceProviderAdapterRegistry,

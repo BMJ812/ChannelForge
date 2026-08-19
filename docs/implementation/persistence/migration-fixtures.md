@@ -60,3 +60,18 @@ The original live source database is never copied directly.
 The broader M03 completion audit still needs to classify or prove the remaining
 roadmap failure cases that are not already covered by runner, backup, lease,
 mapping, or transaction tests.
+
+## Closeout Failure Injection
+
+The M03 closeout suite additionally proves:
+
+- checkpointed batch resume after database reopen
+- injected crash before checkpoint rolls back target writes
+- retry from the last committed checkpoint reaches one canonical result
+- SQLite `SQLITE_FULL` rolls back the active transaction
+- database integrity remains valid after the disk-full failure
+- read-only write attempts are rejected as `SQLITE_READONLY`
+- unknown applied schema migrations are rejected as unsupported schema-ahead
+
+The dedicated `M03 Persistence` GitHub Actions workflow runs the persistence
+suite on both Windows and Linux.
