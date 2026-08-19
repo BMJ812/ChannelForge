@@ -89,3 +89,22 @@ identity relationship.
 Migration 0004 is additive.
 
 No inherited Tunarr identifier is modified or deleted.
+
+## Durable Conflict Evidence
+
+When one-to-one identity mapping is executed as part of a Migration Run, a
+semantic source or target conflict is persisted to `cf_migration_conflict` as
+`OPEN` before the conflict is returned to the caller.
+
+The conflict record includes source reference, candidate targets, existing
+mapping evidence, timestamp, and Migration Run identity.
+
+The durable record survives database close/reopen.
+
+## Opaque Legacy Identifier Rule
+
+Legacy identifier values are validated for non-blank content but are not
+trimmed, case-folded, parsed as UUIDs, or otherwise normalized by the generic
+mapping service.
+
+Namespace and entity-type labels are normalized separately.

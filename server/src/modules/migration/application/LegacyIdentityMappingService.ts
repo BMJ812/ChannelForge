@@ -4,6 +4,8 @@ import {
   type LegacyIdentityMapping,
   type LegacyIdentityReference,
 } from '../domain/LegacyIdentityMapping.js';
+import { MigrationConflictId } from '../domain/MigrationConflict.js';
+import type { MigrationConflictRepository } from '../ports/MigrationConflictRepository.js';
 import type { LegacyIdentityMappingRepository } from '../ports/LegacyIdentityMappingRepository.js';
 
 export type LegacyIdentityConflictReason =
@@ -14,6 +16,7 @@ export class LegacyIdentityMappingConflictError extends Error {
   constructor(
     readonly reason: LegacyIdentityConflictReason,
     readonly existing: LegacyIdentityMapping,
+    readonly conflictId?: MigrationConflictId,
   ) {
     super(
       reason === 'LEGACY_ALREADY_MAPPED'
@@ -56,6 +59,14 @@ function requireNonEmpty(label: string, value: string): string {
   return normalized;
 }
 
+function requireOpaqueNonEmpty(label: string, value: string): string {
+  if (value.trim().length === 0) {
+    throw new RangeError(`${label} must not be empty`);
+  }
+
+  return value;
+}
+
 function sameLegacyIdentity(
   left: LegacyIdentityReference,
   right: LegacyIdentityReference,
@@ -77,7 +88,57 @@ function sameChannelForgeIdentity(
 }
 
 export class LegacyIdentityMappingService {
-  constructor(private readonly repository: LegacyIdentityMappingRepository) {}
+  constructor(
+    private readonly repository: LegacyIdentityMappingRepository,
+    private readonly conflictRepository?: MigrationConflictRepository,
+  ) {}
+
+  private recordConflict(
+    reason: LegacyIdentityConflictReason,
+    request: EnsureLegacyIdentityMappingRequest,
+    existing: LegacyIdentityMapping,
+    legacy: LegacyIdentityReference,
+    channelForge: ChannelForgeIdentityReference,
+  ): MigrationConflictId | undefined {
+    if (
+      this.conflictRepository === undefined ||
+      request.migrationRunId === undefined
+    ) {
+      return undefined;
+    }
+
+    const conflictId = MigrationConflictId.generate();
+
+    this.conflictRepository.insert(
+      Object.freeze({
+        migrationConflictId: conflictId,
+        migrationRunId: request.migrationRunId,
+        stepKey: 'legacy-identity-mapping',
+        conflictType: reason,
+        sourceReference: [
+          legacy.namespace,
+          legacy.entityType,
+          legacy.identifier,
+        ].join('/'),
+        candidateTargets: Object.freeze([
+          [
+            existing.channelForge.entityType,
+            existing.channelForge.identifier,
+          ].join('/'),
+          [channelForge.entityType, channelForge.identifier].join('/'),
+        ]),
+        status: 'OPEN',
+        detectedAt: (request.now ?? (() => new Date()))().toISOString(),
+        evidence: Object.freeze({
+          existingMappingId: existing.mappingId,
+          incomingLegacy: legacy,
+          incomingChannelForge: channelForge,
+        }),
+      }),
+    );
+
+    return conflictId;
+  }
 
   ensureOneToOneMapping(
     request: EnsureLegacyIdentityMappingRequest,
@@ -88,7 +149,7 @@ export class LegacyIdentityMappingService {
         'legacy entity type',
         request.legacy.entityType,
       ),
-      identifier: requireNonEmpty(
+      identifier: requireOpaqueNonEmpty(
         'legacy identifier',
         request.legacy.identifier,
       ),
@@ -112,9 +173,18 @@ export class LegacyIdentityMappingService {
         return existingLegacy;
       }
 
+      const conflictId = this.recordConflict(
+        'LEGACY_ALREADY_MAPPED',
+        request,
+        existingLegacy,
+        legacy,
+        channelForge,
+      );
+
       throw new LegacyIdentityMappingConflictError(
         'LEGACY_ALREADY_MAPPED',
         existingLegacy,
+        conflictId,
       );
     }
 
@@ -126,9 +196,18 @@ export class LegacyIdentityMappingService {
         return existingTarget;
       }
 
+      const conflictId = this.recordConflict(
+        'TARGET_ALREADY_MAPPED',
+        request,
+        existingTarget,
+        legacy,
+        channelForge,
+      );
+
       throw new LegacyIdentityMappingConflictError(
         'TARGET_ALREADY_MAPPED',
         existingTarget,
+        conflictId,
       );
     }
 

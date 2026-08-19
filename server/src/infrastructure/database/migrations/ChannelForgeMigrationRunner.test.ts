@@ -8,6 +8,7 @@ import { openChannelForgeSqliteConnection } from '../connection/ChannelForgeSqli
 import {
   ChannelForgeMigrationRunner,
   MigrationChecksumMismatchError,
+  UnsupportedSchemaAheadError,
 } from './ChannelForgeMigrationRunner.js';
 import {
   checksumSchemaMigration,
@@ -225,6 +226,47 @@ describe('ChannelForgeMigrationRunner', () => {
         .get();
 
       expect(rolledBackTable).toBeUndefined();
+    } finally {
+      database.close();
+    }
+  });
+
+  it('rejects a database containing an unknown applied migration', () => {
+    const database = openTestDatabase();
+
+    try {
+      new ChannelForgeMigrationRunner(
+        database,
+        channelForgeSchemaMigrations,
+      ).migrate();
+
+      database
+        .prepare(
+          `
+            INSERT INTO cf_schema_migration (
+              migration_id,
+              migration_name,
+              checksum,
+              status,
+              completed_at
+            )
+            VALUES (
+              '9999_future_schema',
+              'Future schema',
+              'future-checksum',
+              'APPLIED',
+              ?
+            )
+          `,
+        )
+        .run(new Date().toISOString());
+
+      expect(() =>
+        new ChannelForgeMigrationRunner(
+          database,
+          channelForgeSchemaMigrations,
+        ).migrate(),
+      ).toThrow(UnsupportedSchemaAheadError);
     } finally {
       database.close();
     }

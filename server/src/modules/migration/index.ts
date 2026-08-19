@@ -52,3 +52,16 @@ export type {
 export { LegacyIdentityMappingConstraintError } from './ports/LegacyIdentityMappingRepository.js';
 
 export type { LegacyIdentityMappingRepository } from './ports/LegacyIdentityMappingRepository.js';
+
+export {
+  MigrationConflictId,
+  MigrationConflictStatuses,
+} from './domain/MigrationConflict.js';
+
+export type {
+  MigrationConflict,
+  MigrationConflictId as MigrationConflictIdentifier,
+  MigrationConflictStatus,
+} from './domain/MigrationConflict.js';
+
+export type { MigrationConflictRepository } from './ports/MigrationConflictRepository.js';

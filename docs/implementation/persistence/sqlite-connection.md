@@ -36,3 +36,20 @@ authority changes in this unit.
 
 The first ChannelForge-owned schema will be introduced by the next additive
 migration unit.
+
+## Connection Budget
+
+`ChannelForgeSqliteConnectionManager` owns a configured maximum connection
+count.
+
+The manager:
+
+- refuses acquisition after the configured limit
+- releases capacity only after an owned connection closes
+- can deterministically close all owned connections
+- exposes active count and configured limit for composition diagnostics
+
+The initial manager default is four connections.
+
+Production composition may choose a lower bound, including a single shared
+writer, without changing repository contracts.
