@@ -1,4 +1,4 @@
-import { TunarrInstanceIdentityAdapter } from '@/compatibility/tunarr/adapters/TunarrInstanceIdentityAdapter.js';
+import { CanonicalFirstTunarrInstanceIdentityReader } from '@/compatibility/tunarr/index.js';
 import { MediaSourceType } from '@/db/schema/base.js';
 import { JellyfinApiClient } from '@/external/jellyfin/JellyfinApiClient.js';
 import { mediaSourceParamsSchema, TruthyQueryParam } from '@/types/schemas.js';
@@ -56,15 +56,18 @@ export const jellyfinApiRouter: RouterPluginCallback = (fastify, _, done) => {
       },
     },
     async (req, res) => {
-      const { instanceId } = new TunarrInstanceIdentityAdapter(
+      const identityRead = new CanonicalFirstTunarrInstanceIdentityReader(
         req.serverCtx.settings,
-      ).readInstanceIdentity();
+      ).read({
+        operation: 'jellyfin-login-device-identity',
+        routeTemplate: '/jellyfin/login',
+      });
 
       const response = await JellyfinApiClient.login(
         req.body.url,
         req.body.username,
         req.body.password,
-        instanceId,
+        identityRead.value.instanceId,
       );
 
       return res.send({

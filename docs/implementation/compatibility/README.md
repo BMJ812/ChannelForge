@@ -1,7 +1,7 @@
 # ChannelForge Legacy Compatibility
 
 - **Milestone:** 04 â€” Legacy Compatibility
-- **Current unit:** PR 04B â€” Legacy Identity Resolver
+- **Current unit:** PR 04C â€” First Compatibility Read
 - **Runtime cutover:** none
 - **Legacy authority change:** none
 
@@ -201,3 +201,24 @@ Removal requires:
 | Removal gate | Resolver removable only after legacy identity paths retire |
 | Rollback | Stop resolver use; preserve additive tombstone history |
 | Tests | SQLite tombstone persistence + resolver integration + existing regressions |
+
+## PR 04C Change-Control Record
+
+| Field | PR 04C |
+| --- | --- |
+| Legacy path | Jellyfin login device identity |
+| Target module | Compatibility Instance identity read |
+| Compatibility mode | `CANONICAL_READ_LEGACY_FALLBACK` |
+| Read authority | Canonical when verified mapping and persisted Instance agree; legacy fallback otherwise |
+| Write authority | Unchanged |
+| Mapping namespace | `tunarr` |
+| Fallback | Inherited SettingsDB client ID |
+| Tombstone | Blocks canonical resolution; legacy fallback remains during support phase |
+| Conflict | Blocks canonical resolution; no candidate selected |
+| Partial failure | Canonical read error becomes explicit legacy fallback + compatibility error metric |
+| Reconciliation | None |
+| Metrics | Canonical read, fallback, mapping/tombstone, shadow, error, latency |
+| Freeze gate | Not activated |
+| Removal gate | Jellyfin fallback removable only after mapping coverage and support window |
+| Rollback | Restore legacy adapter at route; no data rollback |
+| Tests | Canonical hit, schema fallback, unverified mapping, tombstone, mismatch, existing compatibility regressions |
