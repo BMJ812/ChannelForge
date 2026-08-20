@@ -1,7 +1,7 @@
 # ChannelForge Legacy Compatibility
 
 - **Milestone:** 04 â€” Legacy Compatibility
-- **Current unit:** PR 04E - Shadow Read Framework
+- **Current unit:** PR 04F - Legacy Route Registry
 - **Runtime cutover:** none
 - **Legacy authority change:** none
 
@@ -264,3 +264,23 @@ Removal requires:
 | Removal gate | Framework removable after all shadow policies retire |
 | Rollback | Remove framework use/exports; no data rollback |
 | Tests | authority, checksums, classes, sampling, cancellation, bounds, diagnostics |
+
+## PR 04F Change-Control Record
+
+| Field | PR 04F |
+| --- | --- |
+| Legacy path | Inherited API, HDHomeRun, video, and stream route registration |
+| Target module | Compatibility route registry and host registration wrappers |
+| Compatibility mode | Route-specific; no route changes mode in 04F |
+| Read authority | Unchanged |
+| Write authority | Unchanged |
+| Mapping namespace | Unchanged |
+| Fallback | Unchanged |
+| Partial failure | Registry/metric instrumentation never substitutes handler output |
+| Reconciliation | None |
+| Metrics | Legacy route calls, deprecated route calls when classified, latency |
+| Tags | `legacy` + `compatibility`; `deprecated` only when applicable |
+| Freeze gate | Not activated |
+| Removal gate | Recorded per route |
+| Rollback | Restore direct host registrations; no data rollback |
+| Tests | classification, route mode, tags, metrics, registration isolation |

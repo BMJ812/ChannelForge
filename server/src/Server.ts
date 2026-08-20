@@ -36,10 +36,10 @@ import path, { dirname } from 'node:path';
 import 'reflect-metadata';
 import { match, P } from 'ts-pattern';
 import { z } from 'zod/v4';
-import { HdhrApiRouter } from './api/hdhrApi.js';
-import { apiRouter } from './api/index.js';
-import { streamApi } from './api/streamApi.js';
-import { videoApiRouter } from './api/videoApi.js';
+import {
+  registerTunarrLegacyApiRoutes,
+  registerTunarrLegacyStreamRoutes,
+} from './compatibility/tunarr/routes/index.js';
 import { defaultHlsOptions } from './ffmpeg/builder/constants.ts';
 import { type ServerOptions, serverOptions } from './globals.js';
 import { IWorkerPool } from './interfaces/IWorkerPool.ts';
@@ -383,11 +383,9 @@ export class Server {
           .get('/', { schema: { hide: true } }, async (_, res) =>
             res.redirect('/web', 302),
           )
-          .register(new HdhrApiRouter().router)
-          .register(apiRouter, { prefix: '/api' });
+          .register(registerTunarrLegacyApiRoutes);
       })
-      .register(videoApiRouter)
-      .register(streamApi)
+      .register(registerTunarrLegacyStreamRoutes)
       // Serve the webapp
       .register(
         async (f) => {
