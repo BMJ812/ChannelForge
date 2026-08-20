@@ -7,6 +7,7 @@ export type {
 } from './application/MediaSourcesModule.js';
 
 export {
+  createMediaSourceCredentialReference,
   MediaLibraryKinds,
   MediaSourceId,
   MediaSourceKinds,
@@ -15,8 +16,13 @@ export {
 
 export type {
   MediaLibraryKind,
+  MediaSourceCredentialReference,
   MediaSourceKind,
+  MediaSourceLibraryBindingReadModel,
+  MediaSourcePathReplacementReadModel,
   RemoteMediaSourceKind,
+  RemoteMediaSourceProviderConfiguration,
+  RemoteMediaSourceReadModel,
 } from './domain/MediaSource.js';
 
 export {

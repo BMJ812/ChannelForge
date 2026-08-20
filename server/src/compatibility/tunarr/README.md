@@ -193,3 +193,29 @@ Concrete concept repair workers remain separate compatibility implementations.
 
 PR 04I does not activate a production reconciliation worker, change a
 compatibility mode, change read/write authority, or freeze any legacy writer.
+
+## PR 04J Provider Compatibility
+
+PR 04J adds a pure read translator for inherited remote Media Source
+configuration.
+
+Supported inherited provider kinds are:
+
+```text
+plex
+jellyfin
+emby
+```
+
+The caller supplies the already-resolved canonical `MediaSourceId`; the
+inherited Media Source UUID is never reused as canonical identity.
+
+The translator preserves non-secret provider configuration, library selection,
+and path-replacement intent.
+
+Inherited plaintext `media_source.accessToken` is deliberately excluded from
+the translation input contract and output model. Compatibility produces only an
+opaque credential reference derived from legacy identity.
+
+The translator performs no provider calls, filesystem writes, legacy writes,
+canonical writes, schema migration, or plaintext dual-write.

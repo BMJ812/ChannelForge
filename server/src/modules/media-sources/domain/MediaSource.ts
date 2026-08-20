@@ -28,3 +28,52 @@ export const MediaLibraryKinds = [
 ] as const;
 
 export type MediaLibraryKind = (typeof MediaLibraryKinds)[number];
+
+export type MediaSourceCredentialReference = Readonly<{
+  key: string;
+}>;
+
+export function createMediaSourceCredentialReference(
+  key: string,
+): MediaSourceCredentialReference {
+  const normalized = key.trim();
+
+  if (normalized.length === 0) {
+    throw new Error('Media Source credential reference key is required');
+  }
+
+  return Object.freeze({
+    key: normalized,
+  });
+}
+
+export type RemoteMediaSourceProviderConfiguration = Readonly<{
+  uri: string;
+  clientIdentifier?: string;
+  username?: string;
+  userId?: string;
+  sendChannelUpdates: boolean;
+  sendGuideUpdates: boolean;
+}>;
+
+export type MediaSourceLibraryBindingReadModel = Readonly<{
+  externalLibraryId: string;
+  name: string;
+  mediaKind: MediaLibraryKind;
+  enabled: boolean;
+}>;
+
+export type MediaSourcePathReplacementReadModel = Readonly<{
+  serverPath: string;
+  localPath: string;
+}>;
+
+export type RemoteMediaSourceReadModel = Readonly<{
+  id: MediaSourceId;
+  kind: RemoteMediaSourceKind;
+  name: string;
+  providerConfiguration: RemoteMediaSourceProviderConfiguration;
+  credentialReference: MediaSourceCredentialReference;
+  libraries: readonly MediaSourceLibraryBindingReadModel[];
+  pathReplacements: readonly MediaSourcePathReplacementReadModel[];
+}>;

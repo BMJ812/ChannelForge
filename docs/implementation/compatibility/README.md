@@ -1,7 +1,7 @@
 # ChannelForge Legacy Compatibility
 
 - **Milestone:** 04 Ã¢â‚¬â€ Legacy Compatibility
-- **Current unit:** PR 04I - Reconciliation Framework
+- **Current unit:** PR 04J - Provider Compatibility
 - **Runtime cutover:** none
 - **Legacy authority change:** none
 
@@ -350,3 +350,25 @@ Removal requires:
 | Removal gate | Remove after all reconciliation producers/workers retire and required history is retained |
 | Rollback | Stop runner/diagnostics use; preserve additive reconciliation history |
 | Tests | enqueue dedupe, persistence reopen, restart, checkpoint, findings, retry ceiling, cancellation boundary, metrics, diagnostics |
+
+## PR 04J Change-Control Record
+
+| Field | PR 04J |
+| --- | --- |
+| Legacy path | Inherited Tunarr remote Media Source configuration read |
+| Target module | Media Sources |
+| Compatibility mode | Read translation contract only; no runtime mode transition |
+| Read authority | Unchanged; translator is not activated as production authority |
+| Write authority | Unchanged |
+| Identity | Caller supplies resolved canonical Media Source ID; legacy UUID remains legacy |
+| Provider kinds | Plex, Jellyfin, Emby |
+| Provider configuration | URI and non-secret provider settings preserved |
+| Credentials | Opaque reference only; inherited plaintext access token is never copied into canonical output |
+| Libraries | External library identity, name, media kind, enabled state preserved |
+| Path replacement | Server/local replacement pairs preserved |
+| Provider calls | None |
+| Persistence | None |
+| Plaintext dual-write | Prohibited; none introduced |
+| Freeze gate | Not activated |
+| Rollback | Stop consuming translator; no schema rollback |
+| Tests | Provider translation, credential non-leakage, identity separation, related-row ownership, unsupported local source, immutability |
