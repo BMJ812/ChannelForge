@@ -133,3 +133,18 @@ fallback, or freeze is introduced.
 
 The registry classifies the read route `ADAPT_READ` and the write route
 `ADAPT_WRITE`.
+
+## PR 04H
+
+PR 04H adds durable compatibility write status and a reusable temporary
+write-translation coordinator.
+
+It performs no production mode transition.
+
+No current concept enters `TEMPORARY_WRITE_TRANSLATION`.
+
+The 04G Media Source scan-policy proof remains `LEGACY_ONLY` with inherited
+Tunarr settings as read and write authority.
+
+Future coordinator activation requires a separate explicit mode and
+write-authority transition.
