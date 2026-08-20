@@ -126,9 +126,19 @@ describe('SqliteCompatibilityStatusRepository', () => {
     }
   });
 
-  it('registers migration 0007 last', () => {
-    expect(channelForgeSchemaMigrations.at(-1)?.id).toBe(
+  it('registers migration 0007 immediately after migration 0006', () => {
+    const migrationIds = channelForgeSchemaMigrations.map(
+      (migration) => migration.id,
+    );
+
+    const compatibilityStatusIndex = migrationIds.indexOf(
       '0007_compatibility_status',
+    );
+
+    expect(compatibilityStatusIndex).toBeGreaterThan(0);
+
+    expect(migrationIds[compatibilityStatusIndex - 1]).toBe(
+      '0006_legacy_identity_tombstone',
     );
   });
 });

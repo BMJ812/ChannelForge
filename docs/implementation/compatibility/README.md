@@ -1,7 +1,7 @@
 # ChannelForge Legacy Compatibility
 
-- **Milestone:** 04 â€” Legacy Compatibility
-- **Current unit:** PR 04H - Compatibility Write Status
+- **Milestone:** 04 Ã¢â‚¬â€ Legacy Compatibility
+- **Current unit:** PR 04I - Reconciliation Framework
 - **Runtime cutover:** none
 - **Legacy authority change:** none
 
@@ -327,3 +327,26 @@ Removal requires:
 | Removal gate | Remove after temporary write translations retire and required history is retained |
 | Rollback | Stop coordinator use; preserve additive status history |
 | Tests | SQLite reopen/concurrency, success, authoritative failure, projection failure, enqueue failure, status failure, bounded metrics |
+
+## PR 04I Change-Control Record
+
+| Field | PR 04I |
+| --- | --- |
+| Legacy path | Durable recovery for compatibility representation divergence; no production worker activated |
+| Target module | Compatibility reconciliation runner + Migration-owned reconciliation persistence |
+| Compatibility mode | Framework uses existing temporary-write reconciliation vocabulary; no runtime concept transitions |
+| Read authority | Unchanged |
+| Write authority | Unchanged; canonical state cannot be overwritten from legacy by ordinary reconciliation |
+| Mapping namespace | Concept-specific; framework creates no mapping |
+| Fallback | None introduced |
+| Partial failure | Retryable worker failure is bounded and durable; attempt ceiling becomes explicit `FAILED` |
+| Persistence | `cf_compatibility_reconciliation_job` + `cf_compatibility_reconciliation_finding` via migration `0008_compatibility_reconciliation` |
+| Restart | Interrupted `RUNNING` jobs return to `QUEUED` with checkpoint/progress retained |
+| Batch | One bounded batch per runner invocation; default 100, maximum 500 |
+| Findings | Durable severity/outcome/status with idempotent per-job finding key |
+| Operator visibility | Read-only bounded job/finding diagnostics |
+| Metrics | Compared, equal, repaired, conflicts, failed, retries, queue depth, oldest finding age, duration |
+| Freeze gate | Not activated |
+| Removal gate | Remove after all reconciliation producers/workers retire and required history is retained |
+| Rollback | Stop runner/diagnostics use; preserve additive reconciliation history |
+| Tests | enqueue dedupe, persistence reopen, restart, checkpoint, findings, retry ceiling, cancellation boundary, metrics, diagnostics |

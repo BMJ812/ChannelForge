@@ -171,3 +171,25 @@ The reconciliation contract is enqueue-only in 04H. PR 04I owns job execution
 and findings.
 
 No production concept is switched to temporary write translation by PR 04H.
+
+## Reconciliation Framework
+
+PR 04I adds durable reconciliation execution under `reconciliation/`.
+
+The framework:
+
+- consumes the enqueue contract introduced by 04H
+- claims one durable job at a time
+- processes one bounded batch per runner invocation
+- requires restart checkpoints for incomplete batches
+- requeues retryable failures only below a bounded attempt ceiling
+- persists operator-visible findings
+- records queue depth, oldest-finding age, compared/equal/repaired/conflict,
+  failure, retry, and duration metrics
+- permits cancellation at bounded batch boundaries
+- never exposes a path for legacy state to overwrite canonical state
+
+Concrete concept repair workers remain separate compatibility implementations.
+
+PR 04I does not activate a production reconciliation worker, change a
+compatibility mode, change read/write authority, or freeze any legacy writer.
