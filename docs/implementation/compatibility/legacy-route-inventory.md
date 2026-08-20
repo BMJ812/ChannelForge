@@ -1,12 +1,12 @@
 # Legacy Route Inventory
 
 - **Milestone:** 04
-- **Unit:** PR 04F - Legacy Route Registry
+- **Unit:** PR 04G - Route Adapter Proof
 - **Reviewed route declarations:** 197
 - **Source inventory:** `docs/implementation/baseline/api-inventory.md`
 - **Source baseline commit:** `0e5491f87259123a3cb085e3d2ba3844eda510d0`
 - **Runtime registration authority:** `server/src/compatibility/tunarr/routes/`
-- **Route adapter cutover:** none
+- **Route adapter cutover:** Media Source scan-policy GET/PUT proof only
 
 ## Method
 
@@ -27,9 +27,11 @@ client compatibility governs their lifecycle.
 | `INTERNAL_ONLY` | 27 |
 | `OUTPUT_PROTOCOL` | 9 |
 | `STREAM_PROTOCOL` | 8 |
-| `UNKNOWN` | 153 |
+| ADAPT_READ | 1 |
+| ADAPT_WRITE | 1 |
+| UNKNOWN | 151 |
 
-No route is classified `ADAPT_READ`, `ADAPT_WRITE`, `DEPRECATE`,
+PR 04G classifies one read route `ADAPT_READ` and one write route `ADAPT_WRITE`.`n`nNo route is classified `DEPRECATE`,
 `FREEZE_WRITE`, `REMOVE_LATER`, or `TRANSLATE_RESPONSE` in PR 04F.
 
 ## Runtime Registration
@@ -212,8 +214,8 @@ Metrics use the Fastify route template, never a concrete request URL.
 | `POST` | `/api/programs/facets/:facetName` | server/src/api/programmingApi.ts:212; Inline/direct registration handler | params, query, body | Static response schema found | No explicit route guard found | No explicit route guard found | `WRITE/COMMAND` | First-party: Not resolved by direct literal scan; external: First-party/generated-client use not fully resolved | Not resolved by direct literal scan | First-party/generated-client use not fully resolved | Present | Direct write evidence: None found | TBD by route adapter PR | `UNKNOWN` | Not set | Replacement classified, callers migrated, zero-use evidence, support window complete |
 | `POST` | `/api/programs/search` | server/src/api/programmingApi.ts:86; Inline/direct registration handler | body | Static response schema found | No explicit route guard found | No explicit route guard found | `WRITE/COMMAND` | First-party: `web/src/generated/sdk.gen.ts`, `web/src/generated/types.gen.ts`; external: First-party/generated-client use not fully resolved | `web/src/generated/sdk.gen.ts`, `web/src/generated/types.gen.ts` | First-party/generated-client use not fully resolved | Not found by static term scan | Direct write evidence: None found | TBD by route adapter PR | `UNKNOWN` | Not set | Replacement classified, callers migrated, zero-use evidence, support window complete |
 | `GET` | `/api/sessions` | server/src/api/sessionApi.ts:14; Inline/direct registration handler | No static request schema found | Static response schema found | No explicit route guard found | No explicit route guard found | `READ` | First-party: `web/src/generated/sdk.gen.ts`, `web/src/generated/types.gen.ts`; external: First-party/generated-client use not fully resolved | `web/src/generated/sdk.gen.ts`, `web/src/generated/types.gen.ts` | First-party/generated-client use not fully resolved | Not found by static term scan | Direct write evidence: None found | TBD by route adapter PR | `UNKNOWN` | Not set | Replacement classified, callers migrated, zero-use evidence, support window complete |
-| `GET` | `/api/settings/media-source` | server/src/api/settingsApi.ts:6; Inline/direct registration handler | No static request schema found | Static response schema found | No explicit route guard found | No explicit route guard found | `READ` | First-party: `web/src/generated/sdk.gen.ts`, `web/src/generated/types.gen.ts`; external: First-party/generated-client use not fully resolved | `web/src/generated/sdk.gen.ts`, `web/src/generated/types.gen.ts` | First-party/generated-client use not fully resolved | Not found by static term scan | Direct write evidence: None found | TBD by route adapter PR | `UNKNOWN` | Not set | Replacement classified, callers migrated, zero-use evidence, support window complete |
-| `PUT` | `/api/settings/media-source` | server/src/api/settingsApi.ts:22; Inline/direct registration handler | body | Static response schema found | No explicit route guard found | No explicit route guard found | `WRITE/COMMAND` | First-party: `web/src/generated/sdk.gen.ts`, `web/src/generated/types.gen.ts`; external: First-party/generated-client use not fully resolved | `web/src/generated/sdk.gen.ts`, `web/src/generated/types.gen.ts` | First-party/generated-client use not fully resolved | Not found by static term scan | Direct write evidence: None found | TBD by route adapter PR | `UNKNOWN` | Not set | Replacement classified, callers migrated, zero-use evidence, support window complete |
+| `GET` | `/api/settings/media-source` | server/src/api/settingsApi.ts:6; Inline/direct registration handler | No static request schema found | Static response schema found | No explicit route guard found | No explicit route guard found | `READ` | First-party: `web/src/generated/sdk.gen.ts`, `web/src/generated/types.gen.ts`; external: First-party/generated-client use not fully resolved | `web/src/generated/sdk.gen.ts`, `web/src/generated/types.gen.ts` | First-party/generated-client use not fully resolved | Not found by static term scan | Direct write evidence: None found | ChannelForge Media Sources scan-policy application service | `ADAPT_READ` | Not deprecated; metadata recorded in PR 04G | Publish replacement management route, migrate first-party generated client, observe zero supported use, complete support and rollback windows |
+| `PUT` | `/api/settings/media-source` | server/src/api/settingsApi.ts:22; Inline/direct registration handler | body | Static response schema found | No explicit route guard found | No explicit route guard found | `WRITE/COMMAND` | First-party: `web/src/generated/sdk.gen.ts`, `web/src/generated/types.gen.ts`; external: First-party/generated-client use not fully resolved | `web/src/generated/sdk.gen.ts`, `web/src/generated/types.gen.ts` | First-party/generated-client use not fully resolved | Not found by static term scan | Direct write evidence: None found | ChannelForge Media Sources scan-policy application service | `ADAPT_WRITE` | Not deprecated; metadata recorded in PR 04G | Publish replacement management route, migrate first-party generated client, observe zero supported use, complete support and rollback windows |
 | `GET` | `/api/smart_collections` | server/src/api/smartCollectionsApi.ts:16; Inline/direct registration handler | No static request schema found | Static response schema found | No explicit route guard found | No explicit route guard found | `READ` | First-party: `web/src/components/search/SearchInput.tsx`, `web/src/components/smart_collections/SmartCollectionsTable.tsx`, `web/src/generated/sdk.gen.ts` (+6 more); external: First-party/generated-client use not fully resolved | `web/src/components/search/SearchInput.tsx`, `web/src/components/smart_collections/SmartCollectionsTable.tsx`, `web/src/generated/sdk.gen.ts` (+6 more) | First-party/generated-client use not fully resolved | Not found by static term scan | Direct write evidence: None found | TBD by route adapter PR | `UNKNOWN` | Not set | Replacement classified, callers migrated, zero-use evidence, support window complete |
 | `POST` | `/api/smart_collections` | server/src/api/smartCollectionsApi.ts:83; Inline/direct registration handler | body | Static response schema found | No explicit route guard found | No explicit route guard found | `WRITE/COMMAND` | First-party: `web/src/components/search/SearchInput.tsx`, `web/src/components/smart_collections/SmartCollectionsTable.tsx`, `web/src/generated/sdk.gen.ts` (+6 more); external: First-party/generated-client use not fully resolved | `web/src/components/search/SearchInput.tsx`, `web/src/components/smart_collections/SmartCollectionsTable.tsx`, `web/src/generated/sdk.gen.ts` (+6 more) | First-party/generated-client use not fully resolved | Present | Direct write evidence: None found | TBD by route adapter PR | `UNKNOWN` | Not set | Replacement classified, callers migrated, zero-use evidence, support window complete |
 | `DELETE` | `/api/smart_collections/:id` | server/src/api/smartCollectionsApi.ts:57; Inline/direct registration handler | params | Static response schema found | No explicit route guard found | No explicit route guard found | `WRITE/COMMAND` | First-party: Not resolved by direct literal scan; external: First-party/generated-client use not fully resolved | Not resolved by direct literal scan | First-party/generated-client use not fully resolved | Present | Direct write evidence: None found | TBD by route adapter PR | `UNKNOWN` | Not set | Replacement classified, callers migrated, zero-use evidence, support window complete |
@@ -300,3 +302,35 @@ Metrics use the Fastify route template, never a concrete request URL.
 - **Freeze gate:** not activated
 - **Removal gate:** per-route inventory field
 - **Rollback:** restore direct host registration; no data rollback
+
+## PR 04G Adapter Proof
+
+The first route adapter proof is intentionally narrow:
+
+```text
+GET /api/settings/media-source
+PUT /api/settings/media-source
+```
+
+The inherited HTTP DTO remains:
+
+```json
+{
+  "rescanIntervalHours": 6
+}
+```
+
+The ChannelForge Media Sources application contract uses:
+
+```text
+intervalHours
+```
+
+Translation is explicit in both directions.
+
+The write route does not create a second writer. ChannelForge validates the
+command through its application service, then the compatibility store writes
+the inherited Tunarr settings authority.
+
+Deprecation planning metadata is registered now, but the route is not marked
+deprecated until a public replacement management route exists.

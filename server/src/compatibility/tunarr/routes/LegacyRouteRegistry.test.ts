@@ -1,12 +1,15 @@
 import { describe, expect, it } from 'vitest';
 
 import { RuntimeCompatibilityMetrics } from '../usage/RuntimeCompatibilityMetrics.js';
+
 import {
   classifyTunarrLegacyRoute,
   legacyRouteCompatibilityMode,
+  legacyRouteDeprecationMetadata,
   LegacyRouteClassifications,
   LegacyRouteRegistry,
 } from './LegacyRouteRegistry.js';
+
 import { LegacyRouteUsageMetrics } from './LegacyRouteUsageMetrics.js';
 
 describe('LegacyRouteRegistry', () => {
@@ -39,14 +42,43 @@ describe('LegacyRouteRegistry', () => {
     expect(classifyTunarrLegacyRoute(path)).toBe(classification);
   });
 
+  it('classifies the 04G proof routes by method', () => {
+    expect(
+      classifyTunarrLegacyRoute('/api/settings/media-source', false, 'GET'),
+    ).toBe('ADAPT_READ');
+
+    expect(
+      classifyTunarrLegacyRoute('/api/settings/media-source', false, 'PUT'),
+    ).toBe('ADAPT_WRITE');
+  });
+
+  it('records deprecation-planning metadata without falsely deprecating the route', () => {
+    const metadata = legacyRouteDeprecationMetadata(
+      'GET',
+      '/api/settings/media-source',
+    );
+
+    expect(metadata).toMatchObject({
+      deprecated: false,
+    });
+
+    expect(metadata?.replacement).toContain(
+      'Media Sources application service',
+    );
+
+    expect(metadata?.removalGate).toContain(
+      'migrate first-party generated client',
+    );
+  });
+
   it('keeps the Jellyfin login compatibility mode intact', () => {
     expect(legacyRouteCompatibilityMode('POST', '/api/jellyfin/login')).toBe(
       'CANONICAL_READ_LEGACY_FALLBACK',
     );
 
-    expect(legacyRouteCompatibilityMode('GET', '/api/channels')).toBe(
-      'LEGACY_ONLY',
-    );
+    expect(
+      legacyRouteCompatibilityMode('GET', '/api/settings/media-source'),
+    ).toBe('LEGACY_ONLY');
   });
 
   it('deduplicates method/path pairs and adds compatibility tags', () => {
@@ -70,6 +102,40 @@ describe('LegacyRouteRegistry', () => {
     expect(registry.snapshot().routeCount).toBe(1);
   });
 
+  it('attaches the 04G adapter classification and deprecation metadata', () => {
+    const registry = new LegacyRouteRegistry();
+
+    const readRoute = registry.register({
+      method: 'GET',
+      path: '/api/settings/media-source',
+      existingTags: ['Settings'],
+    });
+
+    const writeRoute = registry.register({
+      method: 'PUT',
+      path: '/api/settings/media-source',
+      existingTags: ['Settings'],
+    });
+
+    expect(readRoute).toMatchObject({
+      classification: 'ADAPT_READ',
+      compatibilityMode: 'LEGACY_ONLY',
+      deprecation: {
+        deprecated: false,
+      },
+    });
+
+    expect(writeRoute).toMatchObject({
+      classification: 'ADAPT_WRITE',
+      compatibilityMode: 'LEGACY_ONLY',
+      deprecation: {
+        deprecated: false,
+      },
+    });
+
+    expect(readRoute.tags).toEqual(['Settings', 'legacy', 'compatibility']);
+  });
+
   it('keeps hidden routes hidden instead of adding visible tags', () => {
     const registry = new LegacyRouteRegistry();
 
@@ -89,7 +155,9 @@ describe('LegacyRouteRegistry', () => {
 
   it('records bounded template metrics rather than concrete IDs', () => {
     const metrics = new RuntimeCompatibilityMetrics();
-    const usage = new LegacyRouteUsageMetrics(metrics, '04f-test');
+
+    const usage = new LegacyRouteUsageMetrics(metrics, '04g-test');
+
     const registry = new LegacyRouteRegistry();
 
     const route = registry.register({

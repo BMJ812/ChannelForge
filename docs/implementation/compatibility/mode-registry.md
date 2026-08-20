@@ -25,7 +25,8 @@
 | Instance identity â€” Jellyfin login | `CANONICAL_READ_LEGACY_FALLBACK` | Persisted ChannelForge Instance when a VERIFIED `tunarr` mapping agrees; approved 04D policy may lazily create/verify the singleton mapping | Inherited Tunarr path | Explicit inherited client-ID fallback with bounded warning | Mapping coverage + runtime fallback evidence before broader adoption | Later compatibility removal |
 | Instance identity â€” M03 mapping proof | `DUAL_COMPARE` diagnostic proof only | Inherited Tunarr remains authoritative | No writer introduced | Legacy result on missing/unverified/mismatched mapping | Separate production-read PR | Later compatibility removal |
 | Media Source synchronization delegation | `LEGACY_ONLY` | Inherited synchronization behavior | Inherited scan coordinator | None | Canonical Media Source synchronization implementation | Later compatibility removal |
-| Legacy management routes | `LEGACY_ONLY` | Inherited handlers | Inherited handlers | Existing behavior | Route inventory + adapter proof | Later compatibility removal |
+| Media Source scan policy - legacy settings route proof | `LEGACY_ONLY` | Inherited Tunarr settings via ChannelForge Media Sources application service | Inherited Tunarr settings via compatibility store adapter | None | Canonical settings persistence + replacement management route | Later compatibility removal |
+| Legacy management routes | `LEGACY_ONLY` | Inherited handlers except explicitly adapted routes | Inherited handlers except explicitly adapted routes | Existing behavior | Route-by-route adapter migration | Later compatibility removal |
 | Legacy background jobs | `LEGACY_ONLY` | Inherited runtime | Inherited runtime | Existing behavior | Job inventory + compatibility handler | Later compatibility removal |
 | Scheduling runtime | `LEGACY_ONLY` | Inherited scheduler | Inherited scheduler | Existing behavior | M04 scheduling containment + M07 replacement | Later compatibility removal |
 | Output protocols | `LEGACY_ONLY` | Inherited output behavior | Inherited generators/settings | Existing behavior | Protocol compatibility proof | Later compatibility removal |
@@ -112,3 +113,23 @@ The Jellyfin login route remains `CANONICAL_READ_LEGACY_FALLBACK`.
 
 Other inherited management routes remain `LEGACY_ONLY` until a dedicated
 adapter or deprecation PR explicitly changes their mode.
+
+## PR 04G
+
+PR 04G adapts exactly two method/path pairs:
+
+```text
+GET /api/settings/media-source
+PUT /api/settings/media-source
+```
+
+Both remain `LEGACY_ONLY`.
+
+The route handlers now cross the ChannelForge Media Sources application
+boundary, but inherited Tunarr settings remain read and write authority.
+
+No canonical settings persistence, dual write, write translation status,
+fallback, or freeze is introduced.
+
+The registry classifies the read route `ADAPT_READ` and the write route
+`ADAPT_WRITE`.

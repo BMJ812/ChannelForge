@@ -39,3 +39,16 @@ export type {
   MediaSourceSynchronizationPort,
   MediaSourceSynchronizationRequest,
 } from './ports/MediaSourceSynchronization.js';
+
+export { createMediaSourceScanPolicy } from './domain/MediaSourceScanPolicy.js';
+
+export type {
+  MediaSourceScanPolicy,
+  MediaSourceScanPolicyInput,
+} from './domain/MediaSourceScanPolicy.js';
+
+export { createMediaSourceScanPolicyApplicationService } from './application/MediaSourceScanPolicyService.js';
+
+export type { MediaSourceScanPolicyApplicationService } from './application/MediaSourceScanPolicyService.js';
+
+export type { MediaSourceScanPolicyStore } from './ports/MediaSourceScanPolicyStore.js';

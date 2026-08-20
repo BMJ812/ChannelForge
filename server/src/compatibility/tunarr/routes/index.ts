@@ -2,6 +2,7 @@ export {
   classifyTunarrLegacyRoute,
   getTunarrLegacyRouteRegistrySnapshot,
   legacyRouteCompatibilityMode,
+  legacyRouteDeprecationMetadata,
   legacyRouteRegistrationGroup,
   legacyRouteTags,
   LegacyRouteClassifications,
@@ -12,6 +13,7 @@ export {
 
 export type {
   LegacyRouteClassification,
+  LegacyRouteDeprecationMetadata,
   LegacyRouteRegistration,
   LegacyRouteRegistrationGroup,
   LegacyRouteRegistrySnapshot,
@@ -23,3 +25,15 @@ export {
   registerTunarrLegacyApiRoutes,
   registerTunarrLegacyStreamRoutes,
 } from './registerTunarrLegacyRoutes.js';
+
+export {
+  canonicalMediaSourceScanPolicyToLegacyResponse,
+  createTunarrMediaSourceSettingsRouteAdapter,
+  legacyMediaSourceSettingsRequestToCanonical,
+  TunarrMediaSourceSettingsRouteAdapter,
+} from './MediaSourceSettingsRouteAdapter.js';
+
+export type {
+  LegacyMediaSourceSettingsRequest,
+  LegacyMediaSourceSettingsResponse,
+} from './MediaSourceSettingsRouteAdapter.js';
