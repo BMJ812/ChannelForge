@@ -162,7 +162,10 @@ describe('M04 compatibility core contracts', () => {
       'RECONCILIATION_QUEUE_DEPTH',
       'OLDEST_RECONCILIATION_FINDING_AGE_SECONDS',
     ]);
-    expect(CompatibilityTimingMetrics).toEqual(['COMPATIBILITY_LATENCY']);
+    expect(CompatibilityTimingMetrics).toEqual([
+      'COMPATIBILITY_LATENCY',
+      'RECONCILIATION_DURATION',
+    ]);
 
     expect(CompatibilityMetricResults).toEqual([
       'SUCCESS',

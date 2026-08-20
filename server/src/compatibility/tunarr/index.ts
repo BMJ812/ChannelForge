@@ -62,6 +62,20 @@ export type {
 } from './ports/index.js';
 
 export {
+  CompatibilityReconciliationDiagnostics,
+  CompatibilityReconciliationRunner,
+} from './reconciliation/index.js';
+
+export type {
+  CompatibilityReconciliationDiagnosticsOptions,
+  CompatibilityReconciliationDiagnosticsSnapshot,
+  CompatibilityReconciliationRunDisposition,
+  CompatibilityReconciliationRunnerOptions,
+  CompatibilityReconciliationRunResult,
+  CompatibilityReconciliationWorkerErrorDescriptor,
+} from './reconciliation/index.js';
+
+export {
   ShadowReadAuthorities,
   ShadowReadDiagnostics,
   ShadowReadDifferenceClasses,
@@ -106,6 +120,12 @@ export type {
 } from './usage/RuntimeCompatibilityMetrics.js';
 
 export {
+  CompatibilityReconciliationFindingId,
+  CompatibilityReconciliationFindingSeverities,
+  CompatibilityReconciliationFindingStatuses,
+  CompatibilityReconciliationJobId,
+  CompatibilityReconciliationJobStates,
+  CompatibilityReconciliationOutcomes,
   CompatibilityReconciliationReasons,
   CompatibilityStatusConcurrencyError,
   CompatibilityStatusConstraintError,
@@ -113,10 +133,23 @@ export {
 } from './ports/index.js';
 
 export type {
+  CompatibilityReconciliationBatchRequest,
+  CompatibilityReconciliationBatchResult,
   CompatibilityReconciliationEnqueuePort,
   CompatibilityReconciliationEnqueueResult,
+  CompatibilityReconciliationFinding,
+  CompatibilityReconciliationFindingDraft,
+  CompatibilityReconciliationFindingSeverity,
+  CompatibilityReconciliationFindingStatus,
+  CompatibilityReconciliationJob,
+  CompatibilityReconciliationJobState,
+  CompatibilityReconciliationListJobsOptions,
+  CompatibilityReconciliationOutcome,
+  CompatibilityReconciliationOutcomeCounts,
   CompatibilityReconciliationReason,
+  CompatibilityReconciliationRepository,
   CompatibilityReconciliationRequest,
+  CompatibilityReconciliationWorkerPort,
   CompatibilityStatusRecord,
   CompatibilityStatusRepository,
   CompatibilityStatusScope,

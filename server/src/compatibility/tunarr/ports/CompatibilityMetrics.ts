@@ -15,6 +15,12 @@ export const CompatibilityCounterMetrics = [
   'FROZEN_WRITE_ATTEMPTS',
   'TEMPORARY_TRANSLATION_SUCCESSES',
   'TEMPORARY_TRANSLATION_FAILURES',
+  'RECONCILIATION_ITEMS_COMPARED',
+  'RECONCILIATION_EQUAL',
+  'RECONCILIATION_REPAIRED',
+  'RECONCILIATION_CONFLICTS',
+  'RECONCILIATION_FAILED',
+  'RECONCILIATION_RETRIES',
   'MAPPING_CONFLICTS',
   'LAZY_MAPPINGS',
   'UNMAPPED_LEGACY_IDS',
@@ -34,7 +40,10 @@ export const CompatibilityGaugeMetrics = [
 export type CompatibilityGaugeMetric =
   (typeof CompatibilityGaugeMetrics)[number];
 
-export const CompatibilityTimingMetrics = ['COMPATIBILITY_LATENCY'] as const;
+export const CompatibilityTimingMetrics = [
+  'COMPATIBILITY_LATENCY',
+  'RECONCILIATION_DURATION',
+] as const;
 
 export type CompatibilityTimingMetric =
   (typeof CompatibilityTimingMetrics)[number];

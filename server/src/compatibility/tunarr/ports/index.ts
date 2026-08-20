@@ -59,11 +59,32 @@ export type {
   CompatibilityStatusScope,
 } from './CompatibilityStatusRepository.js';
 
-export { CompatibilityReconciliationReasons } from './CompatibilityReconciliation.js';
+export {
+  CompatibilityReconciliationFindingId,
+  CompatibilityReconciliationFindingSeverities,
+  CompatibilityReconciliationFindingStatuses,
+  CompatibilityReconciliationJobId,
+  CompatibilityReconciliationJobStates,
+  CompatibilityReconciliationOutcomes,
+  CompatibilityReconciliationReasons,
+} from './CompatibilityReconciliation.js';
 
 export type {
+  CompatibilityReconciliationBatchRequest,
+  CompatibilityReconciliationBatchResult,
   CompatibilityReconciliationEnqueuePort,
   CompatibilityReconciliationEnqueueResult,
+  CompatibilityReconciliationFinding,
+  CompatibilityReconciliationFindingDraft,
+  CompatibilityReconciliationFindingSeverity,
+  CompatibilityReconciliationFindingStatus,
+  CompatibilityReconciliationJob,
+  CompatibilityReconciliationJobState,
+  CompatibilityReconciliationListJobsOptions,
+  CompatibilityReconciliationOutcome,
+  CompatibilityReconciliationOutcomeCounts,
   CompatibilityReconciliationReason,
+  CompatibilityReconciliationRepository,
   CompatibilityReconciliationRequest,
+  CompatibilityReconciliationWorkerPort,
 } from './CompatibilityReconciliation.js';
