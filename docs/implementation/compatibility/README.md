@@ -1,7 +1,7 @@
 # ChannelForge Legacy Compatibility
 
 - **Milestone:** 04 â€” Legacy Compatibility
-- **Current unit:** PR 04F - Legacy Route Registry
+- **Current unit:** PR 04G - Route Adapter Proof
 - **Runtime cutover:** none
 - **Legacy authority change:** none
 
@@ -284,3 +284,26 @@ Removal requires:
 | Removal gate | Recorded per route |
 | Rollback | Restore direct host registrations; no data rollback |
 | Tests | classification, route mode, tags, metrics, registration isolation |
+
+## PR 04G Change-Control Record
+
+| Field | PR 04G |
+| --- | --- |
+| Legacy path | `GET /api/settings/media-source` and `PUT /api/settings/media-source` |
+| Target module | Media Sources scan-policy application service |
+| Classification | `ADAPT_READ` and `ADAPT_WRITE` |
+| Compatibility mode | `LEGACY_ONLY` unchanged |
+| Read authority | Inherited Tunarr settings through a ChannelForge-owned store port |
+| Write authority | Inherited Tunarr settings; one legacy writer remains |
+| Mapping namespace | None; this contract contains no entity identifier |
+| Fallback | None introduced |
+| Request translation | `rescanIntervalHours` -> canonical `intervalHours` |
+| Response translation | canonical `intervalHours` -> legacy `rescanIntervalHours` |
+| Partial failure | Canonical validation fails before inherited persistence; inherited write failure propagates without a second writer |
+| Reconciliation | None; no dual or canonical persistence exists in 04G |
+| Metrics | Existing legacy route call and compatibility latency metrics |
+| Deprecation metadata | Recorded with replacement, support window, behavior/error differences, migration guidance, and removal gate; route is not yet marked deprecated |
+| Freeze gate | Not activated |
+| Removal gate | Publish replacement management route, migrate first-party caller, zero supported use, support/rollback windows complete |
+| Rollback | Restore direct settings handlers; no data rollback |
+| Tests | canonical service, translation, read adapter, write adapter, validation, route registry |

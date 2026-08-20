@@ -15,6 +15,8 @@ import { LegacyRouteUsageMetrics } from './LegacyRouteUsageMetrics.js';
 type MutableSchema = {
   hide?: boolean;
   tags?: string[];
+  deprecated?: boolean;
+  description?: string;
 };
 
 function methodsOf(method: string | readonly string[]): readonly string[] {
@@ -45,6 +47,21 @@ function installLegacyRouteInstrumentation(
 
       if (schema !== undefined && !hidden) {
         schema.tags = [...registration.tags];
+
+        if (registration.deprecation !== undefined) {
+          schema.deprecated = registration.deprecation.deprecated;
+
+          const guidance =
+            `Compatibility: ${registration.deprecation.migrationGuidance}. ` +
+            `Removal gate: ${registration.deprecation.removalGate}.`;
+
+          schema.description =
+            schema.description === undefined
+              ? guidance
+              : `${schema.description}
+
+${guidance}`;
+        }
       }
     }
   });

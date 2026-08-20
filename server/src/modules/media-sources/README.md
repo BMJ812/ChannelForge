@@ -40,3 +40,22 @@ No Media Sources persistence is introduced or migrated by PR 02F.
 Shell established. Existing provider and scanner implementations remain
 inherited in place. ChannelForge synchronization requests reach the inherited
 scan coordinator through the Tunarr compatibility boundary.
+
+## Scan Policy Application Boundary
+
+PR 04G adds a provider-neutral Media Source scan policy application service.
+
+The canonical contract uses:
+
+```text
+intervalHours
+```
+
+Inherited Tunarr `rescanIntervalHours` naming is translated only inside the
+compatibility boundary.
+
+The application service owns validation and command flow.
+
+PR 04G does not introduce Media Sources persistence. The compatibility store
+still delegates to inherited Tunarr settings, so write authority remains
+legacy.

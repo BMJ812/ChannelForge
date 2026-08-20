@@ -1,3 +1,4 @@
+import { createTunarrMediaSourceSettingsRouteAdapter } from '@/compatibility/tunarr/routes/index.js';
 import { GlobalMediaSourceSettingsSchema } from '@tunarr/types/schemas';
 import type { RouterPluginAsyncCallback } from '../types/serverType.js';
 
@@ -14,8 +15,15 @@ export const settingsApi: RouterPluginAsyncCallback = async (fastify) => {
       },
     },
     async (req, res) => {
-      const settings = req.serverCtx.settings.globalMediaSourceSettings();
-      return res.send(settings);
+      const adapter = createTunarrMediaSourceSettingsRouteAdapter({
+        read: () => req.serverCtx.settings.globalMediaSourceSettings(),
+
+        write: async (value) => {
+          await req.serverCtx.settings.updateSettings('mediaSource', value);
+        },
+      });
+
+      return res.send(await adapter.read());
     },
   );
 
@@ -31,8 +39,15 @@ export const settingsApi: RouterPluginAsyncCallback = async (fastify) => {
       },
     },
     async (req, res) => {
-      await req.serverCtx.settings.updateSettings('mediaSource', req.body);
-      return res.send(req.serverCtx.settings.globalMediaSourceSettings());
+      const adapter = createTunarrMediaSourceSettingsRouteAdapter({
+        read: () => req.serverCtx.settings.globalMediaSourceSettings(),
+
+        write: async (value) => {
+          await req.serverCtx.settings.updateSettings('mediaSource', value);
+        },
+      });
+
+      return res.send(await adapter.write(req.body));
     },
   );
 };
