@@ -100,3 +100,15 @@ Comparison results, sampling, or diagnostics may not create dual read or write
 authority.
 
 Critical identity validation may not use partial sampling.
+
+## PR 04F
+
+PR 04F isolates inherited route registration under the compatibility boundary
+and adds classification, tags, and usage measurement.
+
+It performs no route mode transition.
+
+The Jellyfin login route remains `CANONICAL_READ_LEGACY_FALLBACK`.
+
+Other inherited management routes remain `LEGACY_ONLY` until a dedicated
+adapter or deprecation PR explicitly changes their mode.

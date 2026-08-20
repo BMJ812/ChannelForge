@@ -140,3 +140,20 @@ The framework:
 - never changes authority
 
 PR 04E does not enable a new production shadow policy.
+
+## Legacy Route Registry
+
+PR 04F adds `routes/` as the explicit application-host registration boundary
+for inherited Tunarr API and streaming routers.
+
+The registry records finite method/template pairs, compatibility
+classification, registration group, mode, tags, and usage metrics.
+
+Visible inherited routes receive `legacy` and `compatibility` OpenAPI tags.
+Hidden routes stay hidden.
+
+The host no longer imports the HDHomeRun, API, video, or stream routers
+directly.
+
+PR 04F does not adapt a route handler and does not change read or write
+authority.
