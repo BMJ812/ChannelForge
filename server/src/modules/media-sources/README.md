@@ -59,3 +59,21 @@ The application service owns validation and command flow.
 PR 04G does not introduce Media Sources persistence. The compatibility store
 still delegates to inherited Tunarr settings, so write authority remains
 legacy.
+
+## PR 04J Provider Compatibility Read Contract
+
+PR 04J adds the provider-neutral remote Media Source read model owned by this
+module.
+
+The contract includes canonical Media Source identity, provider kind,
+non-secret provider configuration, an opaque credential reference, configured
+library bindings, and path replacements.
+
+The Media Sources module does not import inherited Tunarr rows.
+
+Tunarr translation remains under `server/src/compatibility/tunarr/providers/`.
+
+The credential reference is a locator only. The canonical read model does not
+contain the inherited plaintext `accessToken`.
+
+PR 04J adds no Media Source persistence and changes no write authority.

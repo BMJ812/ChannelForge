@@ -154,3 +154,17 @@ export type {
   CompatibilityStatusRepository,
   CompatibilityStatusScope,
 } from './ports/index.js';
+
+export {
+  translateTunarrMediaSourceRead,
+  TunarrMediaSourceReadTranslationError,
+  TunarrMediaSourceReadTranslationErrorReasons,
+} from './providers/index.js';
+
+export type {
+  TranslateTunarrMediaSourceReadRequest,
+  TunarrMediaSourceLibraryReadRecord,
+  TunarrMediaSourcePathReplacementReadRecord,
+  TunarrMediaSourceReadTranslationErrorReason,
+  TunarrRemoteMediaSourceReadRecord,
+} from './providers/index.js';
