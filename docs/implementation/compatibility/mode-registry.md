@@ -88,3 +88,15 @@ The policy may create and verify only the installation-level
 persisted ChannelForge Instance.
 
 Write authority for inherited application state does not change.
+
+## PR 04E
+
+PR 04E adds the reusable `DUAL_COMPARE` shadow-read framework.
+
+It performs no runtime mode transition.
+
+Every future shadow policy must designate one authoritative side explicitly.
+Comparison results, sampling, or diagnostics may not create dual read or write
+authority.
+
+Critical identity validation may not use partial sampling.

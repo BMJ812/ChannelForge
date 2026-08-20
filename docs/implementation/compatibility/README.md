@@ -1,7 +1,7 @@
 # ChannelForge Legacy Compatibility
 
 - **Milestone:** 04 â€” Legacy Compatibility
-- **Current unit:** PR 04D â€” Lazy Mapping
+- **Current unit:** PR 04E - Shadow Read Framework
 - **Runtime cutover:** none
 - **Legacy authority change:** none
 
@@ -243,3 +243,24 @@ Removal requires:
 | Removal gate | Lazy policy removable after mapping coverage is complete |
 | Rollback | Disable lazy policy; retain verified mapping history |
 | Tests | eligibility, idempotency, audit, tombstone, competing proposal, reader integration |
+
+## PR 04E Change-Control Record
+
+| Field | PR 04E |
+| --- | --- |
+| Legacy path | Reusable legacy/canonical read comparison; no route enabled |
+| Target module | Compatibility shadow-read framework |
+| Compatibility mode | `DUAL_COMPARE` framework vocabulary; no runtime concept changes mode |
+| Read authority | Caller-designated and unchanged by comparison |
+| Write authority | Unchanged |
+| Mapping namespace | Concept-specific; none created by framework |
+| Fallback | Framework does not choose fallback |
+| Partial failure | Bounded `UNKNOWN` finding or controlled skip; authority unchanged |
+| Reconciliation | No durable reconciliation finding created by 04E |
+| Metrics | Shadow comparisons, mismatches, latency |
+| Sampling | Deterministic; prohibited for critical identity validation |
+| Diagnostics | Bounded checksums/classification only; no raw payload retention |
+| Freeze gate | Not activated |
+| Removal gate | Framework removable after all shadow policies retire |
+| Rollback | Remove framework use/exports; no data rollback |
+| Tests | authority, checksums, classes, sampling, cancellation, bounds, diagnostics |
