@@ -46,3 +46,24 @@ export type ChannelForgeInstanceIdentity = Readonly<{
 export interface TunarrInstanceIdentityPort {
   readInstanceIdentity(): ChannelForgeInstanceIdentity;
 }
+
+export {
+  CompatibilityStatusConcurrencyError,
+  CompatibilityStatusConstraintError,
+  CompatibilityStatusId,
+} from './CompatibilityStatusRepository.js';
+
+export type {
+  CompatibilityStatusRecord,
+  CompatibilityStatusRepository,
+  CompatibilityStatusScope,
+} from './CompatibilityStatusRepository.js';
+
+export { CompatibilityReconciliationReasons } from './CompatibilityReconciliation.js';
+
+export type {
+  CompatibilityReconciliationEnqueuePort,
+  CompatibilityReconciliationEnqueueResult,
+  CompatibilityReconciliationReason,
+  CompatibilityReconciliationRequest,
+} from './CompatibilityReconciliation.js';

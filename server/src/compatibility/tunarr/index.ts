@@ -104,3 +104,20 @@ export type {
   RuntimeCompatibilityMetricsSnapshot,
   RuntimeCompatibilityTimingSnapshot,
 } from './usage/RuntimeCompatibilityMetrics.js';
+
+export {
+  CompatibilityReconciliationReasons,
+  CompatibilityStatusConcurrencyError,
+  CompatibilityStatusConstraintError,
+  CompatibilityStatusId,
+} from './ports/index.js';
+
+export type {
+  CompatibilityReconciliationEnqueuePort,
+  CompatibilityReconciliationEnqueueResult,
+  CompatibilityReconciliationReason,
+  CompatibilityReconciliationRequest,
+  CompatibilityStatusRecord,
+  CompatibilityStatusRepository,
+  CompatibilityStatusScope,
+} from './ports/index.js';

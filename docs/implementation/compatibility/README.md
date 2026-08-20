@@ -1,7 +1,7 @@
 # ChannelForge Legacy Compatibility
 
 - **Milestone:** 04 â€” Legacy Compatibility
-- **Current unit:** PR 04G - Route Adapter Proof
+- **Current unit:** PR 04H - Compatibility Write Status
 - **Runtime cutover:** none
 - **Legacy authority change:** none
 
@@ -307,3 +307,23 @@ Removal requires:
 | Removal gate | Publish replacement management route, migrate first-party caller, zero supported use, support/rollback windows complete |
 | Rollback | Restore direct settings handlers; no data rollback |
 | Tests | canonical service, translation, read adapter, write adapter, validation, route registry |
+
+## PR 04H Change-Control Record
+
+| Field | PR 04H |
+| --- | --- |
+| Legacy path | Reusable temporary write-translation framework; no production route activated |
+| Target module | Compatibility write coordinator + durable status persistence |
+| Compatibility mode | `TEMPORARY_WRITE_TRANSLATION` framework only; no runtime concept transitions |
+| Read authority | Unchanged |
+| Write authority | Unchanged in production; future use requires one ChannelForge command authority |
+| Mapping namespace | Concept-specific; no mapping created by 04H |
+| Fallback | None |
+| Partial failure | Explicit `FAILED` or `DEGRADED`; post-commit compatibility failure is never uncomplicated success |
+| Status persistence | `cf_compatibility_status` via migration `0007_compatibility_status` |
+| Reconciliation | Enqueue port only; PR 04I owns execution and findings |
+| Metrics | Legacy write attempts, translation success/failure, compatibility errors, queue depth, latency |
+| Freeze gate | Not activated |
+| Removal gate | Remove after temporary write translations retire and required history is retained |
+| Rollback | Stop coordinator use; preserve additive status history |
+| Tests | SQLite reopen/concurrency, success, authoritative failure, projection failure, enqueue failure, status failure, bounded metrics |

@@ -157,3 +157,17 @@ directly.
 
 PR 04F does not adapt a route handler and does not change read or write
 authority.
+
+## Compatibility Write Status
+
+PR 04H adds the reusable `write/` coordinator and durable status ports.
+
+The coordinator is intended for future `TEMPORARY_WRITE_TRANSLATION` phases.
+It requires durable `PENDING` before the authoritative command starts, records
+explicit `CURRENT`, `FAILED`, or `DEGRADED` outcomes, and requests
+reconciliation after post-commit compatibility failure.
+
+The reconciliation contract is enqueue-only in 04H. PR 04I owns job execution
+and findings.
+
+No production concept is switched to temporary write translation by PR 04H.
