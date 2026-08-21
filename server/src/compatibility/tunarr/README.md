@@ -243,3 +243,29 @@ framework rather than creating a second schedule authority.
 
 PR 04K does not activate a production scheduler cutover, provider call, FFmpeg
 path, legacy projection writer, or new persistence schema.
+
+## PR 04L Output Compatibility
+
+PR 04L adds `output/` as the containment boundary for inherited output
+artifacts and protocol routes.
+
+The boundary implements the roadmap artifact precedence:
+
+```text
+valid canonical
+  -> last valid canonical
+  -> supported legacy
+  -> controlled unavailable
+```
+
+XMLTV, M3U, HDHomeRun discovery, and HDHomeRun lineup use this read-only
+precedence contract.
+
+The inherited HDHomeRun-compatible device ID is preserved exactly; 04L does not
+derive or rotate device identity.
+
+Compatibility also pins the existing XMLTV, M3U, HDHomeRun, and stream route
+templates without changing route registration.
+
+No production output cutover, artifact-store migration, route rewrite, device
+identity change, or FFmpeg behavior change is activated by PR 04L.

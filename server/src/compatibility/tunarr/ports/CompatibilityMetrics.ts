@@ -31,6 +31,9 @@ export const CompatibilityCounterMetrics = [
   'LEGACY_SCHEDULE_FALLBACKS',
   'SCHEDULE_SHADOW_COMPARISONS',
   'SCHEDULE_SHADOW_DIVERGENCES',
+  'LAST_VALID_OUTPUT_FALLBACKS',
+  'OUTPUT_ARTIFACT_UNAVAILABLE',
+  'HDHR_IDENTITY_READS',
 ] as const;
 
 export type CompatibilityCounterMetric =

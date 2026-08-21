@@ -212,3 +212,26 @@ export type {
   CompatibilitySchedulingResult,
   CompatibilitySchedulingUnavailableResult,
 } from './ports/index.js';
+
+export {
+  CompatibilityOutputArtifactKinds,
+  CompatibilityOutputArtifactReader,
+  CompatibilityOutputArtifactSources,
+  CompatibilityOutputUnavailableError,
+  TunarrOutputCompatibilityRoutePaths,
+  preserveLegacyHdhrIdentity,
+} from './output/index.js';
+
+export type {
+  CompatibilityHdhrIdentityReadResult,
+  CompatibilityLastValidOutputArtifactReader,
+  CompatibilityLegacyHdhrIdentityReader,
+  CompatibilityLegacyOutputArtifactReader,
+  CompatibilityOutputArtifactKind,
+  CompatibilityOutputArtifactReadResult,
+  CompatibilityOutputArtifactReaderOptions,
+  CompatibilityOutputArtifactResolved,
+  CompatibilityOutputArtifactSource,
+  CompatibilityOutputArtifactUnavailable,
+  CompatibilityOutputArtifactValidator,
+} from './output/index.js';

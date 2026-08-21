@@ -1,7 +1,7 @@
 # ChannelForge Legacy Compatibility
 
 - **Milestone:** 04 Ã¢â‚¬â€ Legacy Compatibility
-- **Current unit:** PR 04K - Scheduling Compatibility
+- **Current unit:** PR 04L - Output Compatibility
 - **Runtime cutover:** none
 - **Legacy authority change:** none
 
@@ -394,3 +394,29 @@ Removal requires:
 | Metric cardinality | No raw channel, schedule, or content identifiers |
 | Rollback | Stop consuming scheduling boundary; no schema/data rollback |
 | Tests | canonical containment, explicit fallback, shadow equality/divergence, legacy authority, freeze, transition audit |
+
+## PR 04L Change-Control Record
+
+| Field | PR 04L |
+| --- | --- |
+| Legacy path | Inherited XMLTV, M3U, HDHomeRun-compatible output, and protocol paths |
+| Target module | Output |
+| Compatibility mode | Canonical-first output fallback contract; no production mode transition |
+| Read authority | Precedence contract only: valid canonical -> last-valid canonical -> supported legacy -> unavailable |
+| Write authority | Unchanged; 04L introduces no output writer |
+| Mapping namespace | None introduced |
+| XMLTV path | `/api/xmltv.xml` preserved |
+| M3U path | `/api/channels.m3u` preserved |
+| HDHR paths | `/device.xml`, `/discover.json`, `/lineup_status.json`, `/lineup.json` preserved |
+| Stream template | `/stream/channels/:id` preserved |
+| HDHR identity | Existing device ID preserved; no derivation or rotation |
+| Last-valid artifact | Read port only; no persistence migration |
+| Legacy fallback | Only after canonical and last-valid canonical are unavailable/invalid |
+| Partial failure | Controlled unavailable result; raw generator exceptions contained |
+| Reconciliation | None activated |
+| Metrics | Canonical reads, last-valid fallback, legacy fallback, unavailable output, identity reads, errors |
+| Metric cardinality | No raw channel/device IDs or artifact bodies |
+| Freeze gate | Not activated |
+| Removal gate | Canonical protocol output verified, supported callers migrated, fallback use retired, support/rollback windows complete |
+| Rollback | Stop consuming 04L reader; inherited runtime remains unchanged |
+| Tests | precedence, route stability, last-valid fallback, legacy fallback, unavailable state, identity preservation, bounded metrics |

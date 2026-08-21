@@ -35,3 +35,15 @@ unchanged.
 ## Migration Status
 
 Shell and Output read-model boundary established.
+
+## M04 Output Compatibility
+
+PR 04L adds `HdhrCompatibleIdentity` to the Output-owned public contract and
+implements inherited artifact precedence in the Tunarr compatibility boundary.
+
+The Output module remains the target contract owner.
+
+Compatibility, not Output domain code, owns inherited route paths, fallback
+selection, legacy artifact access, and legacy HDHomeRun identity preservation.
+
+No production Output reader is replaced by PR 04L.
