@@ -1,0 +1,4571 @@
+<!DOCTYPE html><html lang="en" class="no-js"><head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://tunarr.com/implementation/baseline/dependency-inventory/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Dependency Inventory - Tunarr</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  <link href="../../../assets/stylesheets/glightbox.min.css" rel="stylesheet"><script src="../../../assets/javascripts/glightbox.min.js"></script><style id="glightbox-style">
+            html.glightbox-open { overflow: initial; height: 100%; }
+            .gslide-title { margin-top: 0px; user-select: text; }
+            .gslide-desc { color: #666; user-select: text; }
+            .gslide-image img { background: white; }
+            .gscrollbar-fixer { padding-right: 15px; }
+            .gdesc-inner { font-size: 0.75rem; }
+            body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
+            body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
+            body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
+        </style></head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#dependency-inventory" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Tunarr" class="md-header__button md-logo" aria-label="Tunarr" data-md-component="logo">
+      
+  <img src="../../../assets/tunarr.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Tunarr
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Dependency Inventory
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo" aria-label="Switch to light mode" type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"></path></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="indigo" aria-label="Switch to dark mode" type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="indigo" aria-label="Switch to system preference" type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required="">
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix="">
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__social">
+        
+          <a href="https://discord.gg/nYkb7MhPfD" title="Join the Tunarr Discord" class="md-header__button md-icon" target="_blank" rel="noopener">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M492.5 69.8c-.2-.3-.4-.6-.8-.7-38.1-17.5-78.4-30-119.7-37.1-.4-.1-.8 0-1.1.1s-.6.4-.8.8c-5.5 9.9-10.5 20.2-14.9 30.6-44.6-6.8-89.9-6.8-134.4 0-4.5-10.5-9.5-20.7-15.1-30.6-.2-.3-.5-.6-.8-.8s-.7-.2-1.1-.2C162.5 39 122.2 51.5 84.1 69c-.3.1-.6.4-.8.7C7.1 183.5-13.8 294.6-3.6 404.2c0 .3.1.5.2.8s.3.4.5.6c44.4 32.9 94 58 146.8 74.2.4.1.8.1 1.1 0s.7-.4.9-.7c11.3-15.4 21.4-31.8 30-48.8.1-.2.2-.5.2-.8s0-.5-.1-.8-.2-.5-.4-.6-.4-.3-.7-.4c-15.8-6.1-31.2-13.4-45.9-21.9-.3-.2-.5-.4-.7-.6s-.3-.6-.3-.9 0-.6.2-.9.3-.5.6-.7c3.1-2.3 6.2-4.7 9.1-7.1.3-.2.6-.4.9-.4s.7 0 1 .1c96.2 43.9 200.4 43.9 295.5 0 .3-.1.7-.2 1-.2s.7.2.9.4c2.9 2.4 6 4.9 9.1 7.2.2.2.4.4.6.7s.2.6.2.9-.1.6-.3.9-.4.5-.6.6c-14.7 8.6-30 15.9-45.9 21.8-.2.1-.5.2-.7.4s-.3.4-.4.7-.1.5-.1.8.1.5.2.8c8.8 17 18.8 33.3 30 48.8.2.3.6.6.9.7s.8.1 1.1 0c52.9-16.2 102.6-41.3 147.1-74.2.2-.2.4-.4.5-.6s.2-.5.2-.8c12.3-126.8-20.5-236.9-86.9-334.5zm-302 267.7c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.4 59.2-52.8 59.2m195.4 0c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.2 59.2-52.8 59.2"></path></svg>
+          </a>
+        
+          <a href="https://github.com/sponsors/chrisbenincasa" title="Sponsor Tunarr on GitHub" class="md-header__button md-icon" target="_blank" rel="noopener">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="m241 87.1 15 20.7 15-20.7C296 52.5 336.2 32 378.9 32 452.4 32 512 91.6 512 165.1v2.6c0 112.2-139.9 242.5-212.9 298.2-12.4 9.4-27.6 14.1-43.1 14.1s-30.8-4.6-43.1-14.1C139.9 410.2 0 279.9 0 167.7v-2.6C0 91.6 59.6 32 133.1 32 175.8 32 216 52.5 241 87.1"></path></svg>
+          </a>
+        
+      </div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/chrisbenincasa/tunarr" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    chrisbenincasa/tunarr
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Tunarr" class="md-nav__button md-logo" aria-label="Tunarr" data-md-component="logo">
+      
+  <img src="../../../assets/tunarr.png" alt="logo">
+
+    </a>
+    Tunarr
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/chrisbenincasa/tunarr" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    chrisbenincasa/tunarr
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix="">
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api-docs.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Docs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3">
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Getting Started
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Install
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/run/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Run
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4">
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Migration
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Migration
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/migration/migrate-to-1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Migrate to 1.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4">
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configure
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Configure
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_1">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/media_sources/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Media Sources
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_1" id="__nav_4_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Media Sources
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/plex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plex
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/jellyfin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Jellyfin
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/emby/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Emby
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_1_5">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/media_sources/local/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_1_5" id="__nav_4_1_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_4_1_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_1_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Local
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/local/movies/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Movies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/local/shows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shows
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/local/other_videos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Other Video
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/local/music/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Music
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/local/music_videos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Music Videos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/ffmpeg/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FFmpeg
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    FFmpeg
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/ffmpeg/transcode_config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transcode Configs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../misc/search/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Search
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Search
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/channels/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Channels
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_4" id="__nav_4_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Channels
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/channels/properties/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Properties
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/channels/flex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flex
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/channels/epg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EPG
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/channels/transcoding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transcoding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/channels/watermarks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Watermarks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/channels/programming/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Programming
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/library/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Library
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Library
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/library/filler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filler
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/library/custom-shows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Custom Shows
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/library/smart-collections/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Smart Collections
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/scheduling/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scheduling
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_6" id="__nav_4_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Scheduling
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/concepts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concepts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/random-slots/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Slot Editor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/time-slots/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Time Slots
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/cyclic-shuffle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cyclic Shuffle
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/block-shuffle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Block Shuffle
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/mid-roll-breaks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mid-Roll Breaks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/replicate/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Replicate
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/consolidate/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Consolidate
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_7">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/clients/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Clients
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_7" id="__nav_4_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Clients
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/clients/plex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plex
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/clients/jellyfin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Jellyfin
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_8">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/system/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    System
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/system/backup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/system/logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5">
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Misc.
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Misc.
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../misc/faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../misc/common-issues/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common Issues
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../misc/troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stream Troubleshooter
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6">
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Development
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../dev/contributing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+      
+        <li class="md-nav__item">
+  <a href="#package-and-section-counts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Package and Section Counts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dependency-classifications" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependency Classifications
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#complete-manifest-inventory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Complete Manifest Inventory
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#root-pnpm-controls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Root pnpm Controls
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Root pnpm Controls">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#patched-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Patched Dependencies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#native-build-allowlist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Native Build Allowlist
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limits
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/chrisbenincasa/tunarr/edit/dev/docs/implementation/baseline/dependency-inventory.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"></path></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/chrisbenincasa/tunarr/raw/dev/docs/implementation/baseline/dependency-inventory.md" title="View source of this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"></path></svg>
+    </a>
+  
+
+
+<h1 id="dependency-inventory">Dependency Inventory<a class="headerlink" href="#dependency-inventory" title="Permanent link">¶</a></h1>
+<ul>
+<li><strong>Source commit:</strong> <code>195a4d04aca082af04362152f56283c139e9eaad</code></li>
+<li><strong>Package manifests:</strong> <code>5</code></li>
+<li><strong>Declared dependency entries:</strong> <code>253</code></li>
+<li><strong>Unique dependency names:</strong> <code>197</code></li>
+<li><strong>Direct workspace dependency entries:</strong> <code>5</code></li>
+</ul>
+<h2 id="package-and-section-counts">Package and Section Counts<a class="headerlink" href="#package-and-section-counts" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Package</th>
+<th style="text-align: right;">Dependencies</th>
+<th style="text-align: right;">Development</th>
+<th style="text-align: right;">Optional</th>
+<th style="text-align: right;">Peer</th>
+<th style="text-align: right;">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tunarr</code></td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">37</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">37</td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td style="text-align: right;">60</td>
+<td style="text-align: right;">44</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">104</td>
+</tr>
+<tr>
+<td><code>@tunarr/shared</code></td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">19</td>
+</tr>
+<tr>
+<td><code>@tunarr/types</code></td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td style="text-align: right;">46</td>
+<td style="text-align: right;">37</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">83</td>
+</tr>
+</tbody>
+</table>
+<h2 id="dependency-classifications">Dependency Classifications<a class="headerlink" href="#dependency-classifications" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Classification</th>
+<th>Meaning</th>
+<th style="text-align: right;">Count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>workspace</td>
+<td>Direct dependency on another inherited workspace package</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr>
+<td>catalog</td>
+<td>Version is resolved through a pnpm workspace catalog</td>
+<td style="text-align: right;">37</td>
+</tr>
+<tr>
+<td>external</td>
+<td>Version or range is declared directly in the manifest</td>
+<td style="text-align: right;">211</td>
+</tr>
+</tbody>
+</table>
+<h2 id="complete-manifest-inventory">Complete Manifest Inventory<a class="headerlink" href="#complete-manifest-inventory" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Package</th>
+<th>Section</th>
+<th>Dependency</th>
+<th>Specification</th>
+<th>Classification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tunarr</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@commitlint/cli</code></td>
+<td><code>^19.3.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>tunarr</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@commitlint/config-conventional</code></td>
+<td><code>^19.2.2</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>tunarr</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@commitlint/types</code></td>
+<td><code>^19.0.3</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>tunarr</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@eslint/eslintrc</code></td>
+<td><code>^3.0.2</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>tunarr</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@eslint/js</code></td>
+<td><code>^9.0.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>tunarr</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@release-it/bumper</code></td>
+<td><code>^7.0.5</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>tunarr</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@release-it/conventional-changelog</code></td>
+<td><code>^10.0.4</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>tunarr</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@semantic-release/changelog</code></td>
+<td><code>^6.0.3</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>tunarr</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@types/node</code></td>
+<td><code>22.10.7</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>tunarr</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@types/semver</code></td>
+<td><code>^7.7.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>tunarr</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@typescript-eslint/eslint-plugin</code></td>
+<td><code>catalog:</code></td>
+<td><code>catalog</code></td>
+</tr>
+<tr>
+<td><code>tunarr</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@typescript-eslint/parser</code></td>
+<td><code>catalog:</code></td>
+<td><code>catalog</code></td>
+</tr>
+<tr>
+<td><code>tunarr</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@vitest/coverage-v8</code></td>
+<td><code>catalog:vitest</code></td>
+<td><code>catalog</code></td>
+</tr>
+<tr>
+<td><code>tunarr</code></td>
+<td><code>devDependencies</code></td>
+<td><code>esbuild</code></td>
+<td><code>^0.21.5</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>tunarr</code></td>
+<td><code>devDependencies</code></td>
+<td><code>eslint</code></td>
+<td><code>catalog:</code></td>
+<td><code>catalog</code></td>
+</tr>
+<tr>
+<td><code>tunarr</code></td>
+<td><code>devDependencies</code></td>
+<td><code>eslint-import-resolver-typescript</code></td>
+<td><code>^4.4.4</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>tunarr</code></td>
+<td><code>devDependencies</code></td>
+<td><code>eslint-plugin-import</code></td>
+<td><code>^2.31.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>tunarr</code></td>
+<td><code>devDependencies</code></td>
+<td><code>eslint-plugin-lingui</code></td>
+<td><code>^0.13.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>tunarr</code></td>
+<td><code>devDependencies</code></td>
+<td><code>eslint-plugin-react</code></td>
+<td><code>^7.37.3</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>tunarr</code></td>
+<td><code>devDependencies</code></td>
+<td><code>eslint-plugin-react-hooks</code></td>
+<td><code>^7.0.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>tunarr</code></td>
+<td><code>devDependencies</code></td>
+<td><code>eslint-plugin-react-refresh</code></td>
+<td><code>^0.4.16</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>tunarr</code></td>
+<td><code>devDependencies</code></td>
+<td><code>eslint-plugin-unused-imports</code></td>
+<td><code>^4.1.4</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>tunarr</code></td>
+<td><code>devDependencies</code></td>
+<td><code>globals</code></td>
+<td><code>^15.0.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>tunarr</code></td>
+<td><code>devDependencies</code></td>
+<td><code>husky</code></td>
+<td><code>^9.0.11</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>tunarr</code></td>
+<td><code>devDependencies</code></td>
+<td><code>knip</code></td>
+<td><code>^6.7.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>tunarr</code></td>
+<td><code>devDependencies</code></td>
+<td><code>lint-staged</code></td>
+<td><code>^15.2.2</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>tunarr</code></td>
+<td><code>devDependencies</code></td>
+<td><code>prettier</code></td>
+<td><code>^3.5.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>tunarr</code></td>
+<td><code>devDependencies</code></td>
+<td><code>release-it</code></td>
+<td><code>^19.2.2</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>tunarr</code></td>
+<td><code>devDependencies</code></td>
+<td><code>release-it-pnpm</code></td>
+<td><code>^4.6.6</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>tunarr</code></td>
+<td><code>devDependencies</code></td>
+<td><code>semantic-release</code></td>
+<td><code>^25.0.2</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>tunarr</code></td>
+<td><code>devDependencies</code></td>
+<td><code>semver</code></td>
+<td><code>^7.7.3</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>tunarr</code></td>
+<td><code>devDependencies</code></td>
+<td><code>should-semantic-release</code></td>
+<td><code>^0.3.5</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>tunarr</code></td>
+<td><code>devDependencies</code></td>
+<td><code>tsx</code></td>
+<td><code>^4.20.5</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>tunarr</code></td>
+<td><code>devDependencies</code></td>
+<td><code>turbo</code></td>
+<td><code>^2.5.3</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>tunarr</code></td>
+<td><code>devDependencies</code></td>
+<td><code>typescript</code></td>
+<td><code>catalog:</code></td>
+<td><code>catalog</code></td>
+</tr>
+<tr>
+<td><code>tunarr</code></td>
+<td><code>devDependencies</code></td>
+<td><code>typescript-eslint</code></td>
+<td><code>^8.46.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>tunarr</code></td>
+<td><code>devDependencies</code></td>
+<td><code>vitest</code></td>
+<td><code>catalog:vitest</code></td>
+<td><code>catalog</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>@cospired/i18n-iso-languages</code></td>
+<td><code>^4.2.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>@dotenvx/dotenvx</code></td>
+<td><code>^1.49.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>@fastify/cors</code></td>
+<td><code>^10.1.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>@fastify/error</code></td>
+<td><code>^4.2.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>@fastify/multipart</code></td>
+<td><code>^9.0.3</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>@fastify/static</code></td>
+<td><code>^8.2.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>@fastify/swagger</code></td>
+<td><code>^9.5.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>@iptv/xmltv</code></td>
+<td><code>^1.0.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>@logdna/tail-file</code></td>
+<td><code>^4.0.2</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>@marcbachmann/cel-js</code></td>
+<td><code>^7.6.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>@scalar/fastify-api-reference</code></td>
+<td><code>^1.34.6</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>@tunarr/playlist</code></td>
+<td><code>^1.1.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>@tunarr/shared</code></td>
+<td><code>workspace:*</code></td>
+<td><code>workspace</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>@tunarr/types</code></td>
+<td><code>workspace:*</code></td>
+<td><code>workspace</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>@types/better-sqlite3</code></td>
+<td><code>^7.6.13</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>archiver</code></td>
+<td><code>^7.0.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>async-mutex</code></td>
+<td><code>^0.5.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>async-retry</code></td>
+<td><code>^1.3.3</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>axios</code></td>
+<td><code>&gt;=1.12.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>base32</code></td>
+<td><code>^0.0.7</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>better-sqlite3</code></td>
+<td><code>11.8.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>blurhash</code></td>
+<td><code>^2.0.5</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>chalk</code></td>
+<td><code>^5.6.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>cron-parser</code></td>
+<td><code>^4.9.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>dayjs</code></td>
+<td><code>catalog:</code></td>
+<td><code>catalog</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>drizzle-orm</code></td>
+<td><code>^0.39.3</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>fastify</code></td>
+<td><code>^5.6.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>fastify-graceful-shutdown</code></td>
+<td><code>^4.0.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>fastify-plugin</code></td>
+<td><code>^5.0.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>fastify-print-routes</code></td>
+<td><code>^3.2.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>fastify-type-provider-zod</code></td>
+<td><code>^5.0.3</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>fast-xml-parser</code></td>
+<td><code>^4.5.3</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>file-type</code></td>
+<td><code>^19.6.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>find-process</code></td>
+<td><code>^2.0.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>graphology</code></td>
+<td><code>^0.26.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>graphology-dag</code></td>
+<td><code>^0.4.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>inversify</code></td>
+<td><code>^8.1.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>jsonpath-plus</code></td>
+<td><code>^10.3.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>kysely</code></td>
+<td><code>^0.27.6</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>lodash-es</code></td>
+<td><code>^4.17.21</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>lowdb</code></td>
+<td><code>^7.0.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>meilisearch</code></td>
+<td><code>^0.50.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>music-metadata</code></td>
+<td><code>^11.10.5</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>node-cache</code></td>
+<td><code>^5.1.2</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>node-schedule</code></td>
+<td><code>^2.1.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>node-ssdp</code></td>
+<td><code>^4.0.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>pino</code></td>
+<td><code>^9.9.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>pino-pretty</code></td>
+<td><code>^13.1.3</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>pino-roll</code></td>
+<td><code>^1.3.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>p-queue</code></td>
+<td><code>^8.1.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>random-js</code></td>
+<td><code>catalog:</code></td>
+<td><code>catalog</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>reflect-metadata</code></td>
+<td><code>^0.2.2</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>retry</code></td>
+<td><code>^0.13.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>sonic-boom</code></td>
+<td><code>4.2.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>split2</code></td>
+<td><code>^4.2.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>tslib</code></td>
+<td><code>^2.8.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>ts-pattern</code></td>
+<td><code>^5.8.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>uuid</code></td>
+<td><code>^9.0.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>yargs</code></td>
+<td><code>^17.7.2</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>dependencies</code></td>
+<td><code>zod</code></td>
+<td><code>catalog:</code></td>
+<td><code>catalog</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@faker-js/faker</code></td>
+<td><code>^9.9.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@octokit/types</code></td>
+<td><code>^13.10.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@rollup/plugin-swc</code></td>
+<td><code>^0.4.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@types/archiver</code></td>
+<td><code>^6.0.3</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@types/async-retry</code></td>
+<td><code>^1.4.9</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@types/lodash-es</code></td>
+<td><code>4.17.9</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@types/node</code></td>
+<td><code>22.10.7</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@types/node-abi</code></td>
+<td><code>^3.0.3</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@types/node-schedule</code></td>
+<td><code>^2.1.8</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@types/retry</code></td>
+<td><code>^0.12.5</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@types/split2</code></td>
+<td><code>^4.2.3</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@types/tmp</code></td>
+<td><code>^0.2.6</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@types/unzip-stream</code></td>
+<td><code>^0.3.4</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@types/uuid</code></td>
+<td><code>^9.0.8</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@types/yargs</code></td>
+<td><code>^17.0.33</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@typescript/native-preview</code></td>
+<td><code>catalog:</code></td>
+<td><code>catalog</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@vitest/coverage-v8</code></td>
+<td><code>catalog:vitest</code></td>
+<td><code>catalog</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@yao-pkg/pkg</code></td>
+<td><code>^6.9.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>cross-env</code></td>
+<td><code>^7.0.3</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>del-cli</code></td>
+<td><code>^3.0.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>dotenv-cli</code></td>
+<td><code>^7.4.4</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>drizzle-kit</code></td>
+<td><code>^0.30.6</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>esbuild</code></td>
+<td><code>^0.21.5</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>esbuild-plugin-pino</code></td>
+<td><code>^2.3.3</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>fast-check</code></td>
+<td><code>^4.2.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>fast-glob</code></td>
+<td><code>^3.3.3</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>globals</code></td>
+<td><code>^15.15.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>kysely-ctl</code></td>
+<td><code>^0.9.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>memfs</code></td>
+<td><code>^4.51.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>node-abi</code></td>
+<td><code>^3.75.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>prettier</code></td>
+<td><code>^3.6.2</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>rimraf</code></td>
+<td><code>^5.0.10</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>tar</code></td>
+<td><code>^7.4.3</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>thread-stream</code></td>
+<td><code>^3.1.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>tmp</code></td>
+<td><code>^0.2.5</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>tmp-promise</code></td>
+<td><code>^3.0.3</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>tsconfig-paths</code></td>
+<td><code>^4.2.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>ts-essentials</code></td>
+<td><code>^10.1.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>ts-mockito</code></td>
+<td><code>^2.6.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>tsx</code></td>
+<td><code>^4.20.5</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>typed-emitter</code></td>
+<td><code>^2.1.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>typescript</code></td>
+<td><code>catalog:</code></td>
+<td><code>catalog</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>typescript-eslint</code></td>
+<td><code>^8.41.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/server</code></td>
+<td><code>devDependencies</code></td>
+<td><code>vitest</code></td>
+<td><code>catalog:vitest</code></td>
+<td><code>catalog</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/shared</code></td>
+<td><code>dependencies</code></td>
+<td><code>@tunarr/types</code></td>
+<td><code>workspace:*</code></td>
+<td><code>workspace</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/shared</code></td>
+<td><code>dependencies</code></td>
+<td><code>chevrotain</code></td>
+<td><code>^11.0.3</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/shared</code></td>
+<td><code>dependencies</code></td>
+<td><code>dayjs</code></td>
+<td><code>catalog:</code></td>
+<td><code>catalog</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/shared</code></td>
+<td><code>dependencies</code></td>
+<td><code>lodash-es</code></td>
+<td><code>catalog:</code></td>
+<td><code>catalog</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/shared</code></td>
+<td><code>dependencies</code></td>
+<td><code>random-js</code></td>
+<td><code>catalog:</code></td>
+<td><code>catalog</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/shared</code></td>
+<td><code>dependencies</code></td>
+<td><code>tslib</code></td>
+<td><code>^2.6.2</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/shared</code></td>
+<td><code>dependencies</code></td>
+<td><code>zod</code></td>
+<td><code>catalog:</code></td>
+<td><code>catalog</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/shared</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@rollup/plugin-swc</code></td>
+<td><code>^0.4.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/shared</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@types/lodash-es</code></td>
+<td><code>4.17.9</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/shared</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@types/node</code></td>
+<td><code>22.10.7</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/shared</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@typescript/native-preview</code></td>
+<td><code>catalog:</code></td>
+<td><code>catalog</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/shared</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@vitest/coverage-v8</code></td>
+<td><code>catalog:vitest</code></td>
+<td><code>catalog</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/shared</code></td>
+<td><code>devDependencies</code></td>
+<td><code>rimraf</code></td>
+<td><code>^5.0.5</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/shared</code></td>
+<td><code>devDependencies</code></td>
+<td><code>ts-essentials</code></td>
+<td><code>^9.4.2</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/shared</code></td>
+<td><code>devDependencies</code></td>
+<td><code>tsup</code></td>
+<td><code>^8.0.2</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/shared</code></td>
+<td><code>devDependencies</code></td>
+<td><code>tsx</code></td>
+<td><code>^4.20.5</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/shared</code></td>
+<td><code>devDependencies</code></td>
+<td><code>typescript</code></td>
+<td><code>catalog:</code></td>
+<td><code>catalog</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/shared</code></td>
+<td><code>devDependencies</code></td>
+<td><code>vitest</code></td>
+<td><code>catalog:vitest</code></td>
+<td><code>catalog</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/shared</code></td>
+<td><code>peerDependencies</code></td>
+<td><code>ts-pattern</code></td>
+<td><code>^5.4.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/types</code></td>
+<td><code>dependencies</code></td>
+<td><code>zod</code></td>
+<td><code>catalog:</code></td>
+<td><code>catalog</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/types</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@microsoft/api-extractor</code></td>
+<td><code>^7.43.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/types</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@typescript/native-preview</code></td>
+<td><code>catalog:</code></td>
+<td><code>catalog</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/types</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@typescript-eslint/eslint-plugin</code></td>
+<td><code>catalog:</code></td>
+<td><code>catalog</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/types</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@typescript-eslint/parser</code></td>
+<td><code>catalog:</code></td>
+<td><code>catalog</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/types</code></td>
+<td><code>devDependencies</code></td>
+<td><code>eslint</code></td>
+<td><code>catalog:</code></td>
+<td><code>catalog</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/types</code></td>
+<td><code>devDependencies</code></td>
+<td><code>rimraf</code></td>
+<td><code>^5.0.5</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/types</code></td>
+<td><code>devDependencies</code></td>
+<td><code>tsup</code></td>
+<td><code>^8.0.2</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/types</code></td>
+<td><code>devDependencies</code></td>
+<td><code>typed-openapi</code></td>
+<td><code>^0.10.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/types</code></td>
+<td><code>devDependencies</code></td>
+<td><code>typescript</code></td>
+<td><code>catalog:</code></td>
+<td><code>catalog</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>@cospired/i18n-iso-languages</code></td>
+<td><code>^4.2.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>@dotenvx/dotenvx</code></td>
+<td><code>^1.45.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>@emotion/react</code></td>
+<td><code>^11.14.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>@emotion/styled</code></td>
+<td><code>^11.14.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>@hookform/error-message</code></td>
+<td><code>^2.0.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>@hookform/resolvers</code></td>
+<td><code>^5.2.2</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>@lingui/core</code></td>
+<td><code>^5.9.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>@lingui/react</code></td>
+<td><code>^5.9.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>@mui/icons-material</code></td>
+<td><code>^7.0.2</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>@mui/material</code></td>
+<td><code>^7.0.2</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>@mui/x-date-pickers</code></td>
+<td><code>^8.4.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>@tanstack/react-form</code></td>
+<td><code>^1.28.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>@tanstack/react-query</code></td>
+<td><code>^5.18.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>@tanstack/react-query-devtools</code></td>
+<td><code>^5.18.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>@tanstack/react-router</code></td>
+<td><code>^1.133.13</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>@tanstack/zod-adapter</code></td>
+<td><code>^1.131.27</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>@tunarr/shared</code></td>
+<td><code>workspace:*</code></td>
+<td><code>workspace</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>@tunarr/types</code></td>
+<td><code>workspace:*</code></td>
+<td><code>workspace</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>@uidotdev/usehooks</code></td>
+<td><code>^2.4.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>axios</code></td>
+<td><code>&gt;=1.12.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>bowser</code></td>
+<td><code>^2.11.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>color</code></td>
+<td><code>^5.0.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>colorjs.io</code></td>
+<td><code>^0.5.2</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>dayjs</code></td>
+<td><code>catalog:</code></td>
+<td><code>catalog</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>hls.js</code></td>
+<td><code>^1.6.15</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>immer</code></td>
+<td><code>^10.0.3</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>lodash-es</code></td>
+<td><code>catalog:</code></td>
+<td><code>catalog</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>material-react-table</code></td>
+<td><code>^3.2.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>notistack</code></td>
+<td><code>^3.0.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>pluralize</code></td>
+<td><code>^8.0.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>query-string</code></td>
+<td><code>^9.1.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>random-js</code></td>
+<td><code>catalog:</code></td>
+<td><code>catalog</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>react</code></td>
+<td><code>^18.2.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>react-dnd</code></td>
+<td><code>^16.0.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>react-dnd-html5-backend</code></td>
+<td><code>^16.0.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>react-dom</code></td>
+<td><code>^18.2.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>react-error-boundary</code></td>
+<td><code>^6.0.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>react-hook-form</code></td>
+<td><code>^7.68.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>react-transition-group</code></td>
+<td><code>^4.4.5</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>react-virtualized-auto-sizer</code></td>
+<td><code>^1.0.26</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>react-window</code></td>
+<td><code>^1.8.9</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>ts-pattern</code></td>
+<td><code>^5.4.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>usehooks-ts</code></td>
+<td><code>^2.14.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>uuid</code></td>
+<td><code>^9.0.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>zod</code></td>
+<td><code>catalog:</code></td>
+<td><code>catalog</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>dependencies</code></td>
+<td><code>zustand</code></td>
+<td><code>^4.4.6</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@hey-api/openapi-ts</code></td>
+<td><code>0.80.16</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@lingui/cli</code></td>
+<td><code>^5.9.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@lingui/swc-plugin</code></td>
+<td><code>^5.10.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@lingui/vite-plugin</code></td>
+<td><code>^5.9.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@tanstack/react-devtools</code></td>
+<td><code>^0.9.4</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@tanstack/react-form-devtools</code></td>
+<td><code>^0.2.13</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@tanstack/react-router-devtools</code></td>
+<td><code>^1.158.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@tanstack/react-table</code></td>
+<td><code>8.19.3</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@tanstack/router-cli</code></td>
+<td><code>^1.35.4</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@tanstack/router-vite-plugin</code></td>
+<td><code>^1.133.13</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@testing-library/jest-dom</code></td>
+<td><code>^6.9.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@testing-library/react</code></td>
+<td><code>^16.3.2</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@testing-library/user-event</code></td>
+<td><code>^14.6.1</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@types/lodash-es</code></td>
+<td><code>4.17.9</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@types/pluralize</code></td>
+<td><code>^0.0.33</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@types/react</code></td>
+<td><code>^18.2.15</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@types/react-dom</code></td>
+<td><code>^18.2.7</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@types/react-transition-group</code></td>
+<td><code>^4.4.12</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@types/react-window</code></td>
+<td><code>^1.8.8</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@types/uuid</code></td>
+<td><code>^9.0.6</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@typescript/native-preview</code></td>
+<td><code>catalog:</code></td>
+<td><code>catalog</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@typescript-eslint/eslint-plugin</code></td>
+<td><code>catalog:</code></td>
+<td><code>catalog</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@typescript-eslint/parser</code></td>
+<td><code>catalog:</code></td>
+<td><code>catalog</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>devDependencies</code></td>
+<td><code>@vitejs/plugin-react-swc</code></td>
+<td><code>^4.2.3</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>devDependencies</code></td>
+<td><code>baseline-browser-mapping</code></td>
+<td><code>^2.10.22</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>devDependencies</code></td>
+<td><code>eslint</code></td>
+<td><code>catalog:</code></td>
+<td><code>catalog</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>devDependencies</code></td>
+<td><code>eslint-plugin-react-hooks</code></td>
+<td><code>^5.1.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>devDependencies</code></td>
+<td><code>eslint-plugin-react-refresh</code></td>
+<td><code>^0.4.16</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>devDependencies</code></td>
+<td><code>jsdom</code></td>
+<td><code>^28.0.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>devDependencies</code></td>
+<td><code>make-vfs</code></td>
+<td><code>^1.0.15</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>devDependencies</code></td>
+<td><code>nodemon</code></td>
+<td><code>^3.0.3</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>devDependencies</code></td>
+<td><code>openapi-zod-client</code></td>
+<td><code>^1.14.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>devDependencies</code></td>
+<td><code>ts-essentials</code></td>
+<td><code>^9.4.2</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>devDependencies</code></td>
+<td><code>typescript</code></td>
+<td><code>catalog:</code></td>
+<td><code>catalog</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>devDependencies</code></td>
+<td><code>vite</code></td>
+<td><code>^7.1.10</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>devDependencies</code></td>
+<td><code>vite-plugin-svgr</code></td>
+<td><code>^4.5.0</code></td>
+<td><code>external</code></td>
+</tr>
+<tr>
+<td><code>@tunarr/web</code></td>
+<td><code>devDependencies</code></td>
+<td><code>vitest</code></td>
+<td><code>catalog:vitest</code></td>
+<td><code>catalog</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="root-pnpm-controls">Root pnpm Controls<a class="headerlink" href="#root-pnpm-controls" title="Permanent link">¶</a></h2>
+<h3 id="patched-dependencies">Patched Dependencies<a class="headerlink" href="#patched-dependencies" title="Permanent link">¶</a></h3>
+<ul>
+<li><code>kysely</code> â†’ <code>patches/kysely.patch</code></li>
+</ul>
+<h3 id="native-build-allowlist">Native Build Allowlist<a class="headerlink" href="#native-build-allowlist" title="Permanent link">¶</a></h3>
+<ul>
+<li><code>@swc/core</code></li>
+<li><code>arktype</code></li>
+<li><code>better-sqlite3</code></li>
+<li><code>esbuild</code></li>
+<li><code>unrs-resolver</code></li>
+</ul>
+<h2 id="limits">Limits<a class="headerlink" href="#limits" title="Permanent link">¶</a></h2>
+<p>This is a manifest inventory. It does not yet provide:</p>
+<ul>
+<li>Transitive dependency resolution analysis</li>
+<li>Vulnerability assessment</li>
+<li>Dependency-license compatibility analysis</li>
+<li>Runtime import ownership</li>
+<li>Dead-dependency conclusions</li>
+</ul>
+<p>Those findings require separate evidence and must not be inferred solely
+from package manifests.</p>
+<!-- DO NOT FORMAT -->
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://discord.gg/nYkb7MhPfD" target="_blank" rel="noopener" title="Join the Tunarr Discord" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M492.5 69.8c-.2-.3-.4-.6-.8-.7-38.1-17.5-78.4-30-119.7-37.1-.4-.1-.8 0-1.1.1s-.6.4-.8.8c-5.5 9.9-10.5 20.2-14.9 30.6-44.6-6.8-89.9-6.8-134.4 0-4.5-10.5-9.5-20.7-15.1-30.6-.2-.3-.5-.6-.8-.8s-.7-.2-1.1-.2C162.5 39 122.2 51.5 84.1 69c-.3.1-.6.4-.8.7C7.1 183.5-13.8 294.6-3.6 404.2c0 .3.1.5.2.8s.3.4.5.6c44.4 32.9 94 58 146.8 74.2.4.1.8.1 1.1 0s.7-.4.9-.7c11.3-15.4 21.4-31.8 30-48.8.1-.2.2-.5.2-.8s0-.5-.1-.8-.2-.5-.4-.6-.4-.3-.7-.4c-15.8-6.1-31.2-13.4-45.9-21.9-.3-.2-.5-.4-.7-.6s-.3-.6-.3-.9 0-.6.2-.9.3-.5.6-.7c3.1-2.3 6.2-4.7 9.1-7.1.3-.2.6-.4.9-.4s.7 0 1 .1c96.2 43.9 200.4 43.9 295.5 0 .3-.1.7-.2 1-.2s.7.2.9.4c2.9 2.4 6 4.9 9.1 7.2.2.2.4.4.6.7s.2.6.2.9-.1.6-.3.9-.4.5-.6.6c-14.7 8.6-30 15.9-45.9 21.8-.2.1-.5.2-.7.4s-.3.4-.4.7-.1.5-.1.8.1.5.2.8c8.8 17 18.8 33.3 30 48.8.2.3.6.6.9.7s.8.1 1.1 0c52.9-16.2 102.6-41.3 147.1-74.2.2-.2.4-.4.5-.6s.2-.5.2-.8c12.3-126.8-20.5-236.9-86.9-334.5zm-302 267.7c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.4 59.2-52.8 59.2m195.4 0c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.2 59.2-52.8 59.2"></path></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://github.com/sponsors/chrisbenincasa" target="_blank" rel="noopener" title="Sponsor Tunarr on GitHub" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="m241 87.1 15 20.7 15-20.7C296 52.5 336.2 32 378.9 32 452.4 32 512 91.6 512 165.1v2.6c0 112.2-139.9 242.5-212.9 298.2-12.4 9.4-27.6 14.1-43.1 14.1s-30.8-4.6-43.1-14.1C139.9 410.2 0 279.9 0 167.7v-2.6C0 91.6 59.6 32 133.1 32 175.8 32 216 52.5 241 87.1"></path></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tracking", "navigation.path", "navigation.sections", "navigation.indexes", "navigation.footer", "content.code.copy", "content.code.select", "content.tooltips", "content.action.edit", "content.action.view"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  
+<script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(()=>{ lightbox.reload(); });
+</script></body></html>

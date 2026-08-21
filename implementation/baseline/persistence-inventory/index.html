@@ -1,0 +1,3639 @@
+<!DOCTYPE html><html lang="en" class="no-js"><head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://tunarr.com/implementation/baseline/persistence-inventory/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Persistence Inventory - Tunarr</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  <link href="../../../assets/stylesheets/glightbox.min.css" rel="stylesheet"><script src="../../../assets/javascripts/glightbox.min.js"></script><style id="glightbox-style">
+            html.glightbox-open { overflow: initial; height: 100%; }
+            .gslide-title { margin-top: 0px; user-select: text; }
+            .gslide-desc { color: #666; user-select: text; }
+            .gslide-image img { background: white; }
+            .gscrollbar-fixer { padding-right: 15px; }
+            .gdesc-inner { font-size: 0.75rem; }
+            body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
+            body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
+            body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
+        </style></head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#persistence-inventory" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Tunarr" class="md-header__button md-logo" aria-label="Tunarr" data-md-component="logo">
+      
+  <img src="../../../assets/tunarr.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Tunarr
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Persistence Inventory
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo" aria-label="Switch to light mode" type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"></path></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="indigo" aria-label="Switch to dark mode" type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="indigo" aria-label="Switch to system preference" type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required="">
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix="">
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__social">
+        
+          <a href="https://discord.gg/nYkb7MhPfD" title="Join the Tunarr Discord" class="md-header__button md-icon" target="_blank" rel="noopener">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M492.5 69.8c-.2-.3-.4-.6-.8-.7-38.1-17.5-78.4-30-119.7-37.1-.4-.1-.8 0-1.1.1s-.6.4-.8.8c-5.5 9.9-10.5 20.2-14.9 30.6-44.6-6.8-89.9-6.8-134.4 0-4.5-10.5-9.5-20.7-15.1-30.6-.2-.3-.5-.6-.8-.8s-.7-.2-1.1-.2C162.5 39 122.2 51.5 84.1 69c-.3.1-.6.4-.8.7C7.1 183.5-13.8 294.6-3.6 404.2c0 .3.1.5.2.8s.3.4.5.6c44.4 32.9 94 58 146.8 74.2.4.1.8.1 1.1 0s.7-.4.9-.7c11.3-15.4 21.4-31.8 30-48.8.1-.2.2-.5.2-.8s0-.5-.1-.8-.2-.5-.4-.6-.4-.3-.7-.4c-15.8-6.1-31.2-13.4-45.9-21.9-.3-.2-.5-.4-.7-.6s-.3-.6-.3-.9 0-.6.2-.9.3-.5.6-.7c3.1-2.3 6.2-4.7 9.1-7.1.3-.2.6-.4.9-.4s.7 0 1 .1c96.2 43.9 200.4 43.9 295.5 0 .3-.1.7-.2 1-.2s.7.2.9.4c2.9 2.4 6 4.9 9.1 7.2.2.2.4.4.6.7s.2.6.2.9-.1.6-.3.9-.4.5-.6.6c-14.7 8.6-30 15.9-45.9 21.8-.2.1-.5.2-.7.4s-.3.4-.4.7-.1.5-.1.8.1.5.2.8c8.8 17 18.8 33.3 30 48.8.2.3.6.6.9.7s.8.1 1.1 0c52.9-16.2 102.6-41.3 147.1-74.2.2-.2.4-.4.5-.6s.2-.5.2-.8c12.3-126.8-20.5-236.9-86.9-334.5zm-302 267.7c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.4 59.2-52.8 59.2m195.4 0c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.2 59.2-52.8 59.2"></path></svg>
+          </a>
+        
+          <a href="https://github.com/sponsors/chrisbenincasa" title="Sponsor Tunarr on GitHub" class="md-header__button md-icon" target="_blank" rel="noopener">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="m241 87.1 15 20.7 15-20.7C296 52.5 336.2 32 378.9 32 452.4 32 512 91.6 512 165.1v2.6c0 112.2-139.9 242.5-212.9 298.2-12.4 9.4-27.6 14.1-43.1 14.1s-30.8-4.6-43.1-14.1C139.9 410.2 0 279.9 0 167.7v-2.6C0 91.6 59.6 32 133.1 32 175.8 32 216 52.5 241 87.1"></path></svg>
+          </a>
+        
+      </div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/chrisbenincasa/tunarr" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    chrisbenincasa/tunarr
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Tunarr" class="md-nav__button md-logo" aria-label="Tunarr" data-md-component="logo">
+      
+  <img src="../../../assets/tunarr.png" alt="logo">
+
+    </a>
+    Tunarr
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/chrisbenincasa/tunarr" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    chrisbenincasa/tunarr
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix="">
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api-docs.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Docs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3">
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Getting Started
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Install
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/run/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Run
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4">
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Migration
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Migration
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/migration/migrate-to-1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Migrate to 1.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4">
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configure
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Configure
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_1">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/media_sources/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Media Sources
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_1" id="__nav_4_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Media Sources
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/plex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plex
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/jellyfin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Jellyfin
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/emby/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Emby
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_1_5">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/media_sources/local/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_1_5" id="__nav_4_1_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_4_1_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_1_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Local
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/local/movies/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Movies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/local/shows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shows
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/local/other_videos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Other Video
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/local/music/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Music
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/media_sources/local/music_videos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Music Videos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/ffmpeg/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FFmpeg
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    FFmpeg
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/ffmpeg/transcode_config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transcode Configs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../misc/search/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Search
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Search
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/channels/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Channels
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_4" id="__nav_4_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Channels
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/channels/properties/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Properties
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/channels/flex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flex
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/channels/epg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EPG
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/channels/transcoding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transcoding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/channels/watermarks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Watermarks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/channels/programming/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Programming
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/library/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Library
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Library
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/library/filler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filler
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/library/custom-shows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Custom Shows
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/library/smart-collections/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Smart Collections
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/scheduling/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scheduling
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_6" id="__nav_4_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Scheduling
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/concepts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concepts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/random-slots/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Slot Editor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/time-slots/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Time Slots
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/cyclic-shuffle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cyclic Shuffle
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/block-shuffle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Block Shuffle
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/mid-roll-breaks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mid-Roll Breaks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/replicate/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Replicate
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/scheduling/consolidate/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Consolidate
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_7">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/clients/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Clients
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_7" id="__nav_4_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Clients
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/clients/plex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plex
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/clients/jellyfin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Jellyfin
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_8">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../configure/system/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    System
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/system/backup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure/system/logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5">
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Misc.
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Misc.
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../misc/faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../misc/common-issues/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common Issues
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../misc/troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stream Troubleshooter
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6">
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Development
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../dev/contributing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+      
+        <li class="md-nav__item">
+  <a href="#scope-and-method" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scope and Method
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#storage-map" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Storage Map
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sqlite-connection-baseline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SQLite Connection Baseline
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#current-sqlite-schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current SQLite Schema
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#durable-json-and-generated-documents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Durable JSON and Generated Documents
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Durable JSON and Generated Documents">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Settings
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#channel-lineups" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Channel Lineups
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#derived-and-recovery-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Derived and Recovery Files
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migration-surface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Migration Surface
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#known-risks-and-unknowns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Known Risks and Unknowns
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/chrisbenincasa/tunarr/edit/dev/docs/implementation/baseline/persistence-inventory.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"></path></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/chrisbenincasa/tunarr/raw/dev/docs/implementation/baseline/persistence-inventory.md" title="View source of this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"></path></svg>
+    </a>
+  
+
+
+<h1 id="persistence-inventory">Persistence Inventory<a class="headerlink" href="#persistence-inventory" title="Permanent link">¶</a></h1>
+<ul>
+<li><strong>Source commit:</strong> <code>0e5491f87259123a3cb085e3d2ba3844eda510d0</code></li>
+<li><strong>Discovery evidence SHA-256:</strong> <code>9957491ba89d96bcc67bdd17a8ab7be275618fa645ad021de7fa6c6347e322d9</code></li>
+<li><strong>Status:</strong> Reviewed static baseline</li>
+<li><strong>Runtime behavior changed:</strong> No</li>
+</ul>
+<h2 id="scope-and-method">Scope and Method<a class="headerlink" href="#scope-and-method" title="Permanent link">¶</a></h2>
+<p>This inventory combines the sanitized discovery capture with source review of
+the active database connection, Drizzle schema, Kysely/Drizzle migration stack,
+LowDB settings, per-channel lineup documents, backup behavior, and configured
+filesystem paths.</p>
+<p>Static evidence does not provide production row counts. Data-volume estimates
+therefore remain explicitly unknown rather than inferred from schema names.</p>
+<h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Measure</th>
+<th style="text-align: right;">Count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Git-tracked files at source commit</td>
+<td style="text-align: right;">1834</td>
+</tr>
+<tr>
+<td>Text files scanned</td>
+<td style="text-align: right;">1494</td>
+</tr>
+<tr>
+<td>Raw table declarations across current schema and migrations</td>
+<td style="text-align: right;">187</td>
+</tr>
+<tr>
+<td>Unique raw table names</td>
+<td style="text-align: right;">82</td>
+</tr>
+<tr>
+<td>Current Drizzle schema tables</td>
+<td style="text-align: right;">39</td>
+</tr>
+<tr>
+<td>Migration candidate files</td>
+<td style="text-align: right;">160</td>
+</tr>
+<tr>
+<td>SQL migration files</td>
+<td style="text-align: right;">47</td>
+</tr>
+<tr>
+<td>Legacy TypeScript migration files</td>
+<td style="text-align: right;">17</td>
+</tr>
+<tr>
+<td>Named TypeScript migration files</td>
+<td style="text-align: right;">36</td>
+</tr>
+<tr>
+<td>Drizzle snapshot files</td>
+<td style="text-align: right;">45</td>
+</tr>
+<tr>
+<td>Drizzle journal files</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr>
+<td>Lineup migration files</td>
+<td style="text-align: right;">7</td>
+</tr>
+</tbody>
+</table>
+<h2 id="storage-map">Storage Map<a class="headerlink" href="#storage-map" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Store</th>
+<th>Engine</th>
+<th>Location</th>
+<th>Authority</th>
+<th>Current writers</th>
+<th>Evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Primary SQLite database</td>
+<td>better-sqlite3 with Kysely and Drizzle</td>
+<td>Configured database directory plus <code>TUNARR_DATABASE_NAME</code> or <code>db.db</code></td>
+<td>Authoritative operational state</td>
+<td>Repository/DB classes and migrations</td>
+<td>Verified</td>
+</tr>
+<tr>
+<td><code>settings.json</code></td>
+<td>LowDB with Zod-backed adapter</td>
+<td>Configured database directory</td>
+<td>Authoritative application settings</td>
+<td><code>SettingsDB</code> and settings APIs/CLI</td>
+<td>Verified</td>
+</tr>
+<tr>
+<td><code>channel-lineups/{channelId}.json</code></td>
+<td>LowDB with Zod-backed adapter</td>
+<td><code>channel-lineups</code> under configured database directory</td>
+<td>Authoritative lineup/schedule document</td>
+<td><code>LineupRepository</code></td>
+<td>Verified</td>
+</tr>
+<tr>
+<td><code>channel-lineups/{channelId}.json.bak</code></td>
+<td>Filesystem rename convention</td>
+<td><code>channel-lineups</code> under configured database directory</td>
+<td>Soft-deleted/restorable lineup evidence</td>
+<td><code>LineupRepository.markLineupFileForDeletion</code></td>
+<td>Verified</td>
+</tr>
+<tr>
+<td><code>xmltv.xml</code></td>
+<td>Generated XML document</td>
+<td>Configured path; default is database directory</td>
+<td>Derived publication output</td>
+<td>XMLTV generation task/service</td>
+<td>Verified</td>
+</tr>
+<tr>
+<td><code>db-*.bak</code> and <code>backups/</code></td>
+<td>SQLite/filesystem backup artifacts</td>
+<td>Configured database directory</td>
+<td>Recovery evidence</td>
+<td>Migration and backup services</td>
+<td>Verified</td>
+</tr>
+<tr>
+<td><code>cache/</code>, <code>images/</code>, <code>streams/</code>, and <code>logs/</code></td>
+<td>Filesystem directories</td>
+<td>Configured database directory</td>
+<td>Derived cache, upload, stream, and log data</td>
+<td>Runtime services</td>
+<td>Verified</td>
+</tr>
+</tbody>
+</table>
+<h2 id="sqlite-connection-baseline">SQLite Connection Baseline<a class="headerlink" href="#sqlite-connection-baseline" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Current value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Connection timeout</td>
+<td>5000 ms</td>
+</tr>
+<tr>
+<td>Journal mode</td>
+<td>WAL</td>
+</tr>
+<tr>
+<td>Synchronous mode</td>
+<td>NORMAL</td>
+</tr>
+<tr>
+<td>Temporary storage</td>
+<td>MEMORY</td>
+</tr>
+<tr>
+<td>Cache size</td>
+<td>10000 pages</td>
+</tr>
+<tr>
+<td>Memory mapping</td>
+<td>268435456 bytes</td>
+</tr>
+<tr>
+<td>Foreign keys</td>
+<td>ON</td>
+</tr>
+<tr>
+<td>Migration tables</td>
+<td><code>migrations</code>, <code>migration_lock</code></td>
+</tr>
+</tbody>
+</table>
+<p>The primary connection exposes the same Better SQLite3 handle through Kysely
+and Drizzle. A process-local mutex protects migration inspection and migration
+table synchronization. This is not a general transaction boundary for all
+runtime writes.</p>
+<h2 id="current-sqlite-schema">Current SQLite Schema<a class="headerlink" href="#current-sqlite-schema" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Concept</th>
+<th>Schema authority</th>
+<th>Read-path evidence</th>
+<th>Write-path evidence</th>
+<th style="text-align: right;">PK declarations</th>
+<th style="text-align: right;">FK references</th>
+<th style="text-align: right;">Unique declarations</th>
+<th style="text-align: right;">Index declarations</th>
+<th>Authority</th>
+<th>Secret-content review</th>
+<th>Data volume</th>
+<th>Migration risk</th>
+<th>Target concept</th>
+<th>Retention</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>artwork</code></td>
+<td>Catalog metadata</td>
+<td><code>server/src/db/schema/Artwork.ts:38</code></td>
+<td><code>server/src/db/channel/ChannelProgramRepository.ts</code>, <code>server/src/db/program/ProgramGroupingRepository.ts</code>, <code>server/src/db/program/ProgramMetadataRepository.ts</code>, <code>server/src/db/program/ProgramUpsertRepository.ts</code> (+5 more)</td>
+<td><code>server/src/db/LocalMediaDB.ts:103</code>, <code>server/src/db/LocalMediaDB.ts:114</code>, <code>server/src/db/program/ProgramMetadataRepository.ts:53</code>, <code>server/src/db/program/ProgramMetadataRepository.ts:56</code> (+4 more)</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3</td>
+<td>Authoritative operational state</td>
+<td>No obvious secret field term</td>
+<td>UNKNOWN (runtime data required)</td>
+<td>High</td>
+<td>Catalog metadata</td>
+<td>Until explicit update or deletion</td>
+</tr>
+<tr>
+<td><code>cached_image</code></td>
+<td>Image cache</td>
+<td><code>server/src/db/schema/CachedImage.ts:5</code></td>
+<td><code>server/src/db/schema/db.ts</code></td>
+<td><code>server/src/services/cacheImageService.ts:113</code>, <code>server/src/services/cacheImageService.ts:165</code></td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td>Derived/rebuildable cache</td>
+<td>No obvious secret field term</td>
+<td>UNKNOWN (runtime data required)</td>
+<td>High</td>
+<td>Image cache</td>
+<td>Rebuildable; cache policy</td>
+</tr>
+<tr>
+<td><code>channel</code></td>
+<td>Channels and published lineups</td>
+<td><code>server/src/db/schema/Channel.ts:26</code></td>
+<td><code>server/src/db/channel/BasicChannelRepository.ts</code>, <code>server/src/db/channel/ChannelProgramRepository.ts</code>, <code>server/src/db/channel/ChannelReadOpsRepository.ts</code>, <code>server/src/db/channel/LineupRepository.ts</code> (+8 more)</td>
+<td><code>server/src/db/channel/BasicChannelRepository.ts:122</code>, <code>server/src/db/channel/BasicChannelRepository.ts:215</code>, <code>server/src/db/channel/BasicChannelRepository.ts:275</code>, <code>server/src/db/channel/BasicChannelRepository.ts:287</code> (+12 more)</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+<td>Authoritative operational state</td>
+<td>No obvious secret field term</td>
+<td>UNKNOWN (runtime data required)</td>
+<td>High</td>
+<td>Channels and published lineups</td>
+<td>Until explicit update or deletion</td>
+</tr>
+<tr>
+<td><code>channel_fallback</code></td>
+<td>Channels and published lineups</td>
+<td><code>server/src/db/schema/ChannelFallback.ts:8</code></td>
+<td><code>server/src/db/schema/db.ts</code>, <code>server/src/db/schema/index.ts</code></td>
+<td>None found</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td>Authoritative operational state</td>
+<td>No obvious secret field term</td>
+<td>UNKNOWN (runtime data required)</td>
+<td>Moderate</td>
+<td>Channels and published lineups</td>
+<td>Until explicit update or deletion</td>
+</tr>
+<tr>
+<td><code>channel_filler_show</code></td>
+<td>Channels and published lineups</td>
+<td><code>server/src/db/schema/ChannelFillerShow.ts:14</code></td>
+<td><code>server/src/db/channel/BasicChannelRepository.ts</code>, <code>server/src/db/schema/Channel.ts</code>, <code>server/src/db/schema/db.ts</code>, <code>server/src/db/schema/derivedTypes.ts</code> (+1 more)</td>
+<td><code>server/src/db/channel/BasicChannelRepository.ts:134</code>, <code>server/src/db/channel/BasicChannelRepository.ts:228</code>, <code>server/src/db/channel/BasicChannelRepository.ts:231</code>, <code>server/src/db/channel/BasicChannelRepository.ts:357</code> (+2 more)</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td>Authoritative operational state</td>
+<td>No obvious secret field term</td>
+<td>UNKNOWN (runtime data required)</td>
+<td>High</td>
+<td>Channels and published lineups</td>
+<td>Until explicit update or deletion</td>
+</tr>
+<tr>
+<td><code>channel_programs</code></td>
+<td>Channels and published lineups</td>
+<td><code>server/src/db/schema/ChannelPrograms.ts:8</code></td>
+<td><code>server/src/db/channel/BasicChannelRepository.ts</code>, <code>server/src/db/channel/ChannelProgramRepository.ts</code>, <code>server/src/db/channel/LineupRepository.ts</code>, <code>server/src/db/program/ProgramGroupingRepository.ts</code> (+4 more)</td>
+<td><code>server/src/db/channel/BasicChannelRepository.ts:372</code>, <code>server/src/db/channel/ChannelProgramRepository.ts:377</code>, <code>server/src/db/channel/ChannelProgramRepository.ts:381</code>, <code>server/src/db/channel/LineupRepository.ts:399</code> (+4 more)</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td>Authoritative operational state</td>
+<td>No obvious secret field term</td>
+<td>UNKNOWN (runtime data required)</td>
+<td>High</td>
+<td>Channels and published lineups</td>
+<td>Until explicit update or deletion</td>
+</tr>
+<tr>
+<td><code>credit</code></td>
+<td>Catalog metadata</td>
+<td><code>server/src/db/schema/Credit.ts:13</code></td>
+<td><code>server/src/db/program/ProgramMetadataRepository.ts</code>, <code>server/src/db/program/ProgramUpsertRepository.ts</code>, <code>server/src/db/schema/Artwork.ts</code>, <code>server/src/db/schema/derivedTypes.ts</code> (+3 more)</td>
+<td><code>server/src/db/program/ProgramMetadataRepository.ts:436</code>, <code>server/src/db/program/ProgramMetadataRepository.ts:439</code>, <code>server/src/db/program/ProgramMetadataRepository.ts:443</code></td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td>Authoritative operational state</td>
+<td>No obvious secret field term</td>
+<td>UNKNOWN (runtime data required)</td>
+<td>High</td>
+<td>Catalog metadata</td>
+<td>Until explicit update or deletion</td>
+</tr>
+<tr>
+<td><code>custom_show</code></td>
+<td>Custom programming collections</td>
+<td><code>server/src/db/schema/CustomShow.ts:8</code></td>
+<td><code>server/src/db/schema/CustomShowContent.ts</code>, <code>server/src/db/schema/db.ts</code>, <code>server/src/db/schema/index.ts</code>, <code>server/src/db/schema/SubtitlePreferences.ts</code></td>
+<td><code>server/src/db/CustomShowDB.test.ts:181</code>, <code>server/src/db/CustomShowDB.test.ts:582</code>, <code>server/src/db/CustomShowDB.ts:150</code>, <code>server/src/db/CustomShowDB.ts:176</code> (+2 more)</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td>Authoritative operational state</td>
+<td>No obvious secret field term</td>
+<td>UNKNOWN (runtime data required)</td>
+<td>High</td>
+<td>Custom programming collections</td>
+<td>Until explicit update or deletion</td>
+</tr>
+<tr>
+<td><code>custom_show_content</code></td>
+<td>Custom programming collections</td>
+<td><code>server/src/db/schema/CustomShowContent.ts:14</code></td>
+<td><code>server/src/db/schema/CustomShow.ts</code>, <code>server/src/db/schema/db.ts</code>, <code>server/src/db/schema/index.ts</code></td>
+<td><code>server/src/db/CustomShowDB.test.ts:190</code>, <code>server/src/db/CustomShowDB.ts:193</code>, <code>server/src/db/CustomShowDB.ts:305</code>, <code>server/src/db/CustomShowDB.ts:309</code></td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td>Authoritative operational state</td>
+<td>No obvious secret field term</td>
+<td>UNKNOWN (runtime data required)</td>
+<td>High</td>
+<td>Custom programming collections</td>
+<td>Until explicit update or deletion</td>
+</tr>
+<tr>
+<td><code>external_collections</code></td>
+<td>Collections</td>
+<td><code>server/src/db/schema/ExternalCollection.ts:17</code></td>
+<td><code>server/src/db/schema/index.ts</code></td>
+<td><code>server/src/db/ExternalCollectionRepo.ts:19</code>, <code>server/src/db/ExternalCollectionRepo.ts:46</code></td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td>Authoritative operational state</td>
+<td>No obvious secret field term</td>
+<td>UNKNOWN (runtime data required)</td>
+<td>High</td>
+<td>Collections</td>
+<td>Until explicit update or deletion</td>
+</tr>
+<tr>
+<td><code>external_collection_programs</code></td>
+<td>Collections</td>
+<td><code>server/src/db/schema/ExternalCollection.ts:48</code></td>
+<td><code>server/src/db/schema/index.ts</code></td>
+<td>None found</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td>Authoritative operational state</td>
+<td>No obvious secret field term</td>
+<td>UNKNOWN (runtime data required)</td>
+<td>High</td>
+<td>Collections</td>
+<td>Until explicit update or deletion</td>
+</tr>
+<tr>
+<td><code>filler_show</code></td>
+<td>Interstitial and filler programming</td>
+<td><code>server/src/db/schema/FillerShow.ts:9</code></td>
+<td><code>server/src/db/schema/ChannelFillerShow.ts</code>, <code>server/src/db/schema/db.ts</code>, <code>server/src/db/schema/derivedTypes.ts</code>, <code>server/src/db/schema/FillerShowContent.ts</code> (+2 more)</td>
+<td><code>server/src/db/FillerListDB.ts:140</code>, <code>server/src/db/FillerListDB.ts:162</code>, <code>server/src/db/FillerListDB.ts:279</code></td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td>Authoritative operational state</td>
+<td>No obvious secret field term</td>
+<td>UNKNOWN (runtime data required)</td>
+<td>High</td>
+<td>Interstitial and filler programming</td>
+<td>Until explicit update or deletion</td>
+</tr>
+<tr>
+<td><code>filler_show_content</code></td>
+<td>Interstitial and filler programming</td>
+<td><code>server/src/db/schema/FillerShowContent.ts:13</code></td>
+<td><code>server/src/db/schema/db.ts</code>, <code>server/src/db/schema/FillerShow.ts</code>, <code>server/src/db/schema/index.ts</code>, <code>server/src/db/schema/Program.ts</code></td>
+<td><code>server/src/db/FillerListDB.ts:128</code>, <code>server/src/db/FillerListDB.ts:133</code>, <code>server/src/db/FillerListDB.ts:176</code></td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td>Authoritative operational state</td>
+<td>No obvious secret field term</td>
+<td>UNKNOWN (runtime data required)</td>
+<td>High</td>
+<td>Interstitial and filler programming</td>
+<td>Until explicit update or deletion</td>
+</tr>
+<tr>
+<td><code>genre</code></td>
+<td>Catalog metadata</td>
+<td><code>server/src/db/schema/Genre.ts:7</code></td>
+<td><code>server/src/db/converters/CommonDaoMinter.ts</code>, <code>server/src/db/program/ProgramMetadataRepository.ts</code>, <code>server/src/db/program/ProgramUpsertRepository.ts</code>, <code>server/src/db/schema/derivedTypes.ts</code> (+3 more)</td>
+<td><code>server/src/db/program/ProgramMetadataRepository.ts:135</code></td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td>Authoritative operational state</td>
+<td>No obvious secret field term</td>
+<td>UNKNOWN (runtime data required)</td>
+<td>High</td>
+<td>Catalog metadata</td>
+<td>Until explicit update or deletion</td>
+</tr>
+<tr>
+<td><code>genre_entity</code></td>
+<td>Catalog metadata</td>
+<td><code>server/src/db/schema/Genre.ts:16</code></td>
+<td><code>server/src/db/program/ProgramMetadataRepository.ts</code>, <code>server/src/db/schema/index.ts</code>, <code>server/src/db/schema/Program.ts</code>, <code>server/src/db/schema/ProgramGrouping.ts</code></td>
+<td><code>server/src/db/program/ProgramMetadataRepository.ts:133</code>, <code>server/src/db/program/ProgramMetadataRepository.ts:143</code></td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">5</td>
+<td>Authoritative operational state</td>
+<td>No obvious secret field term</td>
+<td>UNKNOWN (runtime data required)</td>
+<td>High</td>
+<td>Catalog metadata</td>
+<td>Until explicit update or deletion</td>
+</tr>
+<tr>
+<td><code>local_media_folder</code></td>
+<td>Media sources and libraries</td>
+<td><code>server/src/db/schema/LocalMediaFolder.ts:7</code></td>
+<td><code>server/src/db/schema/db.ts</code>, <code>server/src/db/schema/index.ts</code>, <code>server/src/db/schema/LocalMediaSourcePath.ts</code>, <code>server/src/db/schema/Program.ts</code> (+1 more)</td>
+<td><code>server/src/db/LocalMediaDB.ts:56</code>, <code>server/src/db/LocalMediaDB.ts:75</code>, <code>server/src/db/LocalMediaDB.ts:93</code></td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3</td>
+<td>Authoritative operational state</td>
+<td>No obvious secret field term</td>
+<td>UNKNOWN (runtime data required)</td>
+<td>High</td>
+<td>Media sources and libraries</td>
+<td>Until explicit update or deletion</td>
+</tr>
+<tr>
+<td><code>local_media_source_path</code></td>
+<td>Media sources and libraries</td>
+<td><code>server/src/db/schema/LocalMediaSourcePath.ts:12</code></td>
+<td><code>server/src/db/schema/db.ts</code>, <code>server/src/db/schema/derivedTypes.ts</code>, <code>server/src/db/schema/index.ts</code>, <code>server/src/db/schema/MediaSource.ts</code> (+1 more)</td>
+<td>None found</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td>Authoritative operational state</td>
+<td>No obvious secret field term</td>
+<td>UNKNOWN (runtime data required)</td>
+<td>High</td>
+<td>Media sources and libraries</td>
+<td>Until explicit update or deletion</td>
+</tr>
+<tr>
+<td><code>media_source</code></td>
+<td>Media sources and libraries</td>
+<td><code>server/src/db/schema/MediaSource.ts:22</code></td>
+<td><code>server/src/db/schema/CustomShow.ts</code>, <code>server/src/db/schema/db.ts</code>, <code>server/src/db/schema/derivedTypes.ts</code>, <code>server/src/db/schema/ExternalCollection.ts</code> (+8 more)</td>
+<td><code>server/src/db/CustomShowDB.test.ts:67</code>, <code>server/src/db/mediaSourceDB.ts:182</code>, <code>server/src/db/mediaSourceDB.ts:204</code>, <code>server/src/db/mediaSourceDB.ts:257</code> (+4 more)</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td>Authoritative operational state</td>
+<td>No obvious secret field term</td>
+<td>UNKNOWN (runtime data required)</td>
+<td>High</td>
+<td>Media sources and libraries</td>
+<td>Until explicit update or deletion</td>
+</tr>
+<tr>
+<td><code>media_source_library</code></td>
+<td>Media sources and libraries</td>
+<td><code>server/src/db/schema/MediaSourceLibrary.ts:9</code></td>
+<td><code>server/src/db/schema/db.ts</code>, <code>server/src/db/schema/derivedTypes.ts</code>, <code>server/src/db/schema/ExternalCollection.ts</code>, <code>server/src/db/schema/index.ts</code> (+6 more)</td>
+<td><code>server/src/db/mediaSourceDB.ts:224</code>, <code>server/src/db/mediaSourceDB.ts:235</code>, <code>server/src/db/mediaSourceDB.ts:374</code>, <code>server/src/db/mediaSourceDB.ts:414</code> (+5 more)</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td>Authoritative operational state</td>
+<td>No obvious secret field term</td>
+<td>UNKNOWN (runtime data required)</td>
+<td>High</td>
+<td>Media sources and libraries</td>
+<td>Until explicit update or deletion</td>
+</tr>
+<tr>
+<td><code>media_source_library_replace_path</code></td>
+<td>Media sources and libraries</td>
+<td><code>server/src/db/schema/MediaSourceLibraryReplacePath.ts:6</code></td>
+<td><code>server/src/db/schema/derivedTypes.ts</code>, <code>server/src/db/schema/index.ts</code>, <code>server/src/db/schema/MediaSource.ts</code></td>
+<td><code>server/src/db/mediaSourceDB.ts:273</code>, <code>server/src/db/mediaSourceDB.ts:276</code>, <code>server/src/db/mediaSourceDB.ts:396</code></td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td>Authoritative operational state</td>
+<td>No obvious secret field term</td>
+<td>UNKNOWN (runtime data required)</td>
+<td>High</td>
+<td>Media sources and libraries</td>
+<td>Until explicit update or deletion</td>
+</tr>
+<tr>
+<td><code>program</code></td>
+<td>Media catalog and program metadata</td>
+<td><code>server/src/db/schema/Program.ts:51</code></td>
+<td><code>server/src/db/channel/ChannelProgramRepository.ts</code>, <code>server/src/db/program/ProgramGroupingRepository.ts</code>, <code>server/src/db/program/ProgramSearchRepository.ts</code>, <code>server/src/db/program/ProgramStateRepository.ts</code> (+22 more)</td>
+<td><code>server/src/db/ChannelDB.test.ts:377</code>, <code>server/src/db/CustomShowDB.test.ts:148</code>, <code>server/src/db/CustomShowDB.test.ts:555</code>, <code>server/src/db/mediaSourceDB.ts:167</code> (+6 more)</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">10</td>
+<td>Authoritative operational state</td>
+<td>No obvious secret field term</td>
+<td>UNKNOWN (runtime data required)</td>
+<td>High</td>
+<td>Media catalog and program metadata</td>
+<td>Until explicit update or deletion</td>
+</tr>
+<tr>
+<td><code>program_chapter</code></td>
+<td>Media catalog and program metadata</td>
+<td><code>server/src/db/schema/ProgramChapter.ts:12</code></td>
+<td><code>server/src/db/program/ProgramUpsertRepository.ts</code>, <code>server/src/db/schema/db.ts</code>, <code>server/src/db/schema/derivedTypes.ts</code>, <code>server/src/db/schema/index.ts</code> (+1 more)</td>
+<td><code>server/src/db/program/ProgramUpsertRepository.ts:276</code></td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td>Authoritative operational state</td>
+<td>No obvious secret field term</td>
+<td>UNKNOWN (runtime data required)</td>
+<td>High</td>
+<td>Media catalog and program metadata</td>
+<td>Until explicit update or deletion</td>
+</tr>
+<tr>
+<td><code>program_external_id</code></td>
+<td>Media catalog and program metadata</td>
+<td><code>server/src/db/schema/ProgramExternalId.ts:21</code></td>
+<td><code>server/src/db/channel/ChannelProgramRepository.ts</code>, <code>server/src/db/program/BasicProgramRepository.ts</code>, <code>server/src/db/program/ProgramExternalIdRepository.ts</code>, <code>server/src/db/program/ProgramGroupingRepository.ts</code> (+4 more)</td>
+<td><code>server/src/db/program/ProgramExternalIdRepository.ts:203</code>, <code>server/src/db/program/ProgramExternalIdRepository.ts:217</code>, <code>server/src/db/program/ProgramExternalIdRepository.ts:248</code>, <code>server/src/db/program/ProgramExternalIdRepository.ts:262</code> (+3 more)</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">5</td>
+<td>Authoritative operational state</td>
+<td>No obvious secret field term</td>
+<td>UNKNOWN (runtime data required)</td>
+<td>High</td>
+<td>Media catalog and program metadata</td>
+<td>Until explicit update or deletion</td>
+</tr>
+<tr>
+<td><code>program_grouping</code></td>
+<td>Program grouping metadata</td>
+<td><code>server/src/db/schema/ProgramGrouping.ts:48</code></td>
+<td><code>server/src/db/channel/ChannelProgramRepository.ts</code>, <code>server/src/db/program/BasicProgramRepository.ts</code>, <code>server/src/db/program/ProgramGroupingRepository.ts</code>, <code>server/src/db/program/ProgramGroupingUpsertRepository.ts</code> (+14 more)</td>
+<td><code>server/src/db/mediaSourceDB.ts:173</code>, <code>server/src/db/program/ProgramGroupingUpsertRepository.ts:146</code>, <code>server/src/db/program/ProgramGroupingUpsertRepository.ts:277</code>, <code>server/src/db/program/ProgramStateRepository.ts:43</code> (+2 more)</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td>Authoritative operational state</td>
+<td>No obvious secret field term</td>
+<td>UNKNOWN (runtime data required)</td>
+<td>High</td>
+<td>Program grouping metadata</td>
+<td>Until explicit update or deletion</td>
+</tr>
+<tr>
+<td><code>program_grouping_external_id</code></td>
+<td>Program grouping metadata</td>
+<td><code>server/src/db/schema/ProgramGroupingExternalId.ts:22</code></td>
+<td><code>server/src/db/channel/ChannelProgramRepository.ts</code>, <code>server/src/db/program/ProgramGroupingRepository.ts</code>, <code>server/src/db/program/ProgramGroupingUpsertRepository.ts</code>, <code>server/src/db/schema/db.ts</code> (+3 more)</td>
+<td><code>server/src/db/program/ProgramGroupingUpsertRepository.ts:347</code>, <code>server/src/db/program/ProgramGroupingUpsertRepository.ts:381</code>, <code>server/src/db/program/ProgramGroupingUpsertRepository.ts:404</code>, <code>server/src/db/program/ProgramGroupingUpsertRepository.ts:448</code> (+2 more)</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">3</td>
+<td>Authoritative operational state</td>
+<td>No obvious secret field term</td>
+<td>UNKNOWN (runtime data required)</td>
+<td>High</td>
+<td>Program grouping metadata</td>
+<td>Until explicit update or deletion</td>
+</tr>
+<tr>
+<td><code>program_media_file</code></td>
+<td>Media catalog and program metadata</td>
+<td><code>server/src/db/schema/ProgramMediaFile.ts:8</code></td>
+<td><code>server/src/db/program/ProgramUpsertRepository.ts</code>, <code>server/src/db/schema/db.ts</code>, <code>server/src/db/schema/derivedTypes.ts</code>, <code>server/src/db/schema/index.ts</code> (+1 more)</td>
+<td><code>server/src/db/program/ProgramUpsertRepository.ts:296</code></td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td>Authoritative operational state</td>
+<td>No obvious secret field term</td>
+<td>UNKNOWN (runtime data required)</td>
+<td>High</td>
+<td>Media catalog and program metadata</td>
+<td>Until explicit update or deletion</td>
+</tr>
+<tr>
+<td><code>program_media_stream</code></td>
+<td>Media catalog and program metadata</td>
+<td><code>server/src/db/schema/ProgramMediaStream.ts:15</code></td>
+<td><code>server/src/db/program/ProgramUpsertRepository.ts</code>, <code>server/src/db/schema/db.ts</code>, <code>server/src/db/schema/derivedTypes.ts</code>, <code>server/src/db/schema/index.ts</code> (+1 more)</td>
+<td><code>server/src/db/program/ProgramUpsertRepository.ts:254</code></td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td>Authoritative operational state</td>
+<td>No obvious secret field term</td>
+<td>UNKNOWN (runtime data required)</td>
+<td>High</td>
+<td>Media catalog and program metadata</td>
+<td>Until explicit update or deletion</td>
+</tr>
+<tr>
+<td><code>program_play_history</code></td>
+<td>Media catalog and program metadata</td>
+<td><code>server/src/db/schema/ProgramPlayHistory.ts:10</code></td>
+<td><code>server/src/db/schema/Channel.ts</code>, <code>server/src/db/schema/index.ts</code>, <code>server/src/db/schema/Program.ts</code></td>
+<td><code>server/src/db/ProgramPlayHistoryDB.ts:107</code>, <code>server/src/db/ProgramPlayHistoryDB.ts:115</code>, <code>server/src/db/ProgramPlayHistoryDB.ts:123</code>, <code>server/src/db/ProgramPlayHistoryDB.ts:74</code> (+2 more)</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4</td>
+<td>Operational history</td>
+<td>No obvious secret field term</td>
+<td>UNKNOWN (runtime data required)</td>
+<td>High</td>
+<td>Media catalog and program metadata</td>
+<td>No explicit static retention limit found</td>
+</tr>
+<tr>
+<td><code>program_subtitles</code></td>
+<td>Media catalog and program metadata</td>
+<td><code>server/src/db/schema/ProgramSubtitles.ts:6</code></td>
+<td><code>server/src/db/program/ProgramMetadataRepository.ts</code>, <code>server/src/db/program/ProgramUpsertRepository.ts</code>, <code>server/src/db/schema/derivedTypes.ts</code>, <code>server/src/db/schema/index.ts</code> (+1 more)</td>
+<td><code>server/src/db/program/ProgramMetadataRepository.ts:375</code>, <code>server/src/db/program/ProgramMetadataRepository.ts:378</code>, <code>server/src/db/program/ProgramMetadataRepository.ts:390</code>, <code>server/src/db/program/ProgramMetadataRepository.ts:397</code> (+2 more)</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td>Authoritative operational state</td>
+<td>No obvious secret field term</td>
+<td>UNKNOWN (runtime data required)</td>
+<td>High</td>
+<td>Media catalog and program metadata</td>
+<td>Until explicit update or deletion</td>
+</tr>
+<tr>
+<td><code>program_version</code></td>
+<td>Media catalog and program metadata</td>
+<td><code>server/src/db/schema/ProgramVersion.ts:13</code></td>
+<td><code>server/src/db/program/ProgramUpsertRepository.ts</code>, <code>server/src/db/schema/db.ts</code>, <code>server/src/db/schema/derivedTypes.ts</code>, <code>server/src/db/schema/index.ts</code> (+4 more)</td>
+<td><code>server/src/db/program/ProgramUpsertRepository.ts:206</code>, <code>server/src/db/program/ProgramUpsertRepository.ts:211</code></td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td>Authoritative operational state</td>
+<td>No obvious secret field term</td>
+<td>UNKNOWN (runtime data required)</td>
+<td>High</td>
+<td>Media catalog and program metadata</td>
+<td>Until explicit update or deletion</td>
+</tr>
+<tr>
+<td><code>smart_collection</code></td>
+<td>Collections</td>
+<td><code>server/src/db/schema/SmartCollection.ts:4</code></td>
+<td><code>server/src/db/schema/index.ts</code></td>
+<td><code>server/src/db/SmartCollectionsDB.ts:119</code>, <code>server/src/db/SmartCollectionsDB.ts:128</code>, <code>server/src/db/SmartCollectionsDB.ts:152</code></td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td>Authoritative operational state</td>
+<td>No obvious secret field term</td>
+<td>UNKNOWN (runtime data required)</td>
+<td>High</td>
+<td>Collections</td>
+<td>Until explicit update or deletion</td>
+</tr>
+<tr>
+<td><code>stream_selection_profiles</code></td>
+<td>Stream selection configuration</td>
+<td><code>server/src/db/schema/StreamSelectionProfile.ts:4</code></td>
+<td><code>server/src/db/schema/Channel.ts</code>, <code>server/src/db/schema/FillerShow.ts</code>, <code>server/src/db/schema/index.ts</code>, <code>server/src/db/schema/Program.ts</code></td>
+<td><code>server/src/api/streamSelectionApi.ts:118</code>, <code>server/src/api/streamSelectionApi.ts:163</code>, <code>server/src/api/streamSelectionApi.ts:208</code></td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td>Authoritative operational state</td>
+<td>No obvious secret field term</td>
+<td>UNKNOWN (runtime data required)</td>
+<td>Moderate</td>
+<td>Stream selection configuration</td>
+<td>Until explicit update or deletion</td>
+</tr>
+<tr>
+<td><code>studio</code></td>
+<td>Catalog metadata</td>
+<td><code>server/src/db/schema/Studio.ts:7</code></td>
+<td><code>server/src/db/converters/CommonDaoMinter.ts</code>, <code>server/src/db/program/ProgramMetadataRepository.ts</code>, <code>server/src/db/program/ProgramUpsertRepository.ts</code>, <code>server/src/db/schema/derivedTypes.ts</code> (+3 more)</td>
+<td><code>server/src/db/program/ProgramMetadataRepository.ts:201</code>, <code>server/src/services/PlexMediaCanonicalizers.ts:204</code></td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td>Authoritative operational state</td>
+<td>No obvious secret field term</td>
+<td>UNKNOWN (runtime data required)</td>
+<td>High</td>
+<td>Catalog metadata</td>
+<td>Until explicit update or deletion</td>
+</tr>
+<tr>
+<td><code>studio_entity</code></td>
+<td>Catalog metadata</td>
+<td><code>server/src/db/schema/Studio.ts:12</code></td>
+<td><code>server/src/db/program/ProgramMetadataRepository.ts</code>, <code>server/src/db/schema/derivedTypes.ts</code>, <code>server/src/db/schema/index.ts</code>, <code>server/src/db/schema/Program.ts</code> (+1 more)</td>
+<td><code>server/src/db/program/ProgramMetadataRepository.ts:199</code>, <code>server/src/db/program/ProgramMetadataRepository.ts:209</code></td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3</td>
+<td>Authoritative operational state</td>
+<td>No obvious secret field term</td>
+<td>UNKNOWN (runtime data required)</td>
+<td>High</td>
+<td>Catalog metadata</td>
+<td>Until explicit update or deletion</td>
+</tr>
+<tr>
+<td><code>channel_subtitle_preferences</code></td>
+<td>Channels and published lineups</td>
+<td><code>server/src/db/schema/SubtitlePreferences.ts:21</code></td>
+<td><code>server/src/db/channel/BasicChannelRepository.ts</code>, <code>server/src/db/channel/ChannelConfigRepository.ts</code>, <code>server/src/db/schema/derivedTypes.ts</code></td>
+<td><code>server/src/db/channel/BasicChannelRepository.ts:160</code>, <code>server/src/db/channel/BasicChannelRepository.ts:245</code>, <code>server/src/db/channel/BasicChannelRepository.ts:249</code>, <code>server/src/db/channel/BasicChannelRepository.ts:408</code></td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td>Authoritative operational state</td>
+<td>No obvious secret field term</td>
+<td>UNKNOWN (runtime data required)</td>
+<td>High</td>
+<td>Channels and published lineups</td>
+<td>Until explicit update or deletion</td>
+</tr>
+<tr>
+<td><code>custom_show_subtitle_preferences</code></td>
+<td>Custom programming collections</td>
+<td><code>server/src/db/schema/SubtitlePreferences.ts:45</code></td>
+<td>None found</td>
+<td>None found</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td>Authoritative operational state</td>
+<td>No obvious secret field term</td>
+<td>UNKNOWN (runtime data required)</td>
+<td>High</td>
+<td>Custom programming collections</td>
+<td>Until explicit update or deletion</td>
+</tr>
+<tr>
+<td><code>tags</code></td>
+<td>Catalog metadata</td>
+<td><code>server/src/db/schema/Tag.ts:7</code></td>
+<td><code>server/src/db/converters/CommonDaoMinter.ts</code>, <code>server/src/db/program/ProgramMetadataRepository.ts</code>, <code>server/src/db/program/ProgramUpsertRepository.ts</code>, <code>server/src/db/schema/base.ts</code> (+4 more)</td>
+<td><code>server/src/db/program/ProgramMetadataRepository.ts:270</code>, <code>server/src/db/TagRepo.ts:16</code>, <code>server/src/services/PlexMediaCanonicalizers.ts:144</code>, <code>server/src/services/PlexMediaCanonicalizers.ts:149</code> (+7 more)</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td>Authoritative operational state</td>
+<td>No obvious secret field term</td>
+<td>UNKNOWN (runtime data required)</td>
+<td>High</td>
+<td>Catalog metadata</td>
+<td>Until explicit update or deletion</td>
+</tr>
+<tr>
+<td><code>tag_relations</code></td>
+<td>Catalog metadata</td>
+<td><code>server/src/db/schema/Tag.ts:23</code></td>
+<td><code>server/src/db/program/ProgramMetadataRepository.ts</code>, <code>server/src/db/schema/index.ts</code>, <code>server/src/db/schema/Program.ts</code>, <code>server/src/db/schema/ProgramGrouping.ts</code></td>
+<td><code>server/src/db/program/ProgramMetadataRepository.ts:266</code>, <code>server/src/db/program/ProgramMetadataRepository.ts:278</code>, <code>server/src/db/TagRepo.ts:101</code>, <code>server/src/db/TagRepo.ts:42</code> (+2 more)</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td>Authoritative operational state</td>
+<td>No obvious secret field term</td>
+<td>UNKNOWN (runtime data required)</td>
+<td>High</td>
+<td>Catalog metadata</td>
+<td>Until explicit update or deletion</td>
+</tr>
+<tr>
+<td><code>transcode_config</code></td>
+<td>Transcode configuration</td>
+<td><code>server/src/db/schema/TranscodeConfig.ts:135</code></td>
+<td><code>server/src/db/schema/Channel.ts</code>, <code>server/src/db/schema/db.ts</code>, <code>server/src/db/schema/derivedTypes.ts</code>, <code>server/src/db/schema/index.ts</code></td>
+<td><code>server/src/db/TranscodeConfigDB.ts:108</code>, <code>server/src/db/TranscodeConfigDB.ts:153</code>, <code>server/src/db/TranscodeConfigDB.ts:168</code>, <code>server/src/db/TranscodeConfigDB.ts:187</code> (+7 more)</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td>Authoritative operational state</td>
+<td>No obvious secret field term</td>
+<td>UNKNOWN (runtime data required)</td>
+<td>High</td>
+<td>Transcode configuration</td>
+<td>Until explicit update or deletion</td>
+</tr>
+</tbody>
+</table>
+<h2 id="durable-json-and-generated-documents">Durable JSON and Generated Documents<a class="headerlink" href="#durable-json-and-generated-documents" title="Permanent link">¶</a></h2>
+<h3 id="settings">Settings<a class="headerlink" href="#settings" title="Permanent link">¶</a></h3>
+<p><code>settings.json</code> is a LowDB document validated by
+<code>SettingsFileSchema</code>. It includes version/migration state, client
+identity, HDHR, XMLTV, Plex stream, FFmpeg, media-source-global, backup,
+logging, cache, server, and feature-flag settings. Values are not reproduced in
+this inventory.</p>
+<h3 id="channel-lineups">Channel Lineups<a class="headerlink" href="#channel-lineups" title="Permanent link">¶</a></h3>
+<p>Each channel has a LowDB-backed JSON lineup document under
+<code>channel-lineups</code>. The document carries lineup items, calculated
+start offsets, update time, schema version, schedule configuration, and
+on-demand configuration. Renaming to <code>.bak</code> provides inherited
+soft-delete/restore behavior.</p>
+<p>The lineup repository also writes SQLite channel/program relationships.
+Static evidence therefore identifies a cross-store consistency boundary that
+requires characterization before replacement.</p>
+<h3 id="derived-and-recovery-files">Derived and Recovery Files<a class="headerlink" href="#derived-and-recovery-files" title="Permanent link">¶</a></h3>
+<ul>
+<li><code>xmltv.xml</code> is a generated guide publication.</li>
+<li><code>db-*.bak</code> and <code>backups/</code> hold migration or configured
+  recovery evidence.</li>
+<li><code>cache/</code> and its image/subtitle children are derived.</li>
+<li><code>images/uploads/</code> contains user-supplied image files.</li>
+<li><code>streams/</code> contains runtime stream artifacts.</li>
+<li>The configured log directory contains runtime logs.</li>
+</ul>
+<h2 id="migration-surface">Migration Surface<a class="headerlink" href="#migration-surface" title="Permanent link">¶</a></h2>
+<p>The active migration path combines Kysely migration bookkeeping with the
+Drizzle migration provider. Historical MikroORM migration state may be
+translated into the current migration tables. The source also retains legacy
+TypeScript migrations, generated SQL migrations, snapshots, and specialized
+JSON lineup migrations.</p>
+<p>Temporary names beginning with <code>__new_</code>, ending in
+<code>_tmp</code>, or containing <code>temp_alter</code> are migration
+implementation details, not current schema authorities.</p>
+<h2 id="known-risks-and-unknowns">Known Risks and Unknowns<a class="headerlink" href="#known-risks-and-unknowns" title="Permanent link">¶</a></h2>
+<ul>
+<li>Runtime row counts and growth rates require a live-data sampling procedure.</li>
+<li>Backup consistency across SQLite and JSON lineup documents is not proven by
+  static source.</li>
+<li>Cross-store writes are not assumed atomic.</li>
+<li>Migration idempotency and down-migration behavior require characterization.</li>
+<li>Secret-content classification is based only on field-name evidence.</li>
+<li>Restore testing and busy/locking behavior remain separate baseline work.</li>
+</ul>
+<!-- DO NOT FORMAT -->
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://discord.gg/nYkb7MhPfD" target="_blank" rel="noopener" title="Join the Tunarr Discord" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M492.5 69.8c-.2-.3-.4-.6-.8-.7-38.1-17.5-78.4-30-119.7-37.1-.4-.1-.8 0-1.1.1s-.6.4-.8.8c-5.5 9.9-10.5 20.2-14.9 30.6-44.6-6.8-89.9-6.8-134.4 0-4.5-10.5-9.5-20.7-15.1-30.6-.2-.3-.5-.6-.8-.8s-.7-.2-1.1-.2C162.5 39 122.2 51.5 84.1 69c-.3.1-.6.4-.8.7C7.1 183.5-13.8 294.6-3.6 404.2c0 .3.1.5.2.8s.3.4.5.6c44.4 32.9 94 58 146.8 74.2.4.1.8.1 1.1 0s.7-.4.9-.7c11.3-15.4 21.4-31.8 30-48.8.1-.2.2-.5.2-.8s0-.5-.1-.8-.2-.5-.4-.6-.4-.3-.7-.4c-15.8-6.1-31.2-13.4-45.9-21.9-.3-.2-.5-.4-.7-.6s-.3-.6-.3-.9 0-.6.2-.9.3-.5.6-.7c3.1-2.3 6.2-4.7 9.1-7.1.3-.2.6-.4.9-.4s.7 0 1 .1c96.2 43.9 200.4 43.9 295.5 0 .3-.1.7-.2 1-.2s.7.2.9.4c2.9 2.4 6 4.9 9.1 7.2.2.2.4.4.6.7s.2.6.2.9-.1.6-.3.9-.4.5-.6.6c-14.7 8.6-30 15.9-45.9 21.8-.2.1-.5.2-.7.4s-.3.4-.4.7-.1.5-.1.8.1.5.2.8c8.8 17 18.8 33.3 30 48.8.2.3.6.6.9.7s.8.1 1.1 0c52.9-16.2 102.6-41.3 147.1-74.2.2-.2.4-.4.5-.6s.2-.5.2-.8c12.3-126.8-20.5-236.9-86.9-334.5zm-302 267.7c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.4 59.2-52.8 59.2m195.4 0c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.2 59.2-52.8 59.2"></path></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://github.com/sponsors/chrisbenincasa" target="_blank" rel="noopener" title="Sponsor Tunarr on GitHub" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="m241 87.1 15 20.7 15-20.7C296 52.5 336.2 32 378.9 32 452.4 32 512 91.6 512 165.1v2.6c0 112.2-139.9 242.5-212.9 298.2-12.4 9.4-27.6 14.1-43.1 14.1s-30.8-4.6-43.1-14.1C139.9 410.2 0 279.9 0 167.7v-2.6C0 91.6 59.6 32 133.1 32 175.8 32 216 52.5 241 87.1"></path></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tracking", "navigation.path", "navigation.sections", "navigation.indexes", "navigation.footer", "content.code.copy", "content.code.select", "content.tooltips", "content.action.edit", "content.action.view"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  
+<script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(()=>{ lightbox.reload(); });
+</script></body></html>

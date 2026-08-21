@@ -1,0 +1,34 @@
+flowchart LR
+    access["access"]
+    branding["branding"]
+    catalog["catalog"]
+    channels["channels"]
+    health["health"]
+    instance["instance"]
+    jobs["jobs"]
+    media_sources["media-sources"]
+    migration["migration"]
+    networks["networks"]
+    output["output"]
+    playout["playout"]
+    plugins["plugins"]
+    programming["programming"]
+    publication["publication"]
+    scheduling["scheduling"]
+    templates["templates"]
+
+    branding --> channels
+    branding --> networks
+    catalog --> media_sources
+    channels --> networks
+    output --> channels
+    playout --> channels
+    playout --> publication
+    programming --> channels
+    programming --> networks
+    publication --> channels
+    publication --> scheduling
+    scheduling --> catalog
+    scheduling --> channels
+    scheduling --> networks
+    scheduling --> programming
