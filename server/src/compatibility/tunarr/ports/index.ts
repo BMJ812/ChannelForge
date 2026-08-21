@@ -88,3 +88,40 @@ export type {
   CompatibilityReconciliationRequest,
   CompatibilityReconciliationWorkerPort,
 } from './CompatibilityReconciliation.js';
+
+export {
+  CompatibilityScheduleDegradedReasons,
+  CompatibilityScheduleDivergenceCodes,
+  CompatibilityScheduleEntryKinds,
+  CompatibilityScheduleFailureReasons,
+  CompatibilityScheduleShadowComparisonResults,
+  CompatibilityScheduleStatuses,
+  CompatibilitySchedulerModes,
+  createCompatibilitySchedulerModeTransition,
+  isCompatibilitySchedulerMode,
+} from './CompatibilityScheduling.js';
+
+export type {
+  CompatibilityLegacyScheduleReader,
+  CompatibilityScheduleComparisonEntry,
+  CompatibilityScheduleComparisonHorizon,
+  CompatibilityScheduleComparisonProjector,
+  CompatibilityScheduleDegradedReason,
+  CompatibilityScheduleDivergence,
+  CompatibilityScheduleDivergenceCode,
+  CompatibilityScheduleEntryKind,
+  CompatibilityScheduleFailureReason,
+  CompatibilityScheduleFallbackPolicy,
+  CompatibilityScheduleLegacyProjectionWriter,
+  CompatibilityScheduleLegacyProjectionWriteRequest,
+  CompatibilityScheduleShadowComparison,
+  CompatibilityScheduleShadowComparisonResult,
+  CompatibilityScheduleStatus,
+  CompatibilityScheduleTolerancePolicy,
+  CompatibilitySchedulerMode,
+  CompatibilitySchedulerModeTransition,
+  CompatibilitySchedulingRequest,
+  CompatibilitySchedulingResolvedResult,
+  CompatibilitySchedulingResult,
+  CompatibilitySchedulingUnavailableResult,
+} from './CompatibilityScheduling.js';

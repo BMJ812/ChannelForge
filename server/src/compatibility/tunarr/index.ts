@@ -168,3 +168,47 @@ export type {
   TunarrMediaSourceReadTranslationErrorReason,
   TunarrRemoteMediaSourceReadRecord,
 } from './providers/index.js';
+
+export {
+  CompatibilitySchedulingBoundary,
+  compareCompatibilityScheduleProjections,
+} from './scheduling/index.js';
+
+export type { CompatibilitySchedulingBoundaryOptions } from './scheduling/index.js';
+
+export {
+  CompatibilityScheduleDegradedReasons,
+  CompatibilityScheduleDivergenceCodes,
+  CompatibilityScheduleEntryKinds,
+  CompatibilityScheduleFailureReasons,
+  CompatibilityScheduleShadowComparisonResults,
+  CompatibilityScheduleStatuses,
+  CompatibilitySchedulerModes,
+  createCompatibilitySchedulerModeTransition,
+  isCompatibilitySchedulerMode,
+} from './ports/index.js';
+
+export type {
+  CompatibilityLegacyScheduleReader,
+  CompatibilityScheduleComparisonEntry,
+  CompatibilityScheduleComparisonHorizon,
+  CompatibilityScheduleComparisonProjector,
+  CompatibilityScheduleDegradedReason,
+  CompatibilityScheduleDivergence,
+  CompatibilityScheduleDivergenceCode,
+  CompatibilityScheduleEntryKind,
+  CompatibilityScheduleFailureReason,
+  CompatibilityScheduleFallbackPolicy,
+  CompatibilityScheduleLegacyProjectionWriter,
+  CompatibilityScheduleLegacyProjectionWriteRequest,
+  CompatibilityScheduleShadowComparison,
+  CompatibilityScheduleShadowComparisonResult,
+  CompatibilityScheduleStatus,
+  CompatibilityScheduleTolerancePolicy,
+  CompatibilitySchedulerMode,
+  CompatibilitySchedulerModeTransition,
+  CompatibilitySchedulingRequest,
+  CompatibilitySchedulingResolvedResult,
+  CompatibilitySchedulingResult,
+  CompatibilitySchedulingUnavailableResult,
+} from './ports/index.js';

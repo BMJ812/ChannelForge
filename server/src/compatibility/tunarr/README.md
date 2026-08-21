@@ -219,3 +219,27 @@ opaque credential reference derived from legacy identity.
 
 The translator performs no provider calls, filesystem writes, legacy writes,
 canonical writes, schema migration, or plaintext dual-write.
+
+## PR 04K Scheduling Compatibility
+
+PR 04K adds `scheduling/` as the containment boundary for inherited schedule
+behavior.
+
+The boundary defines the roadmap scheduler modes, canonical-first schedule
+resolution, explicit degraded legacy fallback, fixed-horizon shadow comparison,
+and frozen legacy containment.
+
+Healthy canonical scheduling never reads inherited scheduling. Shadow reads
+remain diagnostic and cannot change authority. Degraded fallback requires an
+explicit policy and records bounded fallback metrics.
+
+The comparison contract classifies ordering, start-time, duration, content
+identity, filler, and redirect divergence without retaining raw schedule
+payloads in diagnostics.
+
+Approved Schedule Plans are not exposed to the legacy projection writer port.
+Future compatibility writes must use the existing write-status/reconciliation
+framework rather than creating a second schedule authority.
+
+PR 04K does not activate a production scheduler cutover, provider call, FFmpeg
+path, legacy projection writer, or new persistence schema.

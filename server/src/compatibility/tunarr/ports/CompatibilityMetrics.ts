@@ -27,6 +27,10 @@ export const CompatibilityCounterMetrics = [
   'COMPATIBILITY_ERRORS',
   'LEGACY_JOB_EXECUTIONS',
   'LEGACY_OUTPUT_FALLBACKS',
+  'LEGACY_SCHEDULE_READS',
+  'LEGACY_SCHEDULE_FALLBACKS',
+  'SCHEDULE_SHADOW_COMPARISONS',
+  'SCHEDULE_SHADOW_DIVERGENCES',
 ] as const;
 
 export type CompatibilityCounterMetric =
