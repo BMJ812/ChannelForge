@@ -7,6 +7,7 @@ export type {
 } from './application/OutputModule.js';
 
 export type {
+  HdhrCompatibleIdentity,
   OutputArtifact,
   OutputProfileId,
   OutputStreamRoute,
