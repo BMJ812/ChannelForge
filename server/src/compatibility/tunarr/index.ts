@@ -235,3 +235,30 @@ export type {
   CompatibilityOutputArtifactUnavailable,
   CompatibilityOutputArtifactValidator,
 } from './output/index.js';
+
+export {
+  CompatibilityLegacyJobHandler,
+  CompatibilityLegacyJobStatuses,
+  LegacyJobClassifications,
+  LegacyJobRegistry,
+  LegacyJobRegistryError,
+  LegacyJobRegistryErrorReasons,
+  LegacyJobTriggerKinds,
+  TunarrLegacyJobs,
+  tunarrLegacyJobRegistry,
+} from './jobs/index.js';
+
+export type {
+  CompatibilityLegacyJobExecutionDecision,
+  CompatibilityLegacyJobExecutionPolicy,
+  CompatibilityLegacyJobExecutionRequest,
+  CompatibilityLegacyJobExecutionResult,
+  CompatibilityLegacyJobHandlerOptions,
+  CompatibilityLegacyJobStatus,
+  CompatibilityLegacyJobStatusRecord,
+  CompatibilityLegacyJobStatusRecorder,
+  LegacyJobClassification,
+  LegacyJobDescriptor,
+  LegacyJobRegistryErrorReason,
+  LegacyJobTriggerKind,
+} from './jobs/index.js';

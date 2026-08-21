@@ -1,7 +1,7 @@
 # ChannelForge Legacy Compatibility
 
 - **Milestone:** 04 Ã¢â‚¬â€ Legacy Compatibility
-- **Current unit:** PR 04L - Output Compatibility
+- **Current unit:** PR 04M - Legacy Job Registry
 - **Runtime cutover:** none
 - **Legacy authority change:** none
 
@@ -420,3 +420,25 @@ Removal requires:
 | Removal gate | Canonical protocol output verified, supported callers migrated, fallback use retired, support/rollback windows complete |
 | Rollback | Stop consuming 04L reader; inherited runtime remains unchanged |
 | Tests | precedence, route stability, last-valid fallback, legacy fallback, unavailable state, identity preservation, bounded metrics |
+
+## PR 04M Change-Control Record
+
+| Field | PR 04M |
+| --- | --- |
+| Legacy path | Inherited scheduled, startup, dynamic, fixer, and provider-status background work |
+| Target | Tunarr compatibility job registry/handler |
+| Inventory | 25 concrete runtime job identities |
+| Classification | Exact roadmap vocabulary; multiple classifications allowed where behavior crosses concerns |
+| Trigger types | Startup, scheduled, dynamic |
+| Read/write authority | Unchanged |
+| Handler | Registered lookup, translation, compatibility action, status, usage |
+| Unknown job | Fails closed |
+| Errors | Stable compatibility descriptors; raw input/exceptions excluded |
+| Usage metric | Existing `LEGACY_JOB_EXECUTIONS` |
+| Cardinality | Registered job ID or fixed `unknown-job`; no raw entity/provider/session IDs |
+| Freeze preparation | External execution policy; denial has no handler bypass |
+| Freeze gate | Not activated; PR 04N owns freeze infrastructure |
+| Provider calls | None from compatibility handler |
+| Persistence | None |
+| Rollback | Stop consuming 04M contracts; inherited runtime unchanged |
+| Tests | Exact inventory, uniqueness, classifications, helper exclusion, translation, errors, policy denial, bounded metrics |

@@ -269,3 +269,15 @@ templates without changing route registration.
 
 No production output cutover, artifact-store migration, route rewrite, device
 identity change, or FFmpeg behavior change is activated by PR 04L.
+
+## PR 04M Legacy Job Registry
+
+PR 04M adds `jobs/` as the compatibility inventory and handler boundary for
+inherited background work. It inventories 25 concrete startup, scheduled, and
+dynamic job identities using the exact roadmap classification vocabulary.
+
+The handler resolves only registered jobs, optionally translates input, calls a
+caller-supplied compatibility action, records bounded status, and uses the
+existing `LEGACY_JOB_EXECUTIONS` metric. An external execution-policy port
+prepares PR 04N freeze control without activating any production freeze,
+scheduler change, startup change, or job cutover in 04M.
