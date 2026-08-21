@@ -1,7 +1,7 @@
 # ChannelForge Legacy Compatibility
 
 - **Milestone:** 04 Ã¢â‚¬â€ Legacy Compatibility
-- **Current unit:** PR 04M - Legacy Job Registry
+- **Current unit:** PR 04N - Freeze Infrastructure
 - **Runtime cutover:** none
 - **Legacy authority change:** none
 
@@ -442,3 +442,25 @@ Removal requires:
 | Persistence | None |
 | Rollback | Stop consuming 04M contracts; inherited runtime unchanged |
 | Tests | Exact inventory, uniqueness, classifications, helper exclusion, translation, errors, policy denial, bounded metrics |
+
+## PR 04N Change-Control Record
+
+| Field | PR 04N |
+| --- | --- |
+| Scope | Freeze registry + server-side guard |
+| Registry paths | Management routes, jobs, direct DB writers, schedule writers, provider sync writers, output generators, settings writers, cleanup jobs |
+| Default state | All entries `ACTIVE` |
+| Frozen result | Stable `LEGACY_WRITE_FROZEN` error |
+| Unknown path | Fails closed with `COMPATIBILITY_UNAVAILABLE` |
+| Metric | Existing `FROZEN_WRITE_ATTEMPTS` |
+| Metric cardinality | Registered write-path ID only; no raw entity identifiers |
+| Job integration | `LEGACY_WRITE` jobs checked before translation/execution |
+| Non-writing jobs | Not blocked by `legacy-jobs` write freeze |
+| UI dependency | None; enforcement is server-side |
+| Broad freeze | Not activated |
+| Route wiring | Unchanged |
+| Scheduler wiring | Unchanged |
+| Persistence | None |
+| Rollback | Restore registry entry to `ACTIVE` |
+| Tests | Active allow, frozen deny, stable error, bounded metric, job no-mutation, non-write allow, rollback |
+| Next | PR 04O - first low-risk legacy writer freeze |

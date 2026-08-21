@@ -8,6 +8,7 @@ import type {
   CompatibilityMetrics,
 } from '../ports/CompatibilityMetrics.js';
 import type { CompatibilityMode } from '../ports/CompatibilityMode.js';
+import type { CompatibilityLegacyWriteGuard } from '../freeze/CompatibilityLegacyWriteGuard.js';
 import {
   tunarrLegacyJobRegistry,
   type LegacyJobClassification,
@@ -71,6 +72,7 @@ export type CompatibilityLegacyJobHandlerOptions = Readonly<{
   metrics?: CompatibilityMetrics;
   statusRecorder?: CompatibilityLegacyJobStatusRecorder;
   executionPolicy?: CompatibilityLegacyJobExecutionPolicy;
+  freezeGuard?: CompatibilityLegacyWriteGuard;
 }>;
 
 const AllowAll: CompatibilityLegacyJobExecutionPolicy = Object.freeze({
@@ -92,12 +94,14 @@ export class CompatibilityLegacyJobHandler {
   private readonly metrics?: CompatibilityMetrics;
   private readonly statusRecorder?: CompatibilityLegacyJobStatusRecorder;
   private readonly executionPolicy: CompatibilityLegacyJobExecutionPolicy;
+  private readonly freezeGuard?: CompatibilityLegacyWriteGuard;
 
   constructor(options: CompatibilityLegacyJobHandlerOptions = {}) {
     this.registry = options.registry ?? tunarrLegacyJobRegistry;
     this.metrics = options.metrics;
     this.statusRecorder = options.statusRecorder;
     this.executionPolicy = options.executionPolicy ?? AllowAll;
+    this.freezeGuard = options.freezeGuard;
   }
 
   async execute<I, T = I, O = void>(
@@ -113,6 +117,27 @@ export class CompatibilityLegacyJobHandler {
         jobId: request.jobId,
         error: errorDescriptor('COMPATIBILITY_UNAVAILABLE', false),
       });
+    }
+
+    if (
+      job.classifications.includes('LEGACY_WRITE') &&
+      this.freezeGuard !== undefined
+    ) {
+      const freezeDecision = this.freezeGuard.evaluate({
+        writePath: 'legacy-jobs',
+        mode,
+      });
+
+      if (!freezeDecision.allowed) {
+        await this.status(job, 'SKIPPED');
+        this.metric(job.id, 'FROZEN_LEGACY_WRITE', 'FROZEN');
+        return Object.freeze({
+          outcome: 'SKIPPED',
+          jobId: job.id,
+          job,
+          error: freezeDecision.error,
+        });
+      }
     }
 
     const decision = this.decision(job);
