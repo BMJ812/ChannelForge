@@ -1,7 +1,7 @@
 # ChannelForge Legacy Compatibility
 
 - **Milestone:** 04 Ã¢â‚¬â€ Legacy Compatibility
-- **Current unit:** PR 04J - Provider Compatibility
+- **Current unit:** PR 04K - Scheduling Compatibility
 - **Runtime cutover:** none
 - **Legacy authority change:** none
 
@@ -372,3 +372,25 @@ Removal requires:
 | Freeze gate | Not activated |
 | Rollback | Stop consuming translator; no schema rollback |
 | Tests | Provider translation, credential non-leakage, identity separation, related-row ownership, unsupported local source, immutability |
+
+## PR 04K Change-Control Record
+
+| Field | PR 04K |
+| --- | --- |
+| Legacy path | Inherited Tunarr scheduling read/output behavior |
+| Target module | Scheduling compatibility boundary |
+| Scheduler modes | `LEGACY_AUTHORITATIVE`, `SHADOW_CANONICAL`, `CANONICAL_AUTHORITATIVE`, `FROZEN` |
+| Compatibility mode mapping | Legacy-only, dual-compare, canonical-only/canonical-fallback, frozen legacy write |
+| Read authority | Mode-explicit; healthy canonical authority never reads legacy scheduling |
+| Write authority | Approved Schedule Plans remain canonical and immutable; no production writer activated |
+| Degraded fallback | Explicit policy + reason only; canonical artifact must be unavailable first |
+| Shadow compare | Fixed horizon; ordering, start, duration, identity, filler, redirect |
+| Freeze | `FROZEN` serves canonical approved artifact and does not read legacy scheduling |
+| Provider calls | None |
+| FFmpeg | None |
+| Persistence | None |
+| Reconciliation | Future projection failure uses existing 04H/04I framework; no worker activated by 04K |
+| Metrics | Legacy schedule reads/fallbacks, schedule shadow comparisons/divergences |
+| Metric cardinality | No raw channel, schedule, or content identifiers |
+| Rollback | Stop consuming scheduling boundary; no schema/data rollback |
+| Tests | canonical containment, explicit fallback, shadow equality/divergence, legacy authority, freeze, transition audit |
