@@ -262,3 +262,24 @@ export type {
   LegacyJobRegistryErrorReason,
   LegacyJobTriggerKind,
 } from './jobs/index.js';
+
+export {
+  CompatibilityLegacyWriteGuard,
+  LegacyWriteFreezeRegistry,
+  LegacyWriteFreezeRegistryError,
+  LegacyWriteFreezeRegistryErrorReasons,
+  LegacyWriteFreezeStates,
+  LegacyWritePathIds,
+  TunarrLegacyWriteFreezeEntries,
+  tunarrLegacyWriteFreezeRegistry,
+} from './freeze/index.js';
+
+export type {
+  CompatibilityLegacyWriteGuardDecision,
+  CompatibilityLegacyWriteGuardOptions,
+  CompatibilityLegacyWriteGuardRequest,
+  LegacyWriteFreezeEntry,
+  LegacyWriteFreezeRegistryErrorReason,
+  LegacyWriteFreezeState,
+  LegacyWritePathId,
+} from './freeze/index.js';

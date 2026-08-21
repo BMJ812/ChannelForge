@@ -281,3 +281,18 @@ caller-supplied compatibility action, records bounded status, and uses the
 existing `LEGACY_JOB_EXECUTIONS` metric. An external execution-policy port
 prepares PR 04N freeze control without activating any production freeze,
 scheduler change, startup change, or job cutover in 04M.
+
+## PR 04N Freeze Infrastructure
+
+PR 04N adds `freeze/` as the server-side legacy-write freeze boundary.
+
+The registry enumerates the planned inherited mutation-path classes and keeps
+all of them `ACTIVE` by default. The reusable guard blocks only entries marked
+`FROZEN`, returns `LEGACY_WRITE_FROZEN`, and increments the existing bounded
+`FROZEN_WRITE_ATTEMPTS` metric.
+
+The PR 04M legacy-job handler now evaluates the `legacy-jobs` guard before
+translation or execution for jobs classified `LEGACY_WRITE`.
+
+PR 04N does not activate a broad freeze, change route registration, change job
+scheduling, or depend on UI hiding for enforcement.
